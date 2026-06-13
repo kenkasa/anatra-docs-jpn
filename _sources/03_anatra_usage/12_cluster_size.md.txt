@@ -1,0 +1,66 @@
+## クラスターサイズ(cluster_size)
+
+``cluster_size`` (``cls``)は，系内に含まれるクラスターのサイズ分布を計算する．
+分子$i$, $j$の位置をそれぞれ${\bf r}_{i}$, ${\bf r}_{j}$, そしてカットオフ距離を$r_{\mathrm{cut}}$として，
+
+\begin{align}
+ \left|{\bf r}_{i} - {\bf r}_{j}\right| \leq r_{\mathrm{cut}} \label{clsrcut}
+\end{align}
+
+を満たすとき，分子$i$と$j$は同じクラスターに属していると定義する．
+クラスターに属する分子の数$n$がクラスターのサイズである．
+クラスターのサイズ分布関数$P\left(n\right)$を，次式に示す規格化条件を満たすものとして定義する．
+
+\begin{align}
+\sum_{n=1}^{N_{\mathrm{tot}}} P\left(n\right) = 1 
+\end{align}
+
+ここで，$N_{\mathrm{tot}}$は系内に含まれる注目分子の数である．
+各分子がどのクラスターに属するかは，union-find treeによって決定される．
+
+### オプション一覧
+
+**オプション**     | **備考**      | **オプション**    | **備考**
+:-----------------:|:-------------:|:-----------------:|:--------------:
+``-stype``         | Common        | ``-sfile``        | Common
+``-tintype``       | Common        | ``-tin``          | Common
+``-flist_traj``    | Common        | ``-fhead``        | Common        
+``-sel0``          | Common        | ``-mode``         | Common        
+``-rcut``          | Mode specific | --                | -- 
+
+ ---
+* **-rcut \<カットオフ距離(ANGSTROM)\>**
+    * Default: ``3.5``  
+    * Example: ``-dr 3.5``
+
+    2つの分子が同じクラスターに属しているかどうかを規定するカットオフ距離$r_{\mathrm{cut}}$を指定する．
+    式EQREF(clsrcutEQREF)に示す通り，分子$i-j$間距離が$r_{\mathrm{cut}}$以下のとき，
+    分子$i,j$が同じクラスターに属していると判定される． 
+
+### 出力ファイルのフォーマット
+
+* ``*.distr``
+  
+    クラスターサイズ$n$に対する分布$P\left(n\right)$が出力される．
+ 
+  * 1列目: クラスターサイズ$n$
+  * 2列目: $P\left(n\right)$ 
+  * 3列目: $P\left(n\right)$のrunnning integral 
+
+### 解析例
+
+#### 水クラスターのサイズ分布 
+
+```
+#!/usr/bin/env bash
+
+anatra cluster_size                \
+  -stype       psf                 \
+  -sfile       complex.psf         \
+  -tintype     nc                  \
+  -flist_traj  flist               \
+  -fhead       run_nc              \
+  -sel0        water and name O    \
+  -mode0       residue             \
+  -prep_only   false
+```

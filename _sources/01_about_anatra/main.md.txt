@@ -1,0 +1,205 @@
+# ANATRAとは？
+
+**ANATRA** (*Ana*lyze *Tra*jectories)は
+分子動力学(Molecular Dynamics, MD)シミュレーションのトラジェクトリを解析するTcl/Fortran90プログラム群である．
+
+系の特定の原子・分子やタンパク質の特定のアミノ酸残基に注目して解析を行うことが多いが，
+その特定の部位を抜き出してくる汎用プログラムを書くのは容易ではない．
+というのも，研究レベルでは『残基番号11番目から50番目までの部分でかつ残基名がALAでかつ重原子』
+のような複数の条件を同時に満たす原子群を取り出す必要があるが，
+これらの条件により生ずる集合の和や積を解読するプログラムの作成は相当に大変だからである．
+一方で，世界中のMDユーザが利用しているVMD (*V*isual *M*olecular *D*ynamics)では，
+特定の部位を選択するための優れた機能(Atomselection)が提供されている．
+例えば，上記の例をVMDのAtomselectionの文法で書くと，
+```
+resid 11 to 50 and resname ALA and noh
+```
+であり，直感的にも理解しやすい．
+そこで**ANATRA**では，VMDのAtomselectionを利用したプログラム構成にすることとした．
+従って，部位選択に関しては，Atomselectionと全く同じ文法を使うことが可能であり，
+VMDユーザーにとっては新しい部位選択の文法を覚える必要がない．
+
+**ANATRA**は解析の種類に応じた多数のTcl/Fortranプログラムから構成されているが，
+これらを一元的に管理する"``anatra``"という名前のプログラムを提供した．ユーザーは
+```
+$ anatra 解析モード -option1 -option2 ...
+```
+の形で様々な解析を実行できる．このプログラムでは，
+解析モードに応じたTclスクリプトをVMD上から実行することでAtomselection機能を用い，
+選択した部位の情報をFortranプログラムに入力として与えることで特定の部位に特化した解析を行っているが，
+ユーザーはそのことを意識する必要はなく，一連の作業を一気に行える．
+
+同時に，Fortranプログラム側ではAtomselectionに対応する実装がないために，
+ソースコードの複雑化を回避できており，ユーザー側が**ANATRA**で提供しているライブラリを元に新たな解析プログラムを作成することも容易である．[^footnote_intro]
+[^footnote_intro]: 将来的には，開発者向けのマニュアルも整備したいと考えている．
+
+一方で，時系列データからの分布や時間相関関数の計算など，部位選択の機能が必要がない場合も多い．
+これらについては，Tclスクリプトを経由せずに機能するFortranプログラム群を"``fanatra``" (*F*ortran *ANATRA*)
+として一元化したプログラムを提供している．``fanatra``の場合は
+```
+$ fanatra 解析モード コントロールファイル
+```
+の形で解析を実行する．
+
+ ---
+* **Project Leader/Main Developer**   
+    * 笠原 健人(大阪大学基礎工学研究科化学工学領域　松林研究室)
+
+* **Contributor**   
+    * 昌山 廉(大阪大学基礎工学研究科化学工学領域　松林研究室)
+    * 沖田 和也(大阪大学基礎工学研究科化学工学領域　松林研究室)  
+    * 松原 優弥(大阪大学基礎工学研究科化学工学領域　松林研究室)
+    * 丸山 優星(大阪大学基礎工学研究科化学工学領域　松林研究室)
+    * 岡部 涼(大阪大学基礎工学研究科化学工学領域　松林研究室)
+    * 山下 湧輝(大阪大学基礎工学研究科化学工学領域　松林研究室)
+    * 佐伯 修都(大阪大学基礎工学研究科化学工学領域　松林研究室)
+    * 松林 伸幸(大阪大学基礎工学研究科化学工学領域　松林研究室)
+
+  ---
+ANATRAは，**GNU General Public License version 2.0（GPL v2.0）** の下，配布されている．
+
+**ANATRA**  
+Copyright (C) 2025  Kento Kasahara (Univ. of Osaka) 
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see https://www.gnu.org/licenses/.
+
+
+また，下記に示す外部ライブラリに依存して開発が進められており，パッケージ内に同梱されている．これらについては，下記に示すライセンスが適用される．
+
+* **HDF5 (Hierarchical Data Format 5) Software Library and Utilities**  
+    Copyright 2006 by The HDF Group.
+
+    NCSA HDF5 (Hierarchical Data Format 5) Software Library and Utilities  
+    Copyright 1998-2006 by The Board of Trustees of the University of Illinois.
+
+    All rights reserved.
+    
+    This software library and utilities is covered by the 3-clause BSD License.
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted for any purpose (including commercial purposes)
+    provided that the following conditions are met:
+    
+    1. Redistributions of source code must retain the above copyright notice,
+       this list of conditions, and the following disclaimer.
+    
+    2. Redistributions in binary form must reproduce the above copyright notice,
+       this list of conditions, and the following disclaimer in the documentation
+       and/or materials provided with the distribution.
+    
+    3. Neither the name of The HDF Group, the name of the University, nor the
+       name of any Contributor may be used to endorse or promote products derived
+       from this software without specific prior written permission from
+       The HDF Group, the University, or the Contributor, respectively.
+
+    DISCLAIMER:
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+    OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+    TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    
+    For further details, please refer to the full license text available
+    at https://opensource.org/licenses/bsd-3-clause
+    
+    You are under no obligation whatsoever to provide any bug fixes, patches, or
+    upgrades to the features, functionality or performance of the source code
+    ("Enhancements") to anyone; however, if you choose to make your Enhancements
+    available either publicly, or directly to The HDF Group, without imposing a
+    separate written license agreement for such Enhancements, then you hereby
+    grant the following license: a non-exclusive, royalty-free perpetual license
+    to install, use, modify, prepare derivative works, incorporate into other
+    computer software, distribute, and sublicense such enhancements or derivative
+    works thereof, in binary and source code form.
+
+* **NetCDF**  
+    Copyright 2025 Unidata
+
+    Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+    3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. 
+ 
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+* **xdrfile-1.1.4**   
+    Copyright (c) 2009-2014, Erik Lindahl & David van der Spoel  
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+    https://ftp.gromacs.org/pub/contrib/
+
+* **xdf.F90**  
+    This routine was originally developed by Wes Barnett and distributed under the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.  
+https://github.com/wesbarnett/libgmxfort  
+Modified version of the routine was developed by Kai-Min Tu.  
+https://github.com/kmtu/xdrfort
+
+* **mt19937.f**  
+    This routine was developed by Makoto Matsumoto and Takuji Nishimura and was distributed under the GNU Library General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.  
+https://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/VERSIONS/FORTRAN/fortran.html
+
+* **FFTE**  
+    Copyright(C) 2000-2003 Daisuke Takahashi
+
+    You may use, copy, modify this code for any purpose (include commercial use) and without fee. You may distribute this ORIGINAL package.
+
+    https://www2.ccs.tsukuba.ac.jp/SC/sc2003/Software/FFTE_Package-3.0/doc/index.html
+
+* **IEPDYN (Integral-Equation formalism of Population DYNamics)**  
+    Copyright 2026 Kento Kasahara
+
+    IEPDYN is distributed under the **GNU General Public License version 2.0 (GPL v2.0)**.
+    This software is distributed under the GNU GENERAL PUBLIC LICENSE Version 2, June 1991.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see https://www.gnu.org/licenses/.
+
+    https://github.com/kenkasa/iepdyn

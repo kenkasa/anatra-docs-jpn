@@ -1,0 +1,195 @@
+## 特定の方向$z$に対する分子の配向(z_orient, zori)
+
+``z_orient`` (``zori``)は，
+特定の方向($z$)を基準として．
+分子の配向分布を計算する．
+分子内にある2つの部位bottom, headを定義し，それぞれの重心を${\bf R}_{\mathrm{B}}$, ${\bf R}_{\mathrm{H}}$とおく．そして，分子軸${\bf u}$を
+
+\begin{align}
+{\bf u} = {\bf R}_{\mathrm{H}} - {\bf R}_{\mathrm{B}}, \label{uvec}
+\end{align}
+
+と定義する．$z$軸(単位ベクトル${\bf e}_{z}$)と${\bf u}$ (単位ベクトル${\bf e}_{\mathrm{u}}$)のなす角を$\theta$とすると，
+
+\begin{align}
+\cos \theta = {\bf e}_{z} \cdot {\bf e}_{\mathrm{u}},
+\end{align}
+
+である．$\cos\theta$に対する分布関数を
+
+\begin{align}
+P\left(\chi\right) = C\Braket{\delta\left(\chi - \cos \theta\right)},
+\end{align}
+
+とする．ただし，$C$は規格化定数であり，
+
+\begin{align}
+\int_{0}^{\pi}d\theta\,\sin\theta\,P\left(\chi \right) & =1,
+\end{align}
+
+を満たすように設定する．
+上式は，$\theta$から$\chi = \cos\theta$への変数変換を考えることで，次式のように書き直せる．
+
+\begin{align}
+\int_{0}^{1}d\chi\,P\left(\chi\right) & =1.
+\end{align}
+
+``z_orient (zori)``は，上式を満たす$P\left(\chi\right) = P\left(\cos \theta\right)$を計算する．
+
+さらに，実験室座標系での$z$軸に加えて，
+特定の分子の向きによって定義されるベクトルを$z$方向に設定することも可能である．
+その分子の4つの部位の重心を${\bf x}_{\mathrm{B}_0}, {\bf x}_{\mathrm{H}_0}, {\bf x}_{\mathrm{B}_1}, {\bf x}_{\mathrm{H}_1}$として，ベクトル
+
+\begin{align}
+{\bf v}_{0} &= {\bf x}_{\mathrm{H}_0} - {\bf x}_{\mathrm{B}_0}  \label{vec0} \\
+{\bf v}_{1} &= {\bf x}_{\mathrm{H}_1} - {\bf x}_{\mathrm{B}_1} \label{vec1} 
+\end{align}
+
+を用意することで，$z$方向の単位ベクトル
+
+\begin{align}
+{\bf e}_{z} = \dfrac{{\bf v}_1 \times {\bf v}_2}{\left|{\bf v}_1 \times {\bf v}_2 \right|}
+\end{align}
+
+を定義する．このようにして定義した${\bf e}_{z}$と注目している分子の分子軸ベクトル${\bf u}$のなす角によって配向を定義することで，配向分布$P\left(\chi\right)$の定義・計算が可能である．
+
+### オプション一覧
+
+**オプション**     | **備考**      | **オプション**    | **備考**
+:-----------------:|:-------------:|:-----------------:|:--------------:
+``-stype``         | Common        | ``-sfile``        | Common
+``-tintype``       | Common        | ``-tin``          | Common
+``-flist_traj``    | Common        | ``-fhead``        | Common        
+``-sel``$x$        | Common        | ``-mode``$x$      | Common        
+``-zdef_type``     | Mode specific | ``-vecX_bottom_selid`` | Mode specific
+``-vecX_head_selid`` | Mode specific | ``-bottom_selid`` | Mode specific 
+``-head_selid``    | Mode specific |  ``-judgeup``       | Mode specific
+``-nmolup``        | Mode specific |  ``-center_selid``  | Mode specific 
+``-dx``           | Mode specific  | ``-dt``            | Mode specific 
+``-prep_only``     | Common        | --                | -- 
+
+ ---
+* **-sel$x$ \<selelection\>** (最大7個) 
+    * Default: N/A 
+    * Example: ``-sel0 name P -sel1 name N``  
+
+    配向を定義するための部位bottom, headを指定する．実験室座標系ではなく，特定の分子の配向によって決まる方向を$z$方向に用いるときは(``-zdef_type``を参照)，ベクトル${\bf v}_{1}$, ${\bf v}_{2}$ (式EQREF(vec0EQREF)}, EQREF(vec1EQREF))を定義するための部位選択を行う必要がある．また，実験室座標系の$z$軸を用いる場合において，
+${\bf e}_{z}$の向きを特定分子の重心の$z$座標を基準にして反転させるときには(``-judgeup``を参照)，その分子の選択も必要となる．
+
+  ---
+* **-head_selid \<selid\>**
+* **-bottom_selid \<selid\>**
+    * Default: N/A
+    * Example: ``-head_selid 0 -bottom_selid 1``
+
+    分子軸${\bf u}$ (式EQREF(uvecEQREF))を定義するための部位bottom, headに対応する部位をそれぞれ``-bottom_selid``, ``-head_selid``で指定する．
+
+  ---
+* **-zdef_type \<coord or outerprod\>**  
+  * Default: N/A  
+  * Example: ``-zdef_type coord``
+* **-vec$x$_bottom_selid \<selid\>** ($x=0,1$)
+* **-vec$x$_head_selid \<selid\>** ($x=0,1$)
+
+    $z$方向の定義を指定する．
+実験室座標系の$z$軸を$z$方向に設定する場合は``coord``を，
+特定の分子の配向によって$z$方向を定義する場合は``outerprod``を指定する．
+``outerprod``の場合は，``-vec``$x$``_bottom_selid``, ``-vec``$x$``_head_selid``を設定する必要がある．これらのオプションは，式EQREF(vec0EQREF), EQREF(vec1EQREF)の
+    * ${\bf x}_{\mathrm{B}_0}$ : ``-vec0_bottom_selid``
+    * ${\bf x}_{\mathrm{H}_0}$ : ``-vec0_head_selid`` 
+    * ${\bf x}_{\mathrm{B}_1}$ :  ``-vec1_bottom_selid``
+    * ${\bf x}_{\mathrm{H}_1}$ : ``-vec1_head_selid``
+
+    に対応している． 
+
+  ---
+* **-judgeup \<nmolup coord or none\>**
+    * Default: ``coord``  
+    * Example: ``-judgeup coord``
+* **-nmolup \<# of target molecules in upper leaflet\>**
+    * Default: 0
+    * Example: ``-nmolup 100``
+* **-center_selid \<selid\>**
+    * Default: N/A 
+    * Example: ``-center_selid 2`` 
+
+  実験室座標系の$z$軸を基準にとったときの，${\bf e}_{z}$の向きをこのオプションで指定する．$z$軸の正の方向を向いた単位ベクトルを${\bf e}_{z}^{\prime}$とする．
+
+    ``-judgeup nmolup``の場合: オプション``-nmolup``で指定した数を$N_{\mathrm{up}}$とすると，最初の$N_{\mathrm{mol}}$分子は
+${\bf e}_{z} = {\bf e}_{z}^{\prime}$ 
+として$\cos \theta$を計算し，それ以外の分子は${\bf e}_{z} = -{\bf e}_{z}^{\prime}
+$として$\cos \theta$を計算する．
+
+    ``-judgeup coord``の場合: ``-center_selid``で指定した分子の重心の$z$座標を$z_{\mathrm{c}}$, ``-bottom_selid``と``-head_selid``で指定された部位の重心の$z$座標をそれぞれ$z_{\mathrm{B}}$, $z_{\mathrm{H}}$とすると，
+
+\begin{align}
+{\bf e}_{z} = 
+\begin{cases}
+{\bf e}_{z}^{\prime}  & \dfrac{z_{\mathrm{H}}+z_{\mathrm{B}}}{2} > 0\\[.2cm]
+-{\bf e}_{z}^{\prime}
+& \dfrac{z_{\mathrm{H}}+z_{\mathrm{B}}}{2} \leq  0\\
+\end{cases}
+\end{align}
+
+>のように，注目している分子の位置に応じて，${\bf e}_{z}$の向きを設定する．
+
+  ---
+* **-dx \<グリッド幅(ANGSTROM)\>**
+    * Default: 0.1
+    * Example: ``-dx 0.1``
+
+    $P\left(\chi\right)$を計算するときのグリッド幅($\Delta \chi$)を指定する． 
+
+  ---
+* **-dt \<時間刻み\>**
+    * Default: 1
+    * Example: ``-dt 1``
+
+    時系列データ出力の際の時間軸(第1列)の時間刻みを指定する．
+
+### 出力ファイルのフォーマット
+
+* ``*.costheta``
+  
+    $\cos\theta$の時系列データが出力される．
+ 
+  * 1列目: 時間
+  * 2列目: $1$番目の分子の$\cos\theta$
+  * 3列目: $2$番目の分子の$\cos\theta$
+    ...
+
+* ``*.distr``
+
+    $P\left(\chi\right) = P\left(\cos\theta\right)$が出力される．
+
+    * 1列目: $x$軸 ($\cos\theta$)
+    * 2列目: $P\left(\cos\theta\right)$ 
+
+### 解析例
+
+#### 脂質二分子膜内における脂質分子の配向分布 
+
+```
+#!/usr/bin/env bash
+
+anatra z_orient                    \
+  -stype       psf                 \
+  -sfile       complex.psf         \
+  -tintype     nc                  \
+  -flist_traj  flist               \
+  -fhead       run_nc              \
+  -judgeup     coord               \
+  -dx          0.1                 \
+  -dt          0.1                 \
+  -sel0        name P              \
+  -sel1        name N              \
+  -sel2        segid MEMB and noh  \
+  -mode0       residue             \
+  -mode1       residue             \
+  -mode2       whole               \
+  -bottom_selid 0                  \
+  -head_selid   1                  \
+  -center_selid 2                  \
+  -prep_only   false
+```
+

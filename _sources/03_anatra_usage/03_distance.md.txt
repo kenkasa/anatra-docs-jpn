@@ -1,0 +1,128 @@
+## 距離(distance, dis)
+
+``distance``は選択した部位間の距離を計算する解析モードである．
+通常の距離計算の場合，選択した部位の分子重心間の距離が計算される．
+また，部位間の最近接距離(minimum distance)計算なども可能である．
+
+### オプション一覧
+
+**オプション名**                | **備考**         | **オプション名**   | **備考**
+:------------------------------:|:----------------:|:------------------:|:----------------:
+  ``-stype``                    | Common           | ``-sfile``         | Common
+  ``-tintype``                  | Common           | ``-tin``           | Common
+  ``-flist_traj``               | Common           | ``-fhead``         | Common
+  ``-sel0``                     | Common           | ``-sel1``          | Common
+  ``-mode0``                    | Common           | ``-mode1``         | Common
+  ``-pbc``                      | Mode specific    | ``-dt``            | Mode specific    
+  ``-distance_type``$^\dagger$  | Mode specific    | ``-mindist_type0``$^\dagger$  | Mode specific
+  ``-mindist_type1``$^\dagger$  | Mode specific    | ``-prep_only``     | Common
+
+通常の距離を計算する上で不要なオプションには$^{\dagger}$を付けているので，
+通常の距離を求めるだけであれば，それらのオプションは無視して良い．
+
+  ---
+* **-sel0 <部位選択>** 
+* **-sel1 <部位選択>**
+  * Default: N/A
+  * Example: ``-sel0 resid 1 to 20 and noh -sel1 resname LIG``
+
+  この解析モードでは基本的に選択した二つの部位(selid=1, 2)の間の距離を計算する．
+  その対となる部位を``-sel``$x$ ($x=1,2$)で指定する．
+
+  ---
+* **-mode0 \<residue or whole or atom\>**
+* **-mode1 \<residue or whole or atom\>**
+  * Default: ``residue``
+  * Example: ``-mode0 whole -mode1 residue``
+
+  ``-sel0``，``-sel1``で選択した部位をどのように分割するかを指定する．
+
+  ---
+* **-pbc \<true or false\>**
+  * Default: ``false``
+  * Example: ``-pbc true``
+
+  距離を計算する際に，PBCを考慮するかどうかを指定する．
+
+  ---
+* **-dt <時間刻み>**
+  * Default: ``1.0``
+  * Example: ``-dt 0.1``
+
+  時系列データを出力するときの時間軸(第1列)の時間刻みを指定する． 
+
+  ---
+* **-distance_type \<standard or minimum or intra\>$^\dagger$**
+  * Default: ``standard``
+  * Example: ``-distance_type standard``
+
+  距離の種類を指定する．
+  * **standard**: 通常の距離計算を実行する． 
+  * **minimum**: 部位間の最近接の原子間距離を計算する．
+  * **intra**: 分子内距離を計算する．
+
+  ``intra``は他の2つに比べて少し複雑であるので，具体例を交えて使い道を説明する．
+  いま，同種の高分子(残基名PLM)が100本存在する系を考える．
+  また，両末端の原子の名前をCP1, CP2とする．
+  このような系で，それぞれの高分子の末端–末端間距離を計算することはよくある．
+  しかし，``-distance_type standard``を選び，``-sel0 name CP1``，``-sel1 CP2``
+  と指定すると，異なる高分子間のCP1-CP2距離も計算してしまうことになる．
+  ``-distance_type intra``では，同一の分子内での距離のみを計算するようになっている．
+
+  ---
+* **-mindist_type1 \<site or com\>**$^{\dagger}$
+  * Default: ``site``
+  * Example: ``-mindist_type0 com -mindist_type1 site``
+
+  部位内の最近接サイト候補を指定する．
+  * **site**: 部位を構成する原子を最近接サイト候補に設定する．
+  * **com**: 部位の重心のみを最近接サイト候補に設定する．
+
+  部位0, 1がともに``com``の場合，通常の距離計算と等価になる．
+
+  ---
+
+### 出力ファイルのフォーマット
+
+* ``*.dis``ファイル
+
+  このファイルには，選択部位間の距離または最近接距離が出力される．
+  ``-mode0``，``-mode1``の指定により，
+  部位0, 1がそれぞれ$n_1$個，$n_2$個の分子に分割されたとすると，
+  合計で$n_1 n_2$個の距離が出力されることになる．
+  そのときの各データは次のように出力される．
+
+  * 1列目: 時間軸
+  * 2列目: 分子対(1, 1)の距離
+  * 3列目: 分子対(1, 2)の距離  
+    ...
+  * $n_2$列目: 分子対(1, $n_2$)の距離
+  * $n_2+1$列目: 分子対(2, 1)の距離
+  * $n_2+2$列目: 分子対(2, 2)の距離  
+    ...
+
+    距離は，ANGSTROM単位で出力される．
+
+### 解析例
+
+#### 通常の原子間距離の計算
+
+タンパク質(``resid 1 to 192``)とリガンド10分子(``resname LIG``)の間の
+距離を計算する場合を示す．
+```
+#!/bin/bash
+
+anatra distance                                    \
+  -stype          parm7                            \
+  -sfile          complex.prmtop                   \
+  -tintype        dcd                              \
+  -tin            INP.dcd                          \
+  -fhead          out                              \
+  -pbc            true                             \
+  -distance_type  standard                         \
+  -dt             0.1                              \
+  -sel0           resid 1 to 192                   \
+  -sel1           resname LIG                      \
+  -mode0          whole                            \
+  -mode1          residue
+```

@@ -1,0 +1,109 @@
+## 界面法線方向($z$)に沿った分布関数(z_profile, zprof)
+
+``z_profile`` (``zprof``)は，
+膜界面の法線方向($z$)に沿った分布を計算する．
+分子$a$の$z$軸に沿った局所密度場を$\hat{\rho}_{a}\left(z\right)$と定義する．
+
+\begin{align}
+\hat{\rho}_{a}\left(z\right) & =\dfrac{1}{A_{xy}}\sum_{i=1}^{N_{\mathrm{a}}}\delta\left(z-z_{i}\right).
+\end{align}
+
+ここで，$A_{xy}$はシミュレーションセルの$xy$面の面積，$z_{i}$は$i$番目の分子の$z$座標である．
+これの平均をとったものが，分布関数である．
+
+\begin{align}
+\rho_{a}\left(z\right) = \Braket{\hat{\rho}\left(z\right)}.
+\end{align}
+
+実験データと比較するために，電子密度分布$\rho^{e}_{a}\left(z\right)$を計算することも多い．その場合の局所密度場は
+
+\begin{align}
+\hat{\rho}^{e}_{a}\left(z\right) = \sum_{i=1}^{N_{a}}\sum_{\lambda=1}^{N_{\mathrm{s}}} q_{\lambda}\delta\left(z-z_{i,\lambda}\right),
+\end{align}
+
+で与えられる．ただし，$q_{\lambda}$は分子$a$内の$\lambda$番目の原子が持つ電子数，$z_{i,\lambda}$
+は$i$番目の分子$a$内にある$\lambda$番目の原子の$z$座標である．電子密度分布は$\rho_{a}^{e}\left(z\right) = \Braket{\rho_{a}^{e}\left(z\right)}$と定義される．
+
+### オプション一覧
+
+**オプション**     | **備考**      | **オプション**    | **備考**
+:-----------------:|:-------------:|:-----------------:|:--------------:
+``-stype``         | Common        | ``-sfile``        | Common
+``-tintype``       | Common        | ``-tin``          | Common
+``-flist_traj``    | Common        | ``-fhead``        | Common        
+``-sel0``          | Common        | ``-sel1``         | Common        
+``-mode0``         | Common        | ``-mode1``        | Common        
+``-target_selid``  | Mode specific | ``-center_selid`` | Mode specific 
+``-denstype``      | Mode specific | ``-symmetrize``   | Mode specific
+``-prep_only``     | Common        | --                | -- 
+
+ ---
+* **-selid0 \<selid\>**  
+* **-selid1 \<selid\>**  
+    * Default: N/A 
+    * Example: ``-selid0 resname ETOH -selid1 segid MEMB``  
+
+    分布関数を計算したい分子を選択する．
+また，$z=0$を膜中心に設定したい場合は，膜分子も追加で選択する．
+
+  ---
+* **-target_selid \<selid\>**  
+    * Default: N/A  
+    * Example: ``-target_selid 0``
+
+    ``-sel``$x$のうち，分布関数を計算したい分子に対応するselidを指定する．
+
+  ---
+* **-center_selid \<selid\>**  
+    * Default: ``false``  
+    * Example: ``-target_selid 1``
+
+    ``-sel``$x$のうち，膜分子に対応するselidを指定する．このselidで指定された膜分子の重心が$z=0$に設定される．
+
+  ---
+* **-symmetrize \<true or false\>**  
+    * Default: ``false``  
+    * Example: ``-symmetrize false``
+
+    $z<0$と$z>0$の分布を平均して対称化するかどうかを指定する．
+
+  ---
+
+* **-denstype \<number or electron\>**  
+    * Default: ``number``  
+    * Example: ``-denstype number``
+
+    数密度分布(``number``)か電子密度分布(``electron``)のどちらを計算するかを指定する．
+
+### 出力ファイルのフォーマット
+
+* ``*.zprof``
+  
+  ``-target_selid``で指定したselidの分子の分布関数が出力される． 
+  
+  * 1列目: $z$座標 
+  * 2列目: 分布関数 
+
+### 解析例
+
+#### 脂質膜–水系における水分子の数密度分布
+
+```
+#!/usr/bin/env bash
+
+anatra z_profile                 \
+  -stype      psf                \
+  -sfile      complex.psf        \
+  -tintype    netcdf             \
+  -flist_traj flist              \
+  -fhead      run                \
+  -sel0       water              \
+  -sel1       segid MEMB and noh \
+  -mode0      residue            \
+  -mode1      whole              \
+  -target_selid 0                \
+  -center_selid 1                \
+  -denstype   number             \
+  -prep_only  false
+```
+

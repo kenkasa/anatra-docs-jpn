@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ヒストグラム(histogram, hist) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ヒストグラム(histogram, hist)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/05_fanatra_usage/02_histogram.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="histogram-hist">
+<h1>ヒストグラム(histogram, hist)<a class="headerlink" href="#histogram-hist" title="Link to this heading"></a></h1>
+<p>この解析モードでは，何らかの時系列データ<span class="math notranslate nohighlight">\(\xi\left(t\right)\)</span>から分布関数<span class="math notranslate nohighlight">\(P\left(x\right)\)</span>を計算する．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-749ca20f-6ca1-4ad6-aac1-618abd642b3f">
+<span class="eqno">()<a class="headerlink" href="#equation-749ca20f-6ca1-4ad6-aac1-618abd642b3f" title="Permalink to this equation"></a></span>\[\begin{align}
+P\left(x\right) =  \dfrac{1}{N}\Braket{\delta\left(x - \xi\right)} 
+\end{align}\]</div>
+<p>ここで，<span class="math notranslate nohighlight">\(N\)</span>はデータ点の数であり，上式は規格化条件</p>
+<div class="amsmath math notranslate nohighlight" id="equation-c26c1d83-9c6a-4d0d-89e1-b3209e5bb982">
+<span class="eqno">()<a class="headerlink" href="#equation-c26c1d83-9c6a-4d0d-89e1-b3209e5bb982" title="Permalink to this equation"></a></span>\[\begin{align}
+\int_{-\infty}^{\infty} dx P\left(x\right) = 1
+\end{align}\]</div>
+<p>を満たす．</p>
+<section id="id1">
+<h2>パラメータ一覧<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+</section>
+<section id="option-param">
+<h2>&amp;option_param<a class="headerlink" href="#option-param" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dx</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: 0.1</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">=</span> <span class="pre">0.1</span></code></p></li>
+</ul>
+<p>分布関数を計算する際のグリッド幅<span class="math notranslate nohighlight">\(\Delta x\)</span>を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">xsta</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: 0.0</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">xsta</span> <span class="pre">=</span> <span class="pre">0.0</span></code></p></li>
+</ul>
+<p>グリッドを張るスタート位置<span class="math notranslate nohighlight">\(x_{0}\)</span>を指定する．<span class="math notranslate nohighlight">\(i\)</span>番目のグリッドの位置を<span class="math notranslate nohighlight">\(x_{i}\)</span>とすると，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-72a45254-98f7-46d5-b841-6676bce952fc">
+<span class="eqno">()<a class="headerlink" href="#equation-72a45254-98f7-46d5-b841-6676bce952fc" title="Permalink to this equation"></a></span>\[\begin{align}
+x_{i} = x_{0} + \left(i - 1 \right) \Delta x
+\end{align}\]</div>
+<p>である．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ncol</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: 1</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ncol</span> <span class="pre">=</span> <span class="pre">10</span></code></p></li>
+</ul>
+<p>1つの時系列データファイルあたりに含まれるデータ列数を指定する．</p>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h2>出力ファイルのフォーマット<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*.dat</span></code> (拡張子は<code class="docutils literal notranslate"><span class="pre">file_extension</span></code>によって変更可)</p>
+<ul>
+<li><p>1列目: <span class="math notranslate nohighlight">\(x\)</span>座標</p></li>
+<li><p>2列目: 分布関数<span class="math notranslate nohighlight">\(P\left(x\right)\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h2>解析例<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>3つのデータ列を持つ時系列データ<code class="docutils literal notranslate"><span class="pre">inp.ts</span></code>から，<span class="math notranslate nohighlight">\(5\leq x \leq 10\)</span>の範囲で分布関数<span class="math notranslate nohighlight">\(P\left(x\right)\)</span>を計算する例を以下に示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+<span class="n">fcv</span> <span class="o">=</span> <span class="s2">&quot;inp.ts&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+<span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;run&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+<span class="n">dx</span>   <span class="o">=</span> <span class="mf">0.1</span><span class="n">d0</span>
+<span class="n">xsta</span> <span class="o">=</span> <span class="mf">5.0</span><span class="n">d0</span>
+<span class="n">nx</span>   <span class="o">=</span> <span class="mi">50</span>
+<span class="n">ncol</span> <span class="o">=</span> <span class="mi">3</span> 
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">hist</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ヒストグラム解析(hs) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ヒストグラム解析(hs)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/05_fanatra_usage/temp/02_hs.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="hs">
+<h1>ヒストグラム解析(hs)<a class="headerlink" href="#hs" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">hs</span></code>はflistにて指定したファイルに格納されたデータについて，
+指定した範囲，binの細かさでヒストグラムを作成するプログラムである．</p>
+<section id="id1">
+<h2>オプション一覧<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p><strong>オプション名</strong></p></th>
+<th class="head text-center"><p><strong>セクション</strong></p></th>
+<th class="head text-center"><p><strong>オプション名</strong></p></th>
+<th class="head text-center"><p><strong>セクション</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">fts</span></code></p></td>
+<td class="text-center"><p>&amp;input_param</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">fdist</span></code></p></td>
+<td class="text-center"><p>&amp;output_param</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">dx</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">xsta</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">nx</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">ncol</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<ul>
+<li><p><strong>fts = “&lt;解析対象ファイル&gt;”</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;input_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fts</span> <span class="pre">=</span> <span class="pre">&quot;cvdata&quot;</span></code></p></li>
+</ul>
+<p>ヒストグラムを作成したい解析対象ファイルの名前を指定する．[1]
+詳しい解析対象ファイルのフォーマットは以下を参照されたい．
+[1]: このように入力ファイル名を直接指定する形式は開発当初のものであるため今後変更される可能性が高い．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong>fdist = “&lt;出力ファイル&gt;”</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;output_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fts</span> <span class="pre">=</span> <span class="pre">&quot;distribution&quot;</span></code></p></li>
+</ul>
+<p>作成したヒストグラムのデータを出力するファイルの名前を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong>dx = &lt;ビン幅&gt;</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;option_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">=</span> <span class="pre">0.1</span></code></p></li>
+</ul>
+<p>作成するヒストグラムのビン幅を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong>xsta = &lt;ビンの最低値&gt;</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;option_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">xsta</span> <span class="pre">=</span> <span class="pre">0.0</span></code></p></li>
+</ul>
+<p>作成するヒストグラムの最低値（開始の値）を設定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong>nx = &lt;ビンの総数&gt;</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;option_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nx</span> <span class="pre">=</span> <span class="pre">100</span></code></p></li>
+</ul>
+<p>作成するヒストグラムのビンの総数を指定する．つまり，<code class="docutils literal notranslate"><span class="pre">xsta</span></code>から<code class="docutils literal notranslate"><span class="pre">dx</span></code><span class="math notranslate nohighlight">\(\times\)</span><code class="docutils literal notranslate"><span class="pre">nx</span></code>の領域でヒストグラムを作成することとなる．</p>
+</li>
+<li><p><strong>ncol = &lt;解析する列&gt;</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;option_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ncol</span> <span class="pre">=</span> <span class="pre">1</span></code></p></li>
+</ul>
+<p>解析対象のファイルの内，何列目のデータについてヒストグラム作成を行うのか指定する．</p>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h2>解析例<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

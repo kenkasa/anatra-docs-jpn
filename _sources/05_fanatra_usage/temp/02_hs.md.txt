@@ -1,0 +1,59 @@
+## ヒストグラム解析(hs)
+
+`hs`はflistにて指定したファイルに格納されたデータについて，
+指定した範囲，binの細かさでヒストグラムを作成するプログラムである．
+
+### オプション一覧
+
+**オプション名**  | **セクション**         | **オプション名** | **セクション**
+:----------------:|:----------------:|:----------------:|:----------------:
+  ``fts``         |   &input_param   | ``fdist``        |   &output_param         
+  ``dx``          |   &option_param  | ``xsta``         |   &option_param 
+  ``nx``          |   &option_param  | ``ncol``         |   &option_param 
+
+ ---
+* **fts = "\<解析対象ファイル\>"**
+  * Section: &input_param 
+  * Default: N/A
+  * Example: ``fts = "cvdata"``
+
+  ヒストグラムを作成したい解析対象ファイルの名前を指定する．\[1]
+  詳しい解析対象ファイルのフォーマットは以下を参照されたい．
+\[1]: このように入力ファイル名を直接指定する形式は開発当初のものであるため今後変更される可能性が高い．
+ ---
+* **fdist = "\<出力ファイル\>"**
+  * Section: &output_param 
+  * Default: N/A
+  * Example: ``fts = "distribution"``
+
+  作成したヒストグラムのデータを出力するファイルの名前を指定する．
+ ---
+* **dx = \<ビン幅\>**
+  * Section: &option_param 
+  * Default: N/A
+  * Example: ``dx = 0.1``
+
+  作成するヒストグラムのビン幅を指定する．
+ ---
+* **xsta = \<ビンの最低値\>**
+  * Section: &option_param 
+  * Default: N/A
+  * Example: ``xsta = 0.0``
+
+  作成するヒストグラムの最低値（開始の値）を設定する．
+ ---
+* **nx = \<ビンの総数\>**
+  * Section: &option_param 
+  * Default: N/A
+  * Example: ``nx = 100``
+
+  作成するヒストグラムのビンの総数を指定する．つまり，`xsta`から`dx`$\times$`nx`の領域でヒストグラムを作成することとなる．
+
+* **ncol = \<解析する列\>**
+  * Section: &option_param 
+  * Default: N/A
+  * Example: ``ncol = 1``
+
+  解析対象のファイルの内，何列目のデータについてヒストグラム作成を行うのか指定する．
+
+### 解析例

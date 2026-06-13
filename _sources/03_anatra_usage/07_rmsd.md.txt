@@ -1,0 +1,107 @@
+## 平均二乗偏差(rmsd)
+
+### 理論背景
+
+ここでは，平均二乗偏差（Root-mean-square deviation, RMSD）の定義について解説する．RMSDは注目する分子やその特定部位について，MD計算中のある時刻での構造が，参照とする構造(参照構造)からどの程度ずれているかを定量的に評価するものである．
+例えばあるタンパク質について，結晶構造を参照構造として，平衡化過程で参照構造からどの程度構造のズレが生じ，また構造が緩和しているかを判別する際によく用いられる．
+
+原子$N_{\mathrm{sel}}$個からなる分子について，${\bf r}_{i}$を$i$番目の原子の座標，${\bf r} ^{\mathrm{ref}}$を参照構造中の原子の座標，${\bf r} (t)$を時刻$t$での座標とする．この時，
+平均二乗偏差$\chi\left(t\right)$は以下の式で定義される．
+
+\begin{align}
+\chi\left(t\right) & =\sqrt{\dfrac{1}{N_{\mathrm{sel}}}\sum_{i=1}^{N_{\mathrm{sel}}}\left|{\bf r}_{i}\left(t\right)-{\bf r}_{i}^{\mathrm{ref}}\right|^{2}}.
+\end{align}
+
+### オプション一覧
+
+**オプション**     |  **備考**       | **オプション** | **備考**
+|:----------------:|:---------------:|:--------------:|:---------------:|
+``-stype``         | Common          | ``-sfile``     | Common
+``-tintype``       | Common          | ``-tin``       | Common
+``-fout``          | Common          | ``-sel0``      | Common
+``-sel1``          | Common          | ``-sel2``      | Common
+``-sel3``          | Common          | ``-fit``       | Mode specific
+``-refpdb``        | Common          | ``-fitselid``  | Mode specific
+``-refselid``      | Mode specific   | ``-rmsdselid`` | Mode specific
+``-rmsdrefselid``  | Mode specific
+
+  ---
+* **-fout \<出力ファイル\>**
+  * Default: out.rmsd
+  * Example: ``-fout out.rmsd``
+
+  計算結果を出力するファイルを指定する．
+
+  ---
+* **-refpdb \<参照構造のPDBファイル\>**
+  * Default: N/A
+  * Example: ``-refpdb ref.pdb``
+
+  参照構造のPDBファイルを指定する．この場合はRMSD計算における参照構造である．
+
+  ---
+* **-fit \<true or false\>**
+  * Default: ``false``
+  * Example: ``-fit true``
+  * Note: ``true``の場合，``-refselid``，``-fitselid``の指定が必要となる．
+
+  RMSD計算の前にフィッティングを行うかどうかを指定する．
+
+  ---
+* **-fitselid \<selid\>**
+  * Default: N/A
+  * Example: ``-fitselid 1``
+* **-refselid \<selid\>**
+  * Default: N/A
+  * Example: ``-fitselid 2``
+
+  フィッティングを行う際，その対象部位に対応するselidを指定する．
+  従って，このオプションは"``-fit true``"のときに必須となる．
+  参照構造内のフィッティングに使う部位は"``-refselid``"で指定する.
+
+  ---
+* **-rmsdselid \<selid\>**
+  * Default: N/A
+  * Example: ``-rmsdselid 2``
+
+  RMSD計算を行う分子や部位に対応するselidを指定する．
+
+  ---
+* **-rmsdrefselid \<selid\>**
+  * Default: N/A
+  * Example: ``-rmsdrefselid 3``
+
+  RMSD計算を行う際の参照構造に対応するselidを指定する．
+
+### 出力ファイルのフォーマット
+
+* ``*.rmsd``ファイル
+
+  このファイルには，RMSDが出力される．
+  * 1列目: 時間
+  * 2列目: RMSD
+
+### 解析例
+
+#### 水中におけるタンパク質の結晶構造からのRMSD
+
+タンパク質(``resid 1 to 161``)のC$\alpha$原子に対するRMSDを計算する．
+
+```
+anatra rmsd                                   \
+  -stype        parm7                         \
+  -sfile        complex.prmtop                \
+  -tintype      dcd                           \
+  -tin          INP.dcd                       \
+  -fout         out.rmsd                      \
+  -sel0         resid 1 to 161 and name CA    \
+  -sel1         resid 1 to 161 and name CA    \
+  -sel2         resid 1 to 161 and name CA    \
+  -sel3         resid 1 to 161 and name CA    \
+  -fit          true                          \
+  -refpdb       ref.pdb                       \
+  -fitselid     0                             \
+  -refselid     1                             \
+  -rmsdselid    2                             \
+  -rmsdrefselid 3
+```

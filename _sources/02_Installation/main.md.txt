@@ -1,0 +1,194 @@
+# ANATRAのインストール 
+
+この章では，ANATRAのインストール方法について紹介する．
+
+## ANATRAを利用する上で必要となるプログラム
+
+* VMD (> 1.7.3) 
+* Intelコンパイラ(Intel OneAPI) またはGCC (> 8.5.0)
+* bash 
+
+ログインシェルとして，bashを用いていることを前提としている．[^footnote_bash]
+[^footnote_bash]: ただし，次節で述べるように，zshなどの場合についても，自身でrcファイル(``~/.zshrc``など)を修正すれば，bash以外をログインシェルに用いている場合でも利用が可能である．
+
+VMDについては，
+```
+https://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD
+```
+から無料でダウンロードできる．ただし，アカウント登録が必要である．[^footnote_vmd]
+<!---
+松林研内部計算機には，VMDがインストールされているので，``~/.bashrc``に下記を追加することで，
+VMDが利用可能になる．
+```
+source /data2/APPLI/packages/vmd/vmd.rc
+```
+--->
+[^footnote_vmd]: VMDのインストール方法も簡単に述べておく．webサイトからダウンロードした``vmd-XXX.tar.gz``
+を解凍すると，``vmd-XXX``というディレクトリが生成されるので，そのディレクトリへ移動する．
+``configure``ファイルをテキストエディタで開き，
+ファイル上部にある``install_bin_dir=``にVMDをインストールしたいディレクトリを入力する．
+その後，Linuxマシンの場合は"``./configure LINUXAMD64``"と実行した上で，``src``ディレクトリに移動し，
+``make install``を実行すると，``install_bin_dir=``で指定したディレクトリに``vmd``プログラムが配置されているはずである．
+このディレクトリにPATHを通しておけば，インストール完了である．
+
+
+<!---
+## 松林研内部計算機にインストールされているプログラムを利用する
+
+松林研内部計算機には最新版のANATRAが``/data2/APPLI``ディレクトリにインストールされている．  
+```
+/data2/APPLI/GitHub/anatra_dev
+```
+このANATRAを利用するための環境セットアップスクリプト``anatra.rc`` が用意されているので，
+``~/.bashrc``かANATRAを実行するスクリプト内部にて
+下記を実行すると良い．
+```
+$ source /data2/APPLI/GitHub/anatra_dev/anatra.rc
+```
+--->
+
+## ソースコードからインストールする
+
+ここでは，自身でソースコードからANATRAをインストールする方法を紹介する．
+最新版のソースコードはGitHub上で管理されている．  
+```
+https://github.com/kenkasa/anatra
+```
+<!---
+ただし2025年時点ではプライベートリポジトリとして設定されており，
+権限のあるユーザーしかアクセスできない．
+開発者以外でリポジトリへのアクセス権限が必要な人は笠原(kasahara@cheng.es.osaka-u.ac.jp)まで連絡されたい．
+--->
+
+まず，GitHubリポジトリからソースコードをダウンロードする．ANATRAをインストールしたいディレクトリを
+``/home/USER/software``とすると，まずこのディレクトリに移動ののち，``git clone``を実行する．
+```
+$ cd /home/USER/software
+$ git clone https://github.com/kenkasa/anatra.git
+$ ls
+anatra
+
+$ cd anatra 
+$ ls
+README.md
+install.sh
+bin/
+tcl/
+f90/
+docs/
+utility/
+```
+``install.sh``を実行することで，ANATRAのインストールが開始される．
+過去にANATRAのインストールを行ったことがある場合は，``~/.bashrc``または``~/.zshrc``に次の3行が含まれているので，
+実行前に，あらかじめ削除しておく必要がある．ただし，``$ANATRA_PATH``が今回インストールするANATRAと同じディレクトリを指し示している場合は，そのままにしておいても良い(もし分からない場合は下記3行を削除すると良い)．
+```
+export ANATRA_PATH=...
+export PATH=$ANATRA_PATH/bin:$PATH
+export LD_LIBRARY_PATH=$ANATRA_PATH/f90/lib/external/netcdf/netcdf/lib:$LD_LIBRARY_PATH
+```
+<!---
+bashやzsh以外のログインシェルを利用している場合は，上記に対応するものを自身でrcファイルに記入すれば良い．例えば，``zsh``の場合には，
+```
+export ANATRA_PATH=/path/to/vmd_scripts/anatra
+export PATH=$ANATRA_PATH/bin:$PATH
+export LD_LIBRARY_PATH=$ANATRA_PATH/f90/lib/external/netcdf/netcdf/lib
+```
+--->
+
+``install.sh``の実行オプションを下記に記す．
+
+```{raw} latex 
+\renewcommand{\arraystretch}{1.2} 
+{\arrayrulewidth=0.5pt 
+\begin{tabular}{p{4cm}p{3cm}p{8cm}} 
+\arrayrulecolor{gray} 
+\rowcolor{headerColor} 
+\hline \textbf{オプション} & \textbf{値} & \textbf{備考}\\ 
+\hline 
+\verb|--compiler=<type>| 
+& \verb|gcc|, \verb|intel| & 使用するコンパイラを指定する．\\
+\hline 
+\verb|--install-hdf5| & --- & HDF5ライブラリをインストールする．\\
+\hline \verb|--skip-install-lib| & --- & 外部ライブラリのインストールを省略する．\\
+\hline \verb|--with-openblas| & --- & Intel MKLの代わりにOpenBLASを使用する． 事前に環境変数\verb|OPENBLAS_ROOT|を設定し，OpenBLASディレクトリのインストール先を指定する必要がある．\\
+\hline \verb|--with-ffte| & --- & Intel MKLのFFTの代わりにFFTEライブラリを使用する．\\ \hline \end{tabular} } 
+```
+
+``install.sh``を実行する際，引数でコンパイラを指定することが出来る．
+```
+$ ./install.sh --compiler=<gcc or intel>
+```
+デフォルトは``intel``である．Intel OneAPIが利用できる環境の場合は``intel``を指定することを推奨する．
+<!--- いくつかのプログラムはIntelのMath Kernel Library (MKL)に依拠しているため，``gcc``の場合には，それらのインストールがスキップされる．
+--->
+
+Intel compilerを利用する場合は，
+```
+$ ./install.sh --compiler=intel
+```
+のように実行する．
+
+スクリプトを実行すると，ビルドの進捗がログとして表示される．ビルド終了直前で下記のメッセージが表示されれば，
+全ての解析プログラムのビルドが正常終了したと考えて良い．
+```
+Installation of ANATRA fortran programs have been
+succesfully finished!!
+```
+また，変数として``$ANATRA_PATH``が定義されており，``anatra``コマンドにPATHが通っていれば，
+インストール成功である．
+```
+$ echo $ANATRA_PATH
+/home/USER/software/anatra
+
+$ which anatra
+/home/USER/software/anatra/bin/anatra
+```
+
+Fortranソースコードを書き換えて再ビルドする場合，``install.sh``を上記のオプションで実行すると，外部ライブラリを一からビルドするため，時間がかかる．そこで，オプションとして``--skip-install-lib``を加えると，ライブラリのビルドをスキップできる．ただし，前回のビルドからコンパイラを変更する場合には，外部ライブラリも含めて再ビルドする必要がある．
+
+ANATRAをインストールするマシンの環境によっては要求しているライブラリなどが不足しているために，
+インストールに失敗することがある．その場合の対応法については，以下を参照されたい．
+
+### HDF5ライブラリを併せてビルドする場合
+
+ANATRAはNetCDF形式のトラジェクトリをサポートする関係で，HDF5ライブラリが必要となる．
+Linuxディストリビューションの多くは，標準でHDF5ライブラリをプリインストールしている．もし，インストールされていない，またはインストールされているか分からない場合には，``--install-hdf5``を下記のように加えれば，ANATRAに同梱されているHDF5をインストールする．
+```
+$ ./install.sh --compiler=<gcc or intel> --install-hdf5
+```
+
+### OpenBLASを利用する場合
+
+``install.sh``は，デフォルトではIntel OneAPIに同梱されている数学ライブラリIntel Math Kernel Library (MKL)を利用してコンパイルするようになっているが，Intel OneAPIをインストールしていない場合でも，OpenBLASで代替することが可能である．
+
+OpenBLASはGitHub上からダウンロードすることが可能である．
+
+```
+git clone https://github.com/OpenMathLib/OpenBLAS.git
+```
+
+上記コマンドを実行すると，``OpenBLAS``というディレクトリにソースコードが格納される．
+そのディレクトリ内に入って，``make``と``make install``を実行すれば良い．
+``OpenBLAS``ディレクトリ上にライブラリ等をインストールする場合を下記に記す．
+
+```
+cd OpenBLAS
+make
+make PREFIX=/path/to/OpenBLAS install
+```
+
+インストール後に，グローバル変数として``OPENBLAS_ROOT``を``~/.bashrc``や``~/.zshrc``の中に下記のように定義しておく．
+
+```
+export OPENBLAS_ROOT=/path/to/OpenBLAS
+```
+
+その上で，ANATRAの``install.sh``を``--with-openblas``のオプションをつけて実行すれば良い．
+
+```
+./install --compiler=gcc --with-openblas
+```
+
+なお，OpenBLASを利用する数学ライブラリとして指定すると，
+自動的に高速フーリエ変換(Fast Fourier Transform, FFT)のライブラリとして``ffte``が利用されるようになる．
+

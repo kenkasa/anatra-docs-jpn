@@ -1,0 +1,181 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>フレーム抽出(extract_frame, extf) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">フレーム抽出(extract_frame, extf)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/05_fanatra_usage/05_extract_frame.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="extract-frame-extf">
+<h1>フレーム抽出(extract_frame, extf)<a class="headerlink" href="#extract-frame-extf" title="Link to this heading"></a></h1>
+<p>この解析モードでは，CVの値域指定により，特定の条件を満たすスナップショット(フレーム)を抽出する．</p>
+<section id="id1">
+<h2>パラメータ一覧<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+</section>
+<section id="option-param">
+<h2><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code><a class="headerlink" href="#option-param" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ndim</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">2</span></code></p></li>
+</ul>
+<p>時系列CVデータの次元数を指定する．</p>
+<p><code class="docutils literal notranslate"><span class="pre">extract_range</span></code> には，この次元数に対応した範囲を指定する必要がある．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">extract_range</span></code></strong></p>
+<ul>
+<li><p>Default: None</p></li>
+<li><p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">extract_range</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.0</span><span class="n">d0</span> <span class="mf">5.0</span><span class="n">d0</span>
+                 <span class="mf">1.0</span><span class="n">d0</span> <span class="mf">0.0</span><span class="n">d0</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>フレームを抽出するCV領域を指定する．</p>
+<p>各CVについて，下限値と上限値を1組として与える．</p>
+<p>上記の例では，</p>
+<ul class="simple">
+<li><p>CV1: <span class="math notranslate nohighlight">\(-5.0 \leq \mathrm{CV}_1 \leq 5.0\)</span></p></li>
+<li><p>CV2: <span class="math notranslate nohighlight">\(0.0 \leq \mathrm{CV}_2 \leq 1.0\)</span></p></li>
+</ul>
+<p>を満たすフレームが抽出される．</p>
+<p><code class="docutils literal notranslate"><span class="pre">ndim</span></code> 個の範囲を指定することで，多次元の抽出条件を設定できる．</p>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h2>出力ファイルのフォーマット<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>出力ファイル(トラジェクトリ)のフォーマットは，
+入力のトラジェクトリのフォーマット(dcd or xtc or nc (netcdf))と同じものとなる．</p>
+</section>
+<section id="id3">
+<h2>解析例<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>CV数が1，CV (<span class="math notranslate nohighlight">\(\zeta\)</span>)の時系列データ<code class="docutils literal notranslate"><span class="pre">inp.ts</span></code>をもとに，<span class="math notranslate nohighlight">\(5\leq \zeta \leq 10\)</span>の条件を満たす
+フレームを入力トラジェクトリから抽出する場合の解析例を示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">ftraj</span>    <span class="o">=</span> <span class="s2">&quot;input.dcd&quot;</span> 
+ <span class="n">fcv</span>      <span class="o">=</span> <span class="s2">&quot;inp.ts&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span>         <span class="o">=</span> <span class="s2">&quot;out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">ndim</span>          <span class="o">=</span>  <span class="mi">1</span>       
+ <span class="n">extract_range</span> <span class="o">=</span>  <span class="mf">5.0</span>  <span class="mf">10.0</span> 
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">extract_frame</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+</pre></div>
+</div>
+<p>これを実行すると，<code class="docutils literal notranslate"><span class="pre">out.dcd</span></code>が出力される．</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

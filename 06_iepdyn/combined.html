@@ -1,0 +1,1467 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Integral-Equation formalism of Population DYNamics (IEPDYN) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="prev" title="fanatraの使い方" href="../05_fanatra_usage/combined.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Integral-Equation formalism of Population DYNamics (IEPDYN)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">理論背景</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#iepdyn">IEPDYNの理論表式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">境界条件の導入</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#returning-probability-rp">再帰確率(Returning probability, RP)理論との連携</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#p-j-left-t-right"><span class="math notranslate nohighlight">\(P_{j}\left(t\right)\)</span>の時間積分に対する解析的評価</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#p-j-left-infty-right">平衡ポピュレーション<span class="math notranslate nohighlight">\(P_{j}\left(\infty\right)\)</span>の解析的評価</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">パラメータ一覧</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#option-param"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#state"><code class="docutils literal notranslate"><span class="pre">&amp;state</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">補助ツール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">出力ファイル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">解析例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#md-use-perturbed-traj-false">バイアスポテンシャルなしのMDトラジェクトリを利用する場合(<code class="docutils literal notranslate"><span class="pre">use_perturbed_traj</span> <span class="pre">=</span> <span class="pre">.false.</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#krhist">リスタートファイル(<code class="docutils literal notranslate"><span class="pre">krhist</span></code>)の作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id7">平衡ポピュレーション値の計算</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#p-mathrm-b-t"><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の計算</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8"><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の時間積分の解析的評価</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#md-use-perturbed-id-true">バイアスポテンシャルありのMDトラジェクトリを利用する場合(<code class="docutils literal notranslate"><span class="pre">use_perturbed_id</span> <span class="pre">=</span> <span class="pre">.true.</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id9">リスタートファイル(<code class="docutils literal notranslate"><span class="pre">krhist</span></code>)の作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id10">平衡ポピュレーション値の計算</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11"><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の計算</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12"><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の時間積分の解析的評価</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Integral-Equation formalism of Population DYNamics (IEPDYN)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/06_iepdyn/combined.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="integral-equation-formalism-of-population-dynamics-iepdyn">
+<h1>Integral-Equation formalism of Population DYNamics (IEPDYN)<a class="headerlink" href="#integral-equation-formalism-of-population-dynamics-iepdyn" title="Link to this heading"></a></h1>
+<p>Integral-Equation formalism of Population DYNamics (IEPDYN)法は，状態間遷移を記述する方法論である．この方法の特徴は，連続的な時間変化によって状態ダイナミクスを表現する点にあり，Markov-state model (MSM)をはじめとする既存理論で導入される離散的な時間スケール(ラグタイム)を必要とせず，ラグタイムに依存しないダイナミクスの記述が可能である．
+また，IEPDYN法による記述には局所的な状態間遷移に関する時間相関関数の計算が必要となるが，これらは局所的な情報のみを含むため，短時間MD計算から評価することができる．したがって，短時間MD計算から得られる情報を用いて，長時間スケールにわたるポピュレーションダイナミクスを記述することが可能である．</p>
+<p>ANATRAでは，<code class="docutils literal notranslate"><span class="pre">fanatra</span></code>の解析モードの一つとしてIEPDYN法を実装している．</p>
+<section id="id1">
+<h2>理論背景<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="iepdyn">
+<h3>IEPDYNの理論表式<a class="headerlink" href="#iepdyn" title="Link to this heading"></a></h3>
+<p>注目系を構成する原子の位置と運動量のセット(位相点)を<span class="math notranslate nohighlight">\(\boldsymbol{\Gamma}\)</span>とし，
+<span class="math notranslate nohighlight">\(\boldsymbol{\Gamma}\)</span>で張られた空間(位相空間)を複数の構造状態に分割する．系のLiouville演算子を<span class="math notranslate nohighlight">\(\mathcal{L}\)</span>とすると，時刻<span class="math notranslate nohighlight">\(t\)</span>における状態<span class="math notranslate nohighlight">\(j\)</span>の確率密度<span class="math notranslate nohighlight">\(\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right)\)</span>の厳密な時間発展は次式によって表される．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-24078945-0b69-44ba-8012-9a579864bdfe">
+<span class="eqno">(72)<a class="headerlink" href="#equation-24078945-0b69-44ba-8012-9a579864bdfe" title="Permalink to this equation"></a></span>\[\begin{align}
+\dfrac{\partial}{\partial t}\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right) =&amp; -\mathcal{L}\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right) -\sum_{i\in\mathcal{N}_{j}}S_{ij}\left(\boldsymbol{\Gamma}\right)\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right) +\sum_{k\in\mathcal{N}_{j}}S_{jk}\left(\boldsymbol{\Gamma}\right)\hat{f}_{k}\left(\boldsymbol{\Gamma},t\right).
+\end{align}\]</div>
+<p>ここで，<span class="math notranslate nohighlight">\(\mathcal{N}_{j}\)</span>は状態<span class="math notranslate nohighlight">\(j\)</span>の隣接状態のセット，<span class="math notranslate nohighlight">\(S_{ij}\)</span>は
+反応シンク関数と呼ばれ，<span class="math notranslate nohighlight">\(S_{ij}\left(\boldsymbol{\Gamma}\right)\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right)\)</span>
+が時刻<span class="math notranslate nohighlight">\(t\sim t+dt\)</span>の間に系が状態<span class="math notranslate nohighlight">\(j\)</span>から<span class="math notranslate nohighlight">\(i\)</span>に遷移する確率となるように定義される．
+時刻<span class="math notranslate nohighlight">\(t\)</span>において系が状態<span class="math notranslate nohighlight">\(j\)</span>として存在する確率<span class="math notranslate nohighlight">\(P_{j}\left(t\right)\)</span>は，<span class="math notranslate nohighlight">\(\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right)\)</span>を<span class="math notranslate nohighlight">\(\boldsymbol{\Gamma}\)</span>で積分することにより得られる．上式の形式解から<span class="math notranslate nohighlight">\(P_{j}\left(t\right)\)</span>の近似表式</p>
+<div class="amsmath math notranslate nohighlight" id="equation-69132916-8574-4094-880b-b3f432da1b91">
+<span class="eqno">(73)<a class="headerlink" href="#equation-69132916-8574-4094-880b-b3f432da1b91" title="Permalink to this equation"></a></span>\[\begin{align}
+P_{j}\left(t\right) &amp; =P_{j}^{0}\left(t\right)+\sum_{k\in\mathcal{N}_{j}}\int_{0}^{t}d\tau\,M_{jk}\left(t-\tau\right)Q_{jk}\left(\tau\right),
+\end{align}\]</div>
+<p>が得られる．式中の<span class="math notranslate nohighlight">\(P_{j}^{0}\left(t\right)\)</span>は時刻0で状態<span class="math notranslate nohighlight">\(j\)</span>の系が時刻<span class="math notranslate nohighlight">\(t\)</span>でも隣接状態に一度も遷移せずに滞留する確率，<span class="math notranslate nohighlight">\(Q_{jk}\left(t\right)\)</span>は時刻<span class="math notranslate nohighlight">\(t\sim t+dt\)</span>で系が状態<span class="math notranslate nohighlight">\(k\)</span>から<span class="math notranslate nohighlight">\(j\)</span>に遷移する確率，そして，
+<span class="math notranslate nohighlight">\(M_{jk}\left(t\right)\)</span>は状態<span class="math notranslate nohighlight">\(k\)</span>から<span class="math notranslate nohighlight">\(j\)</span>に遷移した時刻を0として，時刻<span class="math notranslate nohighlight">\(t\)</span>でも隣接状態に遷移することなく状態<span class="math notranslate nohighlight">\(j\)</span>に滞留する確率である．
+<span class="math notranslate nohighlight">\(P_j^0(t)\)</span>や<span class="math notranslate nohighlight">\(M_{jk}(t)\)</span>は単一の遷移イベントしか関与しないため，短時間MDにより計算可能である．
+さらに，<span class="math notranslate nohighlight">\(Q_{jk}\left(t\right)\)</span>についても，
+短時間スケールで減衰する関数を積分核に持つ積分方程式</p>
+<div class="amsmath math notranslate nohighlight" id="equation-e5e19d94-db49-4a7e-a340-d8bbe495272b">
+<span class="eqno">(74)<a class="headerlink" href="#equation-e5e19d94-db49-4a7e-a340-d8bbe495272b" title="Permalink to this equation"></a></span>\[\begin{align}
+Q_{ij}\left(t\right) = R_{ij}\left(t\right) + \sum_{k\in \mathcal{N}_{j}}\int_{0}^{t}d\tau\, K_{ijk}\left(t-\tau\right) Q_{jk}\left(\tau\right), 
+\end{align}\]</div>
+<p>で表せることが分かっている．
+ここで，<span class="math notranslate nohighlight">\(R_{ij}\left(t\right)\)</span>は時刻0で状態<span class="math notranslate nohighlight">\(j\)</span>にいた系が時刻<span class="math notranslate nohighlight">\(t\sim t+dt\)</span>の間に状態<span class="math notranslate nohighlight">\(i\)</span>に遷移する確率，
+<span class="math notranslate nohighlight">\(K_{ijk}\left(t\right)\)</span>は時刻<span class="math notranslate nohighlight">\(0\sim dt\)</span>の間に状態<span class="math notranslate nohighlight">\(k\)</span>から<span class="math notranslate nohighlight">\(j\)</span>に遷移した系が，時刻<span class="math notranslate nohighlight">\(t\sim t+dt\)</span>で状態<span class="math notranslate nohighlight">\(i\)</span>に遷移する確率を表す．
+<span class="math notranslate nohighlight">\(P_{j}^{0}\left(t\right)\)</span>, <span class="math notranslate nohighlight">\(M_{jk}\left(t\right)\)</span>と同様に，
+<span class="math notranslate nohighlight">\(R_{ij}\left(t\right)\)</span>, <span class="math notranslate nohighlight">\(K_{ijk}\left(t\right)\)</span>は短時間MDから計算可能である．さらに，<span class="math notranslate nohighlight">\(R_{ij}\left(t\right)\)</span>, <span class="math notranslate nohighlight">\(K_{ijk}\left(t\right)\)</span>から<span class="math notranslate nohighlight">\(P_{j}^{0}\left(t\right)\)</span>, <span class="math notranslate nohighlight">\(M_{jk}\left(t\right)\)</span>を構成することが可能である．したがって，
+短時間MDを実行し<span class="math notranslate nohighlight">\(R_{ij}\left(t\right)\)</span>, <span class="math notranslate nohighlight">\(K_{ijk}\left(t\right)\)</span>を計算することで，長時間スケールのポピュレーションダイナミクス(<span class="math notranslate nohighlight">\(P_{j}\left(t\right)\)</span>)の予測が可能である．</p>
+<p>IEPDYN法によるポピュレーションダイナミクスの記述では，
+初期時刻における各状態のポピュレーション<span class="math notranslate nohighlight">\(w_{j}\)</span>を与える必要がある．
+初期時刻で系が平衡にあるとした場合，初期時刻でポピュレーションを持つ状態のセットを<span class="math notranslate nohighlight">\(\mathcal{M}_{\mathrm{I}}\)</span>，状態<span class="math notranslate nohighlight">\(j\)</span>の平衡ポピュレーションを<span class="math notranslate nohighlight">\(P_{j}^{\mathrm{eq}}\)</span>とすると，<span class="math notranslate nohighlight">\(w_{j}\)</span>は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-2d446719-a12d-41a7-998b-fb7e23fbe631">
+<span class="eqno">(75)<a class="headerlink" href="#equation-2d446719-a12d-41a7-998b-fb7e23fbe631" title="Permalink to this equation"></a></span>\[\begin{align}
+\forall j\in \mathcal{M}_{\mathrm{I}},~ w_{j} = \dfrac{P_{j}^{\mathrm{eq}}}{\displaystyle\sum_{k\in\mathcal{M}_{\mathrm{I}}} P_{k}^{\mathrm{eq}}}
+\end{align}\]</div>
+<p>で与えられる．<span class="math notranslate nohighlight">\(w_j\)</span>はアンブレラサンプリング法などによる自由エネルギー計算によって求めても良いが，
+後で示すように，IEPDYN法で平衡ポピュレーションを解析的評価することも可能である．</p>
+<figure class="align-center" id="pj-qij-scheme-png">
+<a class="reference internal image-reference" href="../_images/Pj_Qij_scheme.png"><img alt="../_images/Pj_Qij_scheme.png" src="../_images/Pj_Qij_scheme.png" style="width: 1932.0px; height: 658.0px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">図 4 </span><span class="caption-text">IEPDYN法のスキーム図．</span><a class="headerlink" href="#pj-qij-scheme-png" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="id2">
+<h3>境界条件の導入<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>IEPDYN法では，粗視化された反応ダイナミクスに対して，反射境界条件(reflecting boundary condition)および吸収境界条件(absorbing boundary condition)を導入することができる．これらの境界条件は，状態間遷移確率<span class="math notranslate nohighlight">\(Q_{ij}(t)\)</span>に対して直接課され，再帰確率(RP)理論を用いた分子結合過程の解析に利用される．</p>
+<p>反射境界条件では，ある状態へ流入したポピュレーションは，その状態に滞留することなく直ちに隣接状態へ再分配される．流入を許さない状態の集合を<span class="math notranslate nohighlight">\(\mathcal{M}_{\mathrm{reflect}}\)</span>とすると，反射境界条件は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-fae2f442-a22e-4b0e-81cd-46c174f57c52">
+<span class="eqno">(76)<a class="headerlink" href="#equation-fae2f442-a22e-4b0e-81cd-46c174f57c52" title="Permalink to this equation"></a></span>\[\begin{align}
+&amp; \forall i\in\mathcal{M}_{\mathrm{reflect}},~\forall j\in\mathcal{N}_{i}, \notag \\
+&amp; Q_{ji}\left(t\right)=R_{ij}\left(t\right) + \sum_{k\in\mathcal{N}_{j}}\int_{0}^{t}d\tau,K_{ijk}\left(t-\tau\right)Q_{jk}\left(\tau\right),\\
+&amp; Q_{ij}\left(t\right)=0,
+\end{align}\]</div>
+<p>によって与えられる．上式は，状態<span class="math notranslate nohighlight">\(j\)</span>から<span class="math notranslate nohighlight">\(i\in \mathcal{M}_{\mathrm{reflect}}\)</span>へ流入したポピュレーションが即座に状態<span class="math notranslate nohighlight">\(j\)</span>へ折り返されることを表している．</p>
+<p>一方，吸収境界条件では，ある状態へ到達したポピュレーションは，その後他の状態へ遷移しないものとする．吸収状態の集合を<span class="math notranslate nohighlight">\(\mathcal{M}_{\mathrm{absorb}}\)</span>とすると，吸収境界条件は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-171caf9f-7716-4d35-94c7-31594ea767f5">
+<span class="eqno">(77)<a class="headerlink" href="#equation-171caf9f-7716-4d35-94c7-31594ea767f5" title="Permalink to this equation"></a></span>\[\begin{align}
+\forall i\in\mathcal{M}_{\mathrm{absorb}},~\forall j \in\mathcal{N}_{i},\quad Q_{ji}\left(t\right) =0,
+\end{align}\]</div>
+<p>によって与えられる．この条件は，吸収状態から他の状態への流入が完全に存在しないことを意味しており，一度吸収状態へ到達したポピュレーションは終状態として取り扱われる．</p>
+<p>このように，IEPDYN法では，状態間遷移確率に対して境界条件を直接導入することで，反射境界および吸収境界を統一的に取り扱うことができる．</p>
+</section>
+<section id="returning-probability-rp">
+<h3>再帰確率(Returning probability, RP)理論との連携<a class="headerlink" href="#returning-probability-rp" title="Link to this heading"></a></h3>
+<p>RP理論は，拡散律速反応を厳密に記述する理論であり，分子結合過程を反応状態(reactive state)の熱力学的および動力学的性質によって特徴づける．IEPDYN法では，RP理論で必要となる動力学量を短時間MD計算から効率的に評価することができる．</p>
+<p>RP理論における結合の速度定数<span class="math notranslate nohighlight">\(k_{\mathrm{on}}\)</span>は，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-636f0a8b-f1d8-4811-9806-7504630709e2">
+<span class="eqno">(78)<a class="headerlink" href="#equation-636f0a8b-f1d8-4811-9806-7504630709e2" title="Permalink to this equation"></a></span>\[\begin{align}
+k_{\mathrm{on}}
+=
+k_{\mathrm{ins}}K^{*}
+\left(
+1+k_{\mathrm{ins}}
+\int_{0}^{\infty}
+dt,
+P_{\mathrm{RET}}\left(t\right)
+\right)^{-1},
+\label{kon_rp}
+\end{align}\]</div>
+<p>によって与えられる．ここで，<span class="math notranslate nohighlight">\(K^{*}\)</span>は反応状態と解離状態との間の平衡定数，<span class="math notranslate nohighlight">\(k_{\mathrm{ins}}\)</span>は反応状態から結合状態への遷移速度定数，<span class="math notranslate nohighlight">\(P_{\mathrm{RET}}\left(t\right)\)</span>は，初期時刻に反応状態に存在した系が時刻<span class="math notranslate nohighlight">\(t\)</span>においても反応状態に存在する条件付き確率(再帰確率)である．</p>
+<p>IEPDYN法では，反応状態の集合を<span class="math notranslate nohighlight">\(\mathcal{M}_{\mathrm{R}}\)</span>とし，初期状態を<span class="math notranslate nohighlight">\(\mathcal{M}_{\mathrm{I}}=\mathcal{M}_{\mathrm{R}}\)</span>と設定する．さらに，適切な境界条件を導入することで，<span class="math notranslate nohighlight">\(k_{\mathrm{ins}}\)</span>および<span class="math notranslate nohighlight">\(P_{\mathrm{RET}}(t)\)</span>を状態存在確率<span class="math notranslate nohighlight">\(P_j(t)\)</span>から計算することができる．</p>
+<p><span class="math notranslate nohighlight">\(k_{\mathrm{ins}}\)</span>の計算では，結合過程の終了を定義するために吸収境界条件を導入し，反応状態のうち解離側に位置する隣接状態に反射境界条件を課す．このとき，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-7d319093-2450-4470-8a0b-7b1fbe38e34a">
+<span class="eqno">(79)<a class="headerlink" href="#equation-7d319093-2450-4470-8a0b-7b1fbe38e34a" title="Permalink to this equation"></a></span>\[\begin{align}
+\dfrac{1}{k_{\mathrm{ins}}}
+=
+\int_{0}^{\infty}
+dt,
+\sum_{j\notin\mathcal{M}_{\mathrm{absorb}}}
+P_{j}\left(t\right),
+\label{kins}
+\end{align}\]</div>
+<p>が成り立つ．右辺は，反応状態から吸収状態までの平均初到達時間(Mean First Passage Time, MFPT)に対応しており，その逆数として<span class="math notranslate nohighlight">\(k_{\mathrm{ins}}\)</span>が得られる．</p>
+<p>一方，<span class="math notranslate nohighlight">\(P_{\mathrm{RET}}(t)\)</span>の計算では，反応状態のうち結合状態側に位置する隣接状態を反射境界として設定する．このとき，<span class="math notranslate nohighlight">\(P_{\mathrm{RET}}(t)\)</span>は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-0b3f63f9-6814-44de-969d-144196650819">
+<span class="eqno">(80)<a class="headerlink" href="#equation-0b3f63f9-6814-44de-969d-144196650819" title="Permalink to this equation"></a></span>\[\begin{align}
+P_{\mathrm{RET}}\left(t\right)
+=
+\sum_{j\in\mathcal{M}_{\mathrm{R}}}
+P_{j}\left(t\right),
+\end{align}\]</div>
+<p>によって与えられる．</p>
+<p>このように，IEPDYN法では境界条件を適切に設定することで，RP理論で必要となる<span class="math notranslate nohighlight">\(k_{\mathrm{ins}}\)</span>および<span class="math notranslate nohighlight">\(P_{\mathrm{RET}}(t)\)</span>を短時間MD計算から効率的に評価できる．さらに，平衡定数<span class="math notranslate nohighlight">\(K^{*}\)</span>と組み合わせることで，長時間スケールの分子結合過程に対する結合速度定数<span class="math notranslate nohighlight">\(k_{\mathrm{on}}\)</span>を算出することが可能となる．</p>
+</section>
+<section id="p-j-left-t-right">
+<h3><span class="math notranslate nohighlight">\(P_{j}\left(t\right)\)</span>の時間積分に対する解析的評価<a class="headerlink" href="#p-j-left-t-right" title="Link to this heading"></a></h3>
+<p>RP理論における<span class="math notranslate nohighlight">\(k_{\mathrm{ins}}\)</span>をはじめとして，速度論的なパラメータは，
+状態ポピュレーションの時間積分</p>
+<div class="amsmath math notranslate nohighlight" id="equation-18373247-e985-473c-a63d-36d510ebadd4">
+<span class="eqno">(81)<a class="headerlink" href="#equation-18373247-e985-473c-a63d-36d510ebadd4" title="Permalink to this equation"></a></span>\[\begin{align}
+\tau_j=\int_0^\infty dt\,P_j(t)
+\end{align}\]</div>
+<p>によって与えられる．
+吸収境界条件あるいは無限遠方を含む状態を導入することで，<span class="math notranslate nohighlight">\(P_j(t)\)</span>は<span class="math notranslate nohighlight">\(t\to\infty\)</span>においてゼロへ収束する．
+通常は，積分方程式を逐次的に解いて<span class="math notranslate nohighlight">\(P_j(t)\)</span>の時間発展を計算した後，その時間積分を評価する必要がある．
+しかし，IEPDYN法ではLaplace変換を利用することで，<span class="math notranslate nohighlight">\(P_j(t)\)</span>を陽に計算することなく<span class="math notranslate nohighlight">\(\tau_j\)</span>を直接評価することができる．</p>
+<p>関数<span class="math notranslate nohighlight">\(f(t)\)</span>のLaplace変換を</p>
+<div class="amsmath math notranslate nohighlight" id="equation-cfb08d19-0253-4641-9441-c87ae27bb1c3">
+<span class="eqno">(82)<a class="headerlink" href="#equation-cfb08d19-0253-4641-9441-c87ae27bb1c3" title="Permalink to this equation"></a></span>\[\begin{align}
+\widetilde{f}(s)=\int_0^\infty dt\,e^{-st}f(t)
+\end{align}\]</div>
+<p>と定義すると，状態存在確率の積分方程式は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-66e59f15-3d6d-4c34-a781-254ba12083df">
+<span class="eqno">(83)<a class="headerlink" href="#equation-66e59f15-3d6d-4c34-a781-254ba12083df" title="Permalink to this equation"></a></span>\[\begin{align}
+\widetilde{P}_{j}\left(s\right)
+=
+\widetilde{P}_{j}^{0}\left(s\right)
++
+\sum_{k\in\mathcal{N}_{j}}
+\widetilde{M}_{jk}\left(s\right)
+\widetilde{Q}_{jk}\left(s\right)
+\end{align}\]</div>
+<p>と表される．さらに，<span class="math notranslate nohighlight">\(s\rightarrow 0\)</span>の極限を取ることで，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-36f23dcf-73cf-467f-b312-61ae7d84cc2b">
+<span class="eqno">(84)<a class="headerlink" href="#equation-36f23dcf-73cf-467f-b312-61ae7d84cc2b" title="Permalink to this equation"></a></span>\[\begin{align}
+\tau_{j}
+=
+\widetilde{P}_{j}^{0}\left(0\right)
++
+\sum_{k\in\mathcal{N}_{j}}
+\widetilde{M}_{jk}\left(0\right)
+\widetilde{Q}_{jk}\left(0\right)
+\end{align}\]</div>
+<p>を得る．したがって，<span class="math notranslate nohighlight">\(\tau_j\)</span>を求めるためには，<span class="math notranslate nohighlight">\(\widetilde{Q}_{jk}(0)\)</span>を評価すればよい．
+そのために，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-f20046b6-806b-41fb-a6ab-87d57b785d51">
+<span class="eqno">(85)<a class="headerlink" href="#equation-f20046b6-806b-41fb-a6ab-87d57b785d51" title="Permalink to this equation"></a></span>\[\begin{align}
+\mathcal{K}_{ij,j^{\prime}k}\left(t\right)
+=
+\delta_{jj^{\prime}}
+K_{ijk}\left(t\right)
+\end{align}\]</div>
+<p>を導入すると，<span class="math notranslate nohighlight">\(Q_{ij}(t)\)</span>に対する積分方程式はLaplace空間において</p>
+<div class="amsmath math notranslate nohighlight" id="equation-db3896a7-6d61-4ce5-b6cb-c2ef3fcf1641">
+<span class="eqno">(86)<a class="headerlink" href="#equation-db3896a7-6d61-4ce5-b6cb-c2ef3fcf1641" title="Permalink to this equation"></a></span>\[\begin{align}
+\widetilde{Q}_{ij}\left(s\right)
+=
+\widetilde{R}_{ij}\left(s\right)
++
+\sum_{j^{\prime},k}
+\widetilde{\mathcal{K}}_{ij,j^{\prime}k}\left(s\right)
+\widetilde{Q}_{j^{\prime}k}\left(s\right)
+\end{align}\]</div>
+<p>と書き換えられる．ここで，状態対<span class="math notranslate nohighlight">\((ij)\)</span>を複合添字<span class="math notranslate nohighlight">\(\lambda\)</span>で表すと，上式は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-4b36b837-2a94-4ee7-885a-fbc8b588d410">
+<span class="eqno">(87)<a class="headerlink" href="#equation-4b36b837-2a94-4ee7-885a-fbc8b588d410" title="Permalink to this equation"></a></span>\[\begin{align}
+\widetilde{\mathbf{Q}}(s)
+=
+\widetilde{\mathbf{R}}(s)
++
+\widetilde{\boldsymbol{\mathcal{K}}}(s)
+\widetilde{\mathbf{Q}}(s)
+\end{align}\]</div>
+<p>と行列表記できる．したがって，<span class="math notranslate nohighlight">\(s\to0\)</span>の極限では，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-03dd3986-68b5-4865-bf9a-c963137aa33b">
+<span class="eqno">(88)<a class="headerlink" href="#equation-03dd3986-68b5-4865-bf9a-c963137aa33b" title="Permalink to this equation"></a></span>\[\begin{align}
+\widetilde{\mathbf{Q}}\left(0\right)
+=
+\left[
+\mathbf{I}
+-
+\widetilde{\boldsymbol{\mathcal{K}}}\left(0\right)
+\right]^{-1}
+\widetilde{\mathbf{R}}\left(0\right)
+\end{align}\]</div>
+<p>が得られる．ここで，<span class="math notranslate nohighlight">\(\mathbf{I}\)</span>は単位行列であり，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-42f8638a-d6c1-4cc3-9e8c-0f76e39be3a9">
+<span class="eqno">(89)<a class="headerlink" href="#equation-42f8638a-d6c1-4cc3-9e8c-0f76e39be3a9" title="Permalink to this equation"></a></span>\[\begin{align}
+\left(
+\mathbf{I}
+-
+\widetilde{\boldsymbol{\mathcal{K}}}\left(0\right)
+\right)_{\lambda\mu}
+=
+\delta_{\lambda\mu}
+-
+\int_0^\infty dt\,
+\mathcal{K}_{\lambda\mu}(t)
+\end{align}\]</div>
+<p>である．</p>
+<p>以上より，時間積分された遷移確率<span class="math notranslate nohighlight">\(\widetilde{\mathbf{Q}}(0)\)</span>を行列演算によって直接求めることができ，さらに<span class="math notranslate nohighlight">\(\tau_j\)</span>を解析的に評価できる．この手法により，<span class="math notranslate nohighlight">\(P_j(t)\)</span>の長時間時間発展を逐次計算することなく，MFPTなどの速度論的パラメータを効率的に算出することが可能となる．</p>
+</section>
+<section id="p-j-left-infty-right">
+<h3>平衡ポピュレーション<span class="math notranslate nohighlight">\(P_{j}\left(\infty\right)\)</span>の解析的評価<a class="headerlink" href="#p-j-left-infty-right" title="Link to this heading"></a></h3>
+<p>IEPDYN法では，全ポピュレーションが保存される系に対して，状態<span class="math notranslate nohighlight">\(j\)</span>の平衡ポピュレーション
+<span class="math notranslate nohighlight">\(P_j^{\mathrm{eq}}\equiv P_j(\infty)\)</span>
+を，<span class="math notranslate nohighlight">\(P_j(t)\)</span>の時間発展を数値積分することなく評価することができる．</p>
+<p>まず，<span class="math notranslate nohighlight">\(Q_{ij}(t)\)</span>を，平衡成分
+<span class="math notranslate nohighlight">\(Q_{ij}^{\mathrm{eq}}\equiv Q_{ij}(\infty)\)</span>
+と時間依存成分<span class="math notranslate nohighlight">\(\delta Q_{ij}(t)\)</span>に分解する：</p>
+<div class="amsmath math notranslate nohighlight" id="equation-4ca3d702-78d6-4978-aab5-1e5f5fdcc043">
+<span class="eqno">(90)<a class="headerlink" href="#equation-4ca3d702-78d6-4978-aab5-1e5f5fdcc043" title="Permalink to this equation"></a></span>\[\begin{align}
+Q_{ij}(t)=Q_{ij}^{\mathrm{eq}}+\delta Q_{ij}(t).
+\end{align}\]</div>
+<p>ここで，<span class="math notranslate nohighlight">\(Q_{ij}^{\mathrm{eq}}\)</span>は状態<span class="math notranslate nohighlight">\(j\)</span>から<span class="math notranslate nohighlight">\(i\)</span>への平衡状態におけるポピュレーション流束を表す．
+この分解をIEPDYNの積分方程式に適用し，<span class="math notranslate nohighlight">\(t\to\infty\)</span>の極限を取ると，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-9661662b-de77-41ee-8904-c8f2a3d02eb9">
+<span class="eqno">(91)<a class="headerlink" href="#equation-9661662b-de77-41ee-8904-c8f2a3d02eb9" title="Permalink to this equation"></a></span>\[\begin{align}
+P_{j}^{\mathrm{eq}}
+&amp;=
+\lim_{t\to\infty}
+\left[
+\sum_{k\in\mathcal{N}_{j}}
+\int_{0}^{t}
+d\tau\,
+M_{jk}(t-\tau)
+\delta Q_{jk}(\tau)
+\right]
+\notag\\
+&amp;\quad
++
+\sum_{k\in\mathcal{N}_{j}}
+I_{jk}
+Q_{jk}^{\mathrm{eq}},
+\end{align}\]</div>
+<p>を得る．ただし，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-32282384-d9dd-479a-992f-370bb25b8796">
+<span class="eqno">(92)<a class="headerlink" href="#equation-32282384-d9dd-479a-992f-370bb25b8796" title="Permalink to this equation"></a></span>\[\begin{align}
+I_{jk}
+=
+\int_{0}^{\infty}
+dt\,
+M_{jk}(t)
+\end{align}\]</div>
+<p>である．
+<span class="math notranslate nohighlight">\(M_{jk}(t)\)</span>および<span class="math notranslate nohighlight">\(\delta Q_{jk}(t)\)</span>はいずれも<span class="math notranslate nohighlight">\(t\to\infty\)</span>でゼロへ収束するため，第1項は消失し，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-0f5983e5-7449-47f1-b8d6-fec05e29fdf7">
+<span class="eqno">(93)<a class="headerlink" href="#equation-0f5983e5-7449-47f1-b8d6-fec05e29fdf7" title="Permalink to this equation"></a></span>\[\begin{align}
+P_{j}^{\mathrm{eq}}
+=
+\sum_{k\in\mathcal{N}_{j}}
+I_{jk}
+Q_{jk}^{\mathrm{eq}}
+\end{align}\]</div>
+<p>が得られる．したがって，平衡遷移流束<span class="math notranslate nohighlight">\(Q_{jk}^{\mathrm{eq}}\)</span>が求まれば，各状態の平衡ポピュレーションを直接計算することができる．
+さらに，積分方程式を行列表記すると，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-f013f7ac-7c88-4cfe-ba30-88969b920d62">
+<span class="eqno">(94)<a class="headerlink" href="#equation-f013f7ac-7c88-4cfe-ba30-88969b920d62" title="Permalink to this equation"></a></span>\[\begin{align}
+\boldsymbol{\delta}{\bf Q}(t)
+&amp;=
+{\bf R}(t)
++
+\int_{0}^{t}
+d\tau\,
+\boldsymbol{\mathcal{K}}(t-\tau)
+\boldsymbol{\delta}{\bf Q}(\tau)
+\notag\\
+&amp;\quad
+-
+{\bf Q}^{\mathrm{eq}}
++
+{\bf J}
+{\bf Q}^{\mathrm{eq}},
+\end{align}\]</div>
+<p>となる．ここで，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-de2d5f3a-4417-4a5f-a20d-0911175e7949">
+<span class="eqno">(95)<a class="headerlink" href="#equation-de2d5f3a-4417-4a5f-a20d-0911175e7949" title="Permalink to this equation"></a></span>\[\begin{align}
+J_{\lambda\mu}
+=
+\int_{0}^{\infty}
+dt\,
+\mathcal{K}_{\lambda\mu}(t)
+\end{align}\]</div>
+<p>である．<span class="math notranslate nohighlight">\(t\to\infty\)</span>の極限では，時間依存項が消失するため，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-0db2a07b-6ad8-4e09-aca5-204dc72029ff">
+<span class="eqno">(96)<a class="headerlink" href="#equation-0db2a07b-6ad8-4e09-aca5-204dc72029ff" title="Permalink to this equation"></a></span>\[\begin{align}
+{\bf J}
+{\bf Q}^{\mathrm{eq}}
+=
+{\bf Q}^{\mathrm{eq}}
+\end{align}\]</div>
+<p>を得る．すなわち，<span class="math notranslate nohighlight">\({\bf Q}^{\mathrm{eq}}\)</span>は行列<span class="math notranslate nohighlight">\({\bf J}\)</span>の固有値1に対応する固有ベクトルとして与えられる．したがって，<span class="math notranslate nohighlight">\({\bf J}\)</span>の固有値問題を解くことで<span class="math notranslate nohighlight">\({\bf Q}^{\mathrm{eq}}\)</span>を求め，さらに</p>
+<div class="amsmath math notranslate nohighlight" id="equation-7db3b25e-11f6-464c-baa5-c0ed087fab5b">
+<span class="eqno">(97)<a class="headerlink" href="#equation-7db3b25e-11f6-464c-baa5-c0ed087fab5b" title="Permalink to this equation"></a></span>\[\begin{align}
+P_{j}^{\mathrm{eq}}
+=
+\sum_{k\in\mathcal{N}_{j}}
+I_{jk}
+Q_{jk}^{\mathrm{eq}}
+\end{align}\]</div>
+<p>を用いて平衡ポピュレーションを評価することができる．
+得られた平衡ポピュレーションは，IEPDYN法における初期統計重み</p>
+<div class="amsmath math notranslate nohighlight" id="equation-bfd3cd54-5b21-40d7-aad6-f21de7e8cf89">
+<span class="eqno">(98)<a class="headerlink" href="#equation-bfd3cd54-5b21-40d7-aad6-f21de7e8cf89" title="Permalink to this equation"></a></span>\[\begin{align}
+\forall j\in\mathcal{M}_{\mathrm{I}},
+\quad
+w_j
+=
+\frac{P_j^{\mathrm{eq}}}
+{\displaystyle
+\sum_{k\in\mathcal{M}_{\mathrm{I}}}
+P_k^{\mathrm{eq}}
+}
+\end{align}\]</div>
+<p>の評価にも利用される．また，結合・解離過程では，
+最外殻状態に反射境界条件を導入することで全ポピュレーション保存系を構成できるため，
+本手法を適用して平衡ポピュレーションを効率的に求めることができる．</p>
+</section>
+</section>
+<section id="id3">
+<h2>パラメータ一覧<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+</section>
+<section id="option-param">
+<h2><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code><a class="headerlink" href="#option-param" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">input_type</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">&quot;TIMESERIES&quot;</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">input_type</span> <span class="pre">=</span> <span class="pre">&quot;TIMESERIES&quot;</span></code></p></li>
+</ul>
+<p>入力ファイル形式を指定する．
+利用可能な形式は</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TIMESERIES</span></code> : ANATRA標準の時系列データ</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HISTOGRAM</span></code> : <code class="docutils literal notranslate"><span class="pre">output_histogram</span> <span class="pre">=</span> <span class="pre">.true.</span></code> により生成されたヒストグラムファイル(<code class="docutils literal notranslate"><span class="pre">*.krhist</span></code>)</p></li>
+</ul>
+<p>である．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">output_histogram</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">output_histogram</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>計算結果からヒストグラム形式のリスタートファイル(<code class="docutils literal notranslate"><span class="pre">*.krhist</span></code>)を出力するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">use_perturbed_traj</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">use_perturbed_traj</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>入力の時系列データがバイアスポテンシャル下でのMD計算により得られたものかどうかを指定する．フラットボトムポテンシャルなど，特定の状態内についてのダイナミクスを乱さないバイアスポテンシャルを用いる必要がある．
+<code class="docutils literal notranslate"><span class="pre">.true.</span></code>の場合には，<code class="docutils literal notranslate"><span class="pre">f_unperturbed_id</span></code>を指定する必要がある．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">f_unperturbed_id</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">f_unperturbed_id</span> <span class="pre">=</span> <span class="pre">&quot;funp.list&quot;</span></code></p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">use_perturbed_traj</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合に指定する必要がある．
+各時系列データについて，(1) どの状態内でのダイナミクスがバイアスポテンシャルによって乱されていないか，(2) <span class="math notranslate nohighlight">\(R_{ij}(t)\)</span>の計算に用いるか，を列挙したリストファイルを指定する．
+<code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>や<code class="docutils literal notranslate"><span class="pre">fcv</span></code>で列挙したファイルの順番に合わせる形で，1行ごとに</p>
+<ul class="simple">
+<li><p>1列目：乱されていない状態ID</p></li>
+<li><p>2列目：<span class="math notranslate nohighlight">\(R_{ij}(t)\)</span>の計算に利用するか(<code class="docutils literal notranslate"><span class="pre">1</span></code>)，利用しないか(<code class="docutils literal notranslate"><span class="pre">0</span></code>)</p></li>
+</ul>
+<p>を記す．例えば，<code class="docutils literal notranslate"><span class="pre">f_unperturbed_id</span></code>で指定したリストファイル<code class="docutils literal notranslate"><span class="pre">funp.list</span></code>が</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="mi">1</span>
+<span class="mi">1</span> <span class="mi">1</span>
+<span class="mi">2</span> <span class="mi">0</span> 
+<span class="mi">2</span> <span class="mi">0</span> 
+</pre></div>
+</div>
+<p>となっている場合，最初の2つの時系列データは状態1のダイナミクスが乱されおらず，<span class="math notranslate nohighlight">\(R_{ij}(t)\)</span>の計算に用いる，ということを意味し，次の2つの時系列データは状態2のダイナミクスが乱されておらず，<span class="math notranslate nohighlight">\(R_{ij}(t)\)</span>の計算には用いない，ということを意味する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">use_dissociate_state</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">use_dissociate_state</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>解離状態を定義するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">use_reflection_state</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">use_reflection_state</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>反射状態を定義するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">use_product_state</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">use_product_state</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>吸収状態（生成状態）を定義するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">calc_steady</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">calc_steady</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>定常状態（平衡状態）における各状態の存在確率の解析的評価を実行するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">calc_Pint</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">calc_Pint</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>各状態存在確率の時間積分の解析的評価を実行するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">extrapolate</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">extrapolate</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>積分方程式を用いて，各状態存在確率<span class="math notranslate nohighlight">\(P_{j}(t)\)</span>の時間発展を計算するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nstate</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nstate</span> <span class="pre">=</span> <span class="pre">4</span></code></p></li>
+</ul>
+<p>状態数を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ndim</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">2</span></code></p></li>
+</ul>
+<p>Collective Variable (CV) の次元数を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nmol</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nmol</span> <span class="pre">=</span> <span class="pre">1</span></code></p></li>
+</ul>
+<p>対象とする分子数を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dt</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">dt</span> <span class="pre">=</span> <span class="pre">0.1d0</span></code></p></li>
+</ul>
+<p>時間グリッド幅を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">t_sparse</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">t_sparse</span> <span class="pre">=</span> <span class="pre">0.1d0</span></code></p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(K_{ijk}(t)\)</span>などの時間相関関数（TCF）の計算に用いる粗い時間グリッド幅を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">t_range</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">t_range</span> <span class="pre">=</span> <span class="pre">10.0</span></code></p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(K_{ijk}(t)\)</span>, <span class="math notranslate nohighlight">\(M_{jk}(t)\)</span>, <span class="math notranslate nohighlight">\(R_{ij}(t)\)</span>, <span class="math notranslate nohighlight">\(P_{j}^{0}(t)\)</span>を計算する時間範囲を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">t_extend</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">t_extend</span> <span class="pre">=</span> <span class="pre">100.0</span></code></p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(P_{j}(t)\)</span>, <span class="math notranslate nohighlight">\(Q_{ij}(t)\)</span>を出力する時間範囲を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dt_tcfout</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">dt_tcfout</span> <span class="pre">=</span> <span class="pre">1.0</span></code></p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(P_{j}(t)\)</span>, <span class="math notranslate nohighlight">\(Q_{ij}(t)\)</span>を出力する時間間隔を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">initial_state_ids</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">initial_state_ids</span> <span class="pre">=</span> <span class="pre">2</span> <span class="pre">3</span></code></p></li>
+</ul>
+<p>初期状態として扱う状態IDを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">reflection_state_ids</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">reflection_state_ids</span> <span class="pre">=</span> <span class="pre">4</span></code></p></li>
+</ul>
+<p>反射状態として扱う状態IDを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">product_state_ids</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">product_state_ids</span> <span class="pre">=</span> <span class="pre">1</span></code></p></li>
+</ul>
+<p>吸収状態（生成状態）として扱う状態IDを指定する．</p>
+</li>
+</ul>
+</section>
+<section id="state">
+<h2><code class="docutils literal notranslate"><span class="pre">&amp;state</span></code><a class="headerlink" href="#state" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">&amp;state</span></code> セクションでは，各状態のCV範囲と初期ポピュレーションを1行ずつ下記のように指定する．</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>lower_bound(CV1)  upper_bound(CV1) lower_bound(CV2) upper_bound(CV2) ... lower_bound(CVndim) upper_bound(CVndim) weight
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>1列目：状態のCV1の下限値</p></li>
+<li><p>2列目：状態のCV1の上限値</p></li>
+<li><p>3列目：状態のCV2の下限値</p></li>
+<li><p>4列目：状態のCV2の上限値</p></li>
+</ul>
+<p>…</p>
+<ul class="simple">
+<li><p>最終列：状態の初期ポピュレーション</p></li>
+</ul>
+<p>このように，下限と上限のセットは<code class="docutils literal notranslate"><span class="pre">ndim</span></code>で指定した分だけ必要となる．
+例えば，<code class="docutils literal notranslate"><span class="pre">ndim=1</span></code>の場合に，</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>&amp;state
+-500.0  -16.0  0.5
+ -16.0  -15.0  0.5
+ -15.0   -2.0  0.0
+  -2.0  500.0  0.0
+/
+</pre></div>
+</div>
+<p>と指定すると，4つの状態が定義され，最初の2状態に初期ポピュレーション0.5が割り当てられる．</p>
+</section>
+<section id="id4">
+<h2>補助ツール<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">iepdyn</span></code>には多くの設定が存在する．
+そこで，下記にインプット作成を補助するPythonスクリプトを用意している．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ANATRA_PATH/utility/iepdyn_util
+</pre></div>
+</div>
+<p>以下の2つのスクリプトはいずれも対話型であり，
+引数なしで利用できる．</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">iepdyn_setup.py</span></code><br />
+<code class="docutils literal notranslate"><span class="pre">iepdyn</span></code>用のインプットを作成するための補助ツール．</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cvlist_generator.py</span></code><br />
+時系列データのリストを作成するための補助ツール．
+バイアスポテンシャルによって摂動を含んでいる時系列データを用いた場合(<code class="docutils literal notranslate"><span class="pre">use_perturbed_traj</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合)，時系列データの分類をディレクトリ階層に基づいて行うことができる．</p></li>
+</ul>
+</section>
+<section id="id5">
+<h2>出力ファイル<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.krhist</span></code> (<code class="docutils literal notranslate"><span class="pre">output_histogram</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合)<br />
+リスタート用の<span class="math notranslate nohighlight">\(K_{ijk}(t)\)</span>, <span class="math notranslate nohighlight">\(R_{ij}(t)\)</span>に関する情報が格納されている．リスタートでは，複数の<code class="docutils literal notranslate"><span class="pre">krhist</span></code>ファイルを読み込ませることが可能である．このファイルに格納される情報は境界条件を課す前のものであり，境界条件の設定を変えた場合でも際計算することなく利用可能である．</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.P0</span></code></p>
+<ul class="simple">
+<li><p>1列目：時刻</p></li>
+<li><p>2列目以降：<span class="math notranslate nohighlight">\(P^{0}_{j}(t)\)</span></p></li>
+</ul>
+<p>何列目がどの状態の<span class="math notranslate nohighlight">\(P_{j}(t)\)</span>に対応しているかはファイル内にヘッダーとして記されている．</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.Rij</span></code></p>
+<ul class="simple">
+<li><p>1列目：時刻</p></li>
+<li><p>2列目以降：<span class="math notranslate nohighlight">\(R_{ij}(t)\)</span>
+何列目がどの<span class="math notranslate nohighlight">\(R_{ij}(t)\)</span>に対応しているかはファイル内にヘッダーとして記されている．</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.Mij</span></code></p>
+<ul class="simple">
+<li><p>1列目：時刻</p></li>
+<li><p>2列目以降：<span class="math notranslate nohighlight">\(M_{ij}(t)\)</span></p></li>
+</ul>
+<p>何列目がどのの<span class="math notranslate nohighlight">\(M_{ij}(t)\)</span>に対応しているかはファイル内にヘッダーとして記されている．</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.Kijk</span></code></p>
+<ul class="simple">
+<li><p>1列目：時刻</p></li>
+<li><p>2列目以降：<span class="math notranslate nohighlight">\(K_{ijk}(t)\)</span></p></li>
+</ul>
+<p>何列目がどのの<span class="math notranslate nohighlight">\(K_{ijk}(t)\)</span>に対応しているかはファイル内にヘッダーとして記されている．</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.pj</span></code> (<code class="docutils literal notranslate"><span class="pre">extrapolate</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合)</p>
+<ul class="simple">
+<li><p>1列目：時刻</p></li>
+<li><p>2列目以降：<span class="math notranslate nohighlight">\(P_{j}(t)\)</span></p></li>
+</ul>
+<p>何列目がどのの<span class="math notranslate nohighlight">\(P_{j}(t)\)</span>に対応しているかはファイル内にヘッダーとして記されている．</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.tcf</span></code> (<code class="docutils literal notranslate"><span class="pre">extrapolate</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合)</p>
+<ul class="simple">
+<li><p>1列目：時刻</p></li>
+<li><p>2列目以降：<span class="math notranslate nohighlight">\(\displaystyle\sum_{k\in \mathcal{M}_{\mathrm{I}}}P_{k}(t)\)</span></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.q</span></code> (<code class="docutils literal notranslate"><span class="pre">extrapolate</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合)</p>
+<ul class="simple">
+<li><p>1列目：時刻</p></li>
+<li><p>2列目以降：<span class="math notranslate nohighlight">\(Q_{ij}(t)\)</span></p></li>
+</ul>
+<p>何列目がどのの<span class="math notranslate nohighlight">\(Q_{ij}(t)\)</span>に対応しているかはファイル内にヘッダーとして記されている．</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.int</span></code> (<code class="docutils literal notranslate"><span class="pre">calc_Pint</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合)<br />
+下記のフォーマットで</p>
+<div class="amsmath math notranslate nohighlight" id="equation-5491eb66-ff1a-41a7-a666-3f5a865fc8b2">
+<span class="eqno">(99)<a class="headerlink" href="#equation-5491eb66-ff1a-41a7-a666-3f5a865fc8b2" title="Permalink to this equation"></a></span>\[\begin{align}
+\tau_{j} = \int_{0}^{\infty} dt\, P_{j}\left(t\right),
+\end{align}\]</div>
+<p>が格納されている．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Pint</span> <span class="n">InitTotal</span>    <span class="mf">0.5549862E+02</span>
+<span class="n">Pint</span>         <span class="mi">1</span>    <span class="mf">0.5474586E+02</span>
+<span class="n">Pint</span>         <span class="mi">2</span>    <span class="mf">0.6403562E+00</span>
+<span class="n">Pint</span>         <span class="mi">3</span>    <span class="mf">0.9158297E-01</span>
+<span class="n">Pint</span>         <span class="mi">4</span>    <span class="mf">0.1578925E-01</span>
+<span class="n">Pint</span>         <span class="mi">5</span>    <span class="mf">0.5035148E-02</span>
+<span class="n">Pint</span>         <span class="mi">6</span>    <span class="mf">0.7000565E-02</span>
+<span class="n">Pint</span>         <span class="mi">7</span>    <span class="mf">0.3941343E-01</span>
+<span class="n">Pint</span>         <span class="mi">8</span>    <span class="mf">0.6599485E-01</span>
+</pre></div>
+</div>
+<p>2列目は状態インデックスを表しており，3列目が<span class="math notranslate nohighlight">\(\tau_j\)</span>の値である．
+<code class="docutils literal notranslate"><span class="pre">InitTotal</span></code>は，初期状態<span class="math notranslate nohighlight">\(\mathcal{M}_{\mathrm{I}}\)</span>に属する状態に対する<span class="math notranslate nohighlight">\(\tau_{j}\)</span>の和である．</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.steady</span></code> (<code class="docutils literal notranslate"><span class="pre">calc_steady</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合)</p>
+<ul class="simple">
+<li><p>1列目：時刻</p></li>
+<li><p>2列目：状態インデックス(<span class="math notranslate nohighlight">\(j\)</span>)</p></li>
+<li><p>3列目：<span class="math notranslate nohighlight">\(P_{j}^{\mathrm{eq}}\)</span></p></li>
+<li><p>4列目：<span class="math notranslate nohighlight">\(-k_{\mathrm{B}}T \log \dfrac{P_{j}^{\mathrm{eq}}}{\displaystyle\sum_{k\in \mathcal{M}_{\mathrm{I}}}P_{k}^{\mathrm{eq}}}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id6">
+<h2>解析例<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<p>分子間距離<span class="math notranslate nohighlight">\(r\)</span>で規定される分子結合/解離を例として
+IEPDYN法の適用手順について述べる．
+ここでは，状態を下記のように設定する．</p>
+<ul class="simple">
+<li><p>状態1(結合状態): <span class="math notranslate nohighlight">\(0\leq r &lt; 2\)</span></p></li>
+<li><p>状態2(結合状態): <span class="math notranslate nohighlight">\(2\leq r &lt; 3.5\)</span></p></li>
+<li><p>状態3: <span class="math notranslate nohighlight">\(3.5\leq r &lt; 4\)</span></p></li>
+<li><p>状態4 (解離状態を含む): <span class="math notranslate nohighlight">\(4\leq r \)</span></p></li>
+</ul>
+<p>また，求める計算量を，residence time correlation function</p>
+<div class="amsmath math notranslate nohighlight" id="equation-02ba0ed4-1efe-4b59-a81b-1ea786383450">
+<span class="eqno">(100)<a class="headerlink" href="#equation-02ba0ed4-1efe-4b59-a81b-1ea786383450" title="Permalink to this equation"></a></span>\[\begin{align}
+P_{\mathrm{B}}\left(t\right) 
+=\dfrac{\displaystyle \sum_{k\in \mathcal{M}_{\mathrm{I}}}P_{k}\left(t\right) }{\displaystyle \sum_{k\in \mathcal{M}_{\mathrm{I}}}P_{k}\left(0\right)} 
+\end{align}\]</div>
+<p>およびその積分値<span class="math notranslate nohighlight">\(\tau_{\mathrm{B}}\)</span>と定める．
+<span class="math notranslate nohighlight">\(\tau_{\mathrm{B}}\)</span>は結合状態の寿命を表す．これらを求めるときには，結合状態1, 2が初期状態となる．</p>
+<section id="md-use-perturbed-traj-false">
+<h3>バイアスポテンシャルなしのMDトラジェクトリを利用する場合(<code class="docutils literal notranslate"><span class="pre">use_perturbed_traj</span> <span class="pre">=</span> <span class="pre">.false.</span></code>)<a class="headerlink" href="#md-use-perturbed-traj-false" title="Link to this heading"></a></h3>
+<section id="krhist">
+<h4>リスタートファイル(<code class="docutils literal notranslate"><span class="pre">krhist</span></code>)の作成<a class="headerlink" href="#krhist" title="Link to this heading"></a></h4>
+<p>まずは，時系列データごとにリスタートファイル(<code class="docutils literal notranslate"><span class="pre">krhist</span></code>)を作成する．時系列データ<code class="docutils literal notranslate"><span class="pre">0001.ts</span></code>を読み込んで，
+<code class="docutils literal notranslate"><span class="pre">krhist/0001.krhist</span></code>を作成する場合のインプットを下記に示す．
+状態1と2が結合状態(初期状態)であるが，
+<code class="docutils literal notranslate"><span class="pre">krhist</span></code>ファイル作成の際には，初期ポピュレーション値は参照されないので，
+<code class="docutils literal notranslate"><span class="pre">&amp;state</span></code>でのこれらの状態の初期ポピュレーション値は1.0にしておいて良い．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">krhist</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run0001</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">fcv</span> <span class="o">=</span> <span class="s2">&quot;0001.ts&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;krhist/0001&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">input_type</span>           <span class="o">=</span> <span class="s2">&quot;TIMESERIES&quot;</span>
+ <span class="n">output_histogram</span>     <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">use_perturbed_traj</span>   <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_dissociate_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">use_reflection_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_product_state</span>    <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_steady</span>          <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_Pint</span>            <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">extrapolate</span>          <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">nstate</span>               <span class="o">=</span> <span class="mi">4</span> 
+ <span class="n">ndim</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">nmol</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">dt</span>                   <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_sparse</span>             <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_range</span>              <span class="o">=</span> <span class="mf">1.0</span>
+ <span class="n">initial_state_ids</span>    <span class="o">=</span> <span class="mi">1</span> <span class="mi">2</span> 
+ <span class="n">dissociate_state_ids</span> <span class="o">=</span> <span class="mi">4</span> 
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">state</span>
+<span class="mf">0.0</span>     <span class="mf">2.0</span>      <span class="mf">1.0</span>
+<span class="mf">2.0</span>     <span class="mf">3.5</span>      <span class="mf">1.0</span>
+<span class="mf">3.5</span>     <span class="mf">4.0</span>      <span class="mf">0.0</span>
+<span class="mf">4.0</span>     <span class="mf">1.0</span><span class="n">d10</span>   <span class="mf">0.0</span>
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">iepdyn</span> <span class="n">run0001</span><span class="o">.</span><span class="n">inp</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h4>平衡ポピュレーション値の計算<a class="headerlink" href="#id7" title="Link to this heading"></a></h4>
+<p><span class="math notranslate nohighlight">\(P_{\mathrm{B}}\left(t\right)\)</span>をIEPDYN法により計算するためには，状態1, 2の初期ポピュレーション値が必要となる．
+そこで，解離状態4を反射状態と定めることで，
+状態1–3でポピュレーションが保存されるようにした上で，
+一つ前で計算したリスタートファイル(<code class="docutils literal notranslate"><span class="pre">krhist</span></code>)をもとに，平衡状態のポピュレーション(<span class="math notranslate nohighlight">\(P_{j}^{\mathrm{eq}}\)</span>)を計算する．
+そのために，</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">calc_Pint</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_reflection_state</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reflection_state_ids</span> <span class="pre">=</span> <span class="pre">4</span></code></p></li>
+</ul>
+<p>と設定した上で，</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">use_dissociate_state</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></li>
+</ul>
+<p>に設定する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">steady</span>
+
+<span class="c1"># Create list of krhist files</span>
+<span class="c1">#</span>
+<span class="n">ls</span> <span class="n">krhist</span><span class="o">/*.</span><span class="n">krhist</span> <span class="o">&gt;</span> <span class="n">krhist</span><span class="o">.</span><span class="n">list</span> 
+
+<span class="c1"># Create input file</span>
+<span class="c1">#</span>
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">steady</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">flist_cv</span> <span class="o">=</span> <span class="s2">&quot;krhist.list&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;steady/out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">input_type</span>           <span class="o">=</span> <span class="s2">&quot;HISTOGRAM&quot;</span>
+ <span class="n">output_histogram</span>     <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_perturbed_traj</span>   <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_dissociate_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_reflection_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">use_product_state</span>    <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_steady</span>          <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">calc_Pint</span>            <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">extrapolate</span>          <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">nstate</span>               <span class="o">=</span> <span class="mi">4</span> 
+ <span class="n">ndim</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">nmol</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">dt</span>                   <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_sparse</span>             <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_range</span>              <span class="o">=</span> <span class="mf">1.0</span>
+ <span class="n">initial_state_ids</span>    <span class="o">=</span> <span class="mi">1</span> <span class="mi">2</span> 
+ <span class="n">reflection_state_ids</span> <span class="o">=</span> <span class="mi">4</span> 
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">state</span>
+<span class="mf">0.0</span>     <span class="mf">2.0</span>      <span class="mf">1.0</span>
+<span class="mf">2.0</span>     <span class="mf">3.5</span>      <span class="mf">1.0</span>
+<span class="mf">3.5</span>     <span class="mf">4.0</span>      <span class="mf">0.0</span>
+<span class="mf">4.0</span>     <span class="mf">1.0</span><span class="n">d10</span>   <span class="mf">0.0</span>
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">iepdyn</span> <span class="n">steady</span><span class="o">.</span><span class="n">inp</span>
+</pre></div>
+</div>
+<p>これを実行すると，<code class="docutils literal notranslate"><span class="pre">steady/out.int</span></code>が得られ，
+その中身は，例えば下記のようなものである．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="mi">1</span>    <span class="mf">0.9874940E+00</span>    <span class="mf">0.7502598E-02</span>
+    <span class="mi">2</span>    <span class="mf">0.1066799E-01</span>    <span class="mf">0.2706875E+01</span>
+    <span class="mi">3</span>    <span class="mf">0.1489986E-02</span>    <span class="mf">0.3880407E+01</span>
+</pre></div>
+</div>
+<p>2列目が平衡ポピュレーションの値である．</p>
+</section>
+<section id="p-mathrm-b-t">
+<h4><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の計算<a class="headerlink" href="#p-mathrm-b-t" title="Link to this heading"></a></h4>
+<p>1つ前のステップで得た平衡ポピュレーション値を
+<code class="docutils literal notranslate"><span class="pre">&amp;state</span></code>内の状態1, 2について入力した上で，</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">extrapolate</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">t_extend</span>&#160;&#160;&#160; <span class="pre">=</span> <span class="pre">10.0</span></code></p></li>
+</ul>
+<p>を指定する．<code class="docutils literal notranslate"><span class="pre">t_extend</span></code>は<span class="math notranslate nohighlight">\(P_{j}\left(t\right)\)</span>を計算する時間範囲を規定する．
+また，</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">use_dissociate_state</span> <span class="pre">=</span> <span class="pre">.true</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_reflection_state</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dissociate_state_ids</span> <span class="pre">=</span> <span class="pre">4</span></code></p></li>
+</ul>
+<p>に設定にしておく．</p>
+<p>なお，初期状態の平衡ポピュレーション値の和が1になるようにプログラム内で処理される．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">extrapolate</span> 
+
+<span class="c1"># Create list of krhist files</span>
+<span class="c1">#</span>
+<span class="n">ls</span> <span class="n">krhist</span><span class="o">/*.</span><span class="n">krhist</span> <span class="o">&gt;</span> <span class="n">krhist</span><span class="o">.</span><span class="n">list</span> 
+
+<span class="c1"># Create input file</span>
+<span class="c1">#</span>
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">extrapolate</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">flist_cv</span> <span class="o">=</span> <span class="s2">&quot;krhist.list&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;extrapolate/out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">input_type</span>           <span class="o">=</span> <span class="s2">&quot;HISTOGRAM&quot;</span>
+ <span class="n">output_histogram</span>     <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_perturbed_traj</span>   <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_dissociate_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">use_reflection_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_product_state</span>    <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_steady</span>          <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_Pint</span>            <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">extrapolate</span>          <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">nstate</span>               <span class="o">=</span> <span class="mi">4</span> 
+ <span class="n">ndim</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">nmol</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">dt</span>                   <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_sparse</span>             <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_range</span>              <span class="o">=</span> <span class="mf">1.0</span>
+ <span class="n">t_extend</span>             <span class="o">=</span>  <span class="mf">10.0</span>
+ <span class="n">dt_tcfout</span>            <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">initial_state_ids</span>    <span class="o">=</span> <span class="mi">1</span> <span class="mi">2</span> 
+ <span class="n">dissociate_state_ids</span> <span class="o">=</span> <span class="mi">4</span> 
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">state</span>
+<span class="mf">0.0</span>     <span class="mf">2.0</span>      <span class="mf">0.9874940E+00</span>
+<span class="mf">2.0</span>     <span class="mf">3.5</span>      <span class="mf">0.1066799E-01</span>
+<span class="mf">3.5</span>     <span class="mf">4.0</span>      <span class="mf">0.0</span>
+<span class="mf">4.0</span>     <span class="mf">1.0</span><span class="n">d10</span>   <span class="mf">0.0</span>
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">iepdyn</span> <span class="n">extrapolate</span><span class="o">.</span><span class="n">inp</span>
+
+</pre></div>
+</div>
+<p>これを実行すると，出力ファイルの1つとして<code class="docutils literal notranslate"><span class="pre">extrapolate/out.tcf</span></code>が得られるが，このファイル内に<span class="math notranslate nohighlight">\(P_{\mathrm{B}}\left(t\right)\)</span>の情報が格納されている．</p>
+</section>
+<section id="id8">
+<h4><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の時間積分の解析的評価<a class="headerlink" href="#id8" title="Link to this heading"></a></h4>
+<p>今度は，<span class="math notranslate nohighlight">\(P_{\mathrm{B}}\left(t\right)\)</span>の時間積分を，解析的方法により求める．
+この場合は，1つ前のステップでのインプットのうち，下記の変数を変更する．</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">extrapolate</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">calc_Pint</span>&#160;&#160; <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>また，<code class="docutils literal notranslate"><span class="pre">t_extend</span></code>や<code class="docutils literal notranslate"><span class="pre">dt_tcfout</span></code>などは結果に影響を与えないが，削除しておく．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">Pint</span> 
+
+<span class="c1"># Create list of krhist files</span>
+<span class="c1">#</span>
+<span class="n">ls</span> <span class="n">krhist</span><span class="o">/*.</span><span class="n">krhist</span> <span class="o">&gt;</span> <span class="n">krhist</span><span class="o">.</span><span class="n">list</span> 
+
+<span class="c1"># Create input file</span>
+<span class="c1">#</span>
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">Pint</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">flist_cv</span> <span class="o">=</span> <span class="s2">&quot;krhist.list&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;Pint/out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">input_type</span>           <span class="o">=</span> <span class="s2">&quot;HISTOGRAM&quot;</span>
+ <span class="n">output_histogram</span>     <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_perturbed_traj</span>   <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_dissociate_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">use_reflection_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_product_state</span>    <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_steady</span>          <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_Pint</span>            <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">extrapolate</span>          <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">nstate</span>               <span class="o">=</span> <span class="mi">4</span> 
+ <span class="n">ndim</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">nmol</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">dt</span>                   <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_sparse</span>             <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_range</span>              <span class="o">=</span> <span class="mf">1.0</span>
+ <span class="n">initial_state_ids</span>    <span class="o">=</span> <span class="mi">1</span> <span class="mi">2</span> 
+ <span class="n">dissociate_state_ids</span> <span class="o">=</span> <span class="mi">4</span> 
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">state</span>
+<span class="mf">0.0</span>     <span class="mf">2.0</span>      <span class="mf">0.9874940E+00</span>
+<span class="mf">2.0</span>     <span class="mf">3.5</span>      <span class="mf">0.1066799E-01</span>
+<span class="mf">3.5</span>     <span class="mf">4.0</span>      <span class="mf">0.0</span>
+<span class="mf">4.0</span>     <span class="mf">1.0</span><span class="n">d10</span>   <span class="mf">0.0</span>
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">iepdyn</span> <span class="n">Pint</span><span class="o">.</span><span class="n">inp</span>
+</pre></div>
+</div>
+<p>これを実行すると，<code class="docutils literal notranslate"><span class="pre">Pint/out.int</span></code>が得られる．
+このファイル内の1行目の3列目が<span class="math notranslate nohighlight">\(P_{\mathrm{B}}\left(t\right)\)</span>の時間積分値である．</p>
+</section>
+</section>
+<section id="md-use-perturbed-id-true">
+<h3>バイアスポテンシャルありのMDトラジェクトリを利用する場合(<code class="docutils literal notranslate"><span class="pre">use_perturbed_id</span> <span class="pre">=</span> <span class="pre">.true.</span></code>)<a class="headerlink" href="#md-use-perturbed-id-true" title="Link to this heading"></a></h3>
+<p>バイアスなしの場合と手順はほぼ同様だが，
+用意する<code class="docutils literal notranslate"><span class="pre">f_unperturbed_id</span></code>で指定するリストの作成などが必要となり，手続きがやや煩雑となる．</p>
+<section id="id9">
+<h4>リスタートファイル(<code class="docutils literal notranslate"><span class="pre">krhist</span></code>)の作成<a class="headerlink" href="#id9" title="Link to this heading"></a></h4>
+<p>ここでは，時系列データごとに<code class="docutils literal notranslate"><span class="pre">krhist</span></code>ファイルを作成する．
+状態<span class="math notranslate nohighlight">\(j\)</span>のダイナミクスが乱されていない時系列データが，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span><span class="o">/</span><span class="mi">0001</span><span class="o">/</span><span class="n">run0001</span><span class="o">.</span><span class="n">dis</span>
+<span class="n">ts</span><span class="o">/</span><span class="mi">0001</span><span class="o">/</span><span class="n">run0002</span><span class="o">.</span><span class="n">dis</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>のようにディレクトリ名(<code class="docutils literal notranslate"><span class="pre">XXXX=0001,</span> <span class="pre">0002,</span> <span class="pre">...</span></code>)で分類されているとする．このディレクトリ構造をもとに，まずは<code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>と<code class="docutils literal notranslate"><span class="pre">f_unperturbed_id</span></code>に対応するリストを下記のPythonスクリプトから作成する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ $ANATRA_PATH/utility/iepdyn_util/cvlist_generator.py
+</pre></div>
+</div>
+<p>実行すると，下記のように，情報の入力を求められるので，指示に従って入力していく．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>=== File Search Utility ===
+
+(1) Enter the root directory to search: ts 
+(2) Enter the target extension (e.g., txt): dis
+(3) Enter the maximum search directory depth: 2
+
+Searching files...
+
+=== Matched Files ===
+
+/path/to/ts/0001/run0001.dis
+/path/to/ts/0001/run0002.dis
+/path/to/ts/0002/run0001.dis
+/path/to/ts/0002/run0002.dis
+/path/to/ts/0003/run0001.dis
+/path/to/ts/0003/run0002.dis
+/path/to/ts/0004/run0001.dis
+/path/to/ts/0004/run0002.dis
+
+----------------------------------------
+
+(4) Enter directory level counted from the deepest directory for grouping (default: 1): 1
+
+=== Grouped Files ===
+
+--- State 1: 0001 ---
+/path/to/ts/0001/run0001.dis
+/path/to/ts/0001/run0002.dis
+
+--- State 2: 0002 ---
+/path/to/ts/0002/run0001.dis
+/path/to/ts/0002/run0002.dis
+
+--- State 3: 0003 ---
+/path/to/ts/0003/run0001.dis
+/path/to/ts/0003/run0002.dis
+
+--- State 4: 0004 ---
+/path/to/ts/0004/run0001.dis
+/path/to/ts/0004/run0002.dis
+
+----------------------------------------
+
+Did these files come from perturbed dynamics? (y/n): y
+
+Available states:
+  1 : 0001
+  2 : 0002
+  3 : 0003
+  4 : 0004
+
+Enter state numbers used for Rij calculation (space-separated, empty input allowed): 1 2
+
+----------------------------------------
+
+Enter fraction of files to be listed from each state (default: 1.0 (corresponding to all the files)): 1.0
+
+=== Output Preview ===
+
+/path/to/ts/0001/run0001.dis
+1 1
+/path/to/ts/0001/run0002.dis
+1 1
+/path/to/ts/0002/run0001.dis
+2 1
+/path/to/ts/0002/run0002.dis
+2 1
+/path/to/ts/0003/run0001.dis
+3 0 
+/path/to/ts/0003/run0002.dis
+3 0 
+/path/to/ts/0004/run0001.dis
+4 0 
+/path/to/ts/0004/run0002.dis
+4 0 
+
+----------------------------------------
+
+Enter filename to save the file list: flist
+Enter filename to save state_id and Rij_flag: funp
+</pre></div>
+</div>
+<p>この操作により，時系列データのリスト<code class="docutils literal notranslate"><span class="pre">flist</span></code>
+と各時系列データのどの領域が乱されていないかなどを記した<code class="docutils literal notranslate"><span class="pre">funp</span></code>が得られる．</p>
+<p>次に，時系列データごとに<code class="docutils literal notranslate"><span class="pre">krhist</span></code>を計算するために，作成した<code class="docutils literal notranslate"><span class="pre">flist</span></code>と<code class="docutils literal notranslate"><span class="pre">funp</span></code>を下記のPythonスクリプトにより1行ずつのファイルに分割する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ $ANATRA_PATH/utility/iepdyn_util/split_cv.py --flist flist --funp funp
+</pre></div>
+</div>
+<p>上記を実行することで，下記のディレクトリとファイルが生成される．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0001</span><span class="o">/</span><span class="mf">0001.</span><span class="n">flist</span>
+<span class="mi">0001</span><span class="o">/</span><span class="mf">0001.</span><span class="n">funp</span>
+<span class="mi">0001</span><span class="o">/</span><span class="mf">0002.</span><span class="n">flist</span>
+<span class="mi">0001</span><span class="o">/</span><span class="mf">0002.</span><span class="n">funp</span>
+<span class="mi">0002</span><span class="o">/</span><span class="mf">0001.</span><span class="n">flist</span>
+<span class="mi">0002</span><span class="o">/</span><span class="mf">0001.</span><span class="n">funp</span>
+<span class="mi">0002</span><span class="o">/</span><span class="mf">0002.</span><span class="n">flist</span>
+<span class="mi">0002</span><span class="o">/</span><span class="mf">0002.</span><span class="n">funp</span>
+<span class="mi">0003</span><span class="o">/</span><span class="mf">0001.</span><span class="n">flist</span>
+<span class="mi">0003</span><span class="o">/</span><span class="mf">0001.</span><span class="n">funp</span>
+<span class="mi">0003</span><span class="o">/</span><span class="mf">0002.</span><span class="n">flist</span>
+<span class="mi">0003</span><span class="o">/</span><span class="mf">0002.</span><span class="n">funp</span>
+<span class="mi">0004</span><span class="o">/</span><span class="mf">0001.</span><span class="n">flist</span>
+<span class="mi">0004</span><span class="o">/</span><span class="mf">0001.</span><span class="n">funp</span>
+<span class="mi">0004</span><span class="o">/</span><span class="mf">0002.</span><span class="n">flist</span>
+<span class="mi">0004</span><span class="o">/</span><span class="mf">0002.</span><span class="n">funp</span>
+</pre></div>
+</div>
+<p>生成された<code class="docutils literal notranslate"><span class="pre">XXXX.flist</span></code>, <code class="docutils literal notranslate"><span class="pre">XXXX.funp</span></code>が1つの時系列データに対する<code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>, <code class="docutils literal notranslate"><span class="pre">f_unperturbed_id</span></code>である．
+したがって，これらを順次読み込んで<code class="docutils literal notranslate"><span class="pre">krhist</span></code>を作成すれば良い．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/usr/bin/env bash
+
+for i in {0001..0004};do
+  for f in `ls $i/*.flist`;do
+    num=`basename $f | sed -e &quot;s/.flist//g&quot;`
+    flist=$i/${num}.flist
+    funp=$i/${num}.funp
+
+cat &lt;&lt; EOF &gt; $i/run${num}.inp
+&amp;input_param
+ flist_cv = &quot;$i/${num}.flist&quot;
+/
+&amp;output_param
+ fhead = &quot;$i/run${num}&quot;
+/
+&amp;option_param
+ use_perturbed_traj   = .true.
+ f_unperturbed_id     = &quot;$i/${num}.funp&quot;
+
+ output_histogram     = .true.
+ use_dissociate_state = .true.
+ use_reflection_state = .false.
+ use_product_state    = .false.
+ calc_steady          = .false.
+ calc_Pint            = .false.
+ extrapolate          = .false.
+ nstate               = 4 
+ ndim                 = 1
+ nmol                 = 1
+ dt                   = 2e-05
+ t_sparse             = 2e-05
+ t_range              = 1.0
+ initial_state_ids    = 1 2
+ dissociate_state_ids = 4 
+/
+&amp;state
+0.0     2.0      1.0
+2.0     3.5      1.0
+3.5     4.0      0.0
+4.0     1.0d10   0.0
+/
+EOF
+    fanatra iepdyn $i/run${num}.inp &gt;&amp; $i/run${num}.out
+  done
+done
+</pre></div>
+</div>
+<p>これを実行することで，`krhist``ファイルが生成される．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">0001</span><span class="o">/</span><span class="n">run0001</span><span class="o">.</span><span class="n">krhist</span>
+<span class="mi">0001</span><span class="o">/</span><span class="n">run0002</span><span class="o">.</span><span class="n">krhist</span>
+<span class="mi">0002</span><span class="o">/</span><span class="n">run0001</span><span class="o">.</span><span class="n">krhist</span>
+<span class="mi">0002</span><span class="o">/</span><span class="n">run0002</span><span class="o">.</span><span class="n">krhist</span>
+<span class="mi">0003</span><span class="o">/</span><span class="n">run0001</span><span class="o">.</span><span class="n">krhist</span>
+<span class="mi">0003</span><span class="o">/</span><span class="n">run0002</span><span class="o">.</span><span class="n">krhist</span>
+<span class="mi">0004</span><span class="o">/</span><span class="n">run0001</span><span class="o">.</span><span class="n">krhist</span>
+<span class="mi">0004</span><span class="o">/</span><span class="n">run0002</span><span class="o">.</span><span class="n">krhist</span>
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h4>平衡ポピュレーション値の計算<a class="headerlink" href="#id10" title="Link to this heading"></a></h4>
+<p>バイアスポテンシャルがない場合と同様に，
+状態1, 2の初期ポピュレーション値を反射境界条件を導入することで計算する．
+<code class="docutils literal notranslate"><span class="pre">krhist</span></code>からなるリストなどは再度<code class="docutils literal notranslate"><span class="pre">cvlist_generator.py</span></code>を利用することで求めておく．
+下記は，実行時に入力が求められている部分のみを抜粋した．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(1) Enter the root directory to search: . 
+(2) Enter the target extension (e.g., txt): krhist 
+(3) Enter the maximum search directory depth: 2
+(4) Enter directory level counted from the deepest directory for grouping (default: 1): 1
+Did these files come from perturbed dynamics? (y/n): y
+Enter state numbers used for Rij calculation (space-separated, empty input allowed): 1 2
+Enter fraction of files to be listed from each state (default: 1.0 (corresponding to all the files)): 1.0
+Enter filename to save the file list: fkrhist.list
+Enter filename to save state_id and Rij_flag: fkrhist.unp
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">steady</span>
+
+<span class="c1"># Create input file</span>
+<span class="c1">#</span>
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">steady</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">flist_cv</span> <span class="o">=</span> <span class="s2">&quot;fkrhist.list&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;steady/out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">use_perturbed_traj</span>   <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">f_unperturbed_id</span>     <span class="o">=</span> <span class="s2">&quot;fkrhist.unp&quot;</span>
+
+ <span class="n">input_type</span>           <span class="o">=</span> <span class="s2">&quot;HISTOGRAM&quot;</span>
+ <span class="n">output_histogram</span>     <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_dissociate_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_reflection_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">use_product_state</span>    <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_steady</span>          <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">calc_Pint</span>            <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">extrapolate</span>          <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">nstate</span>               <span class="o">=</span> <span class="mi">4</span> 
+ <span class="n">ndim</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">nmol</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">dt</span>                   <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_sparse</span>             <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_range</span>              <span class="o">=</span> <span class="mf">1.0</span>
+ <span class="n">initial_state_ids</span>    <span class="o">=</span> <span class="mi">1</span> <span class="mi">2</span> 
+ <span class="n">reflection_state_ids</span> <span class="o">=</span> <span class="mi">4</span> 
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">state</span>
+<span class="mf">0.0</span>     <span class="mf">2.0</span>      <span class="mf">1.0</span>
+<span class="mf">2.0</span>     <span class="mf">3.5</span>      <span class="mf">1.0</span>
+<span class="mf">3.5</span>     <span class="mf">4.0</span>      <span class="mf">0.0</span>
+<span class="mf">4.0</span>     <span class="mf">1.0</span><span class="n">d10</span>   <span class="mf">0.0</span>
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">iepdyn</span> <span class="n">steady</span><span class="o">.</span><span class="n">inp</span>
+</pre></div>
+</div>
+<p>実行することで，平衡ポピュレーション値が格納されている<code class="docutils literal notranslate"><span class="pre">steady/out.steady</span></code>が得られる．</p>
+</section>
+<section id="id11">
+<h4><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の計算<a class="headerlink" href="#id11" title="Link to this heading"></a></h4>
+<p><span class="math notranslate nohighlight">\(P_{\mathrm{B}}\left(t\right)\)</span>の時間発展を<code class="docutils literal notranslate"><span class="pre">extrapolate</span> <span class="pre">=</span> <span class="pre">.true.</span></code>と設定することで計算する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">extrapolate</span> 
+
+<span class="c1"># Create input file</span>
+<span class="c1">#</span>
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">extrapolate</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">flist_cv</span> <span class="o">=</span> <span class="s2">&quot;fkrhist.list&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;extrapolate/out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">use_perturbed_traj</span>   <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">f_unperturbed_id</span>     <span class="o">=</span> <span class="s2">&quot;fkrhist.unp&quot;</span>
+
+ <span class="n">input_type</span>           <span class="o">=</span> <span class="s2">&quot;HISTOGRAM&quot;</span>
+ <span class="n">output_histogram</span>     <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_dissociate_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">use_reflection_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_product_state</span>    <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_steady</span>          <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_Pint</span>            <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">extrapolate</span>          <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">nstate</span>               <span class="o">=</span> <span class="mi">4</span> 
+ <span class="n">ndim</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">nmol</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">dt</span>                   <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_sparse</span>             <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_range</span>              <span class="o">=</span> <span class="mf">1.0</span>
+ <span class="n">t_extend</span>             <span class="o">=</span>  <span class="mf">10.0</span>
+ <span class="n">dt_tcfout</span>            <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">initial_state_ids</span>    <span class="o">=</span> <span class="mi">1</span> <span class="mi">2</span> 
+ <span class="n">dissociate_state_ids</span> <span class="o">=</span> <span class="mi">4</span> 
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">state</span>
+<span class="mf">0.0</span>     <span class="mf">2.0</span>      <span class="mf">0.9874940E+00</span>
+<span class="mf">2.0</span>     <span class="mf">3.5</span>      <span class="mf">0.1066799E-01</span>
+<span class="mf">3.5</span>     <span class="mf">4.0</span>      <span class="mf">0.0</span>
+<span class="mf">4.0</span>     <span class="mf">1.0</span><span class="n">d10</span>   <span class="mf">0.0</span>
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">iepdyn</span> <span class="n">extrapolate</span><span class="o">.</span><span class="n">inp</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h4><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の時間積分の解析的評価<a class="headerlink" href="#id12" title="Link to this heading"></a></h4>
+<p>下記を実行すれば良い．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">Pint</span>
+
+<span class="c1"># Create input file</span>
+<span class="c1">#</span>
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">Pint</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">flist_cv</span> <span class="o">=</span> <span class="s2">&quot;fkrhist.list&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;Pint/out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">use_perturbed_traj</span>   <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">f_unperturbed_id</span>     <span class="o">=</span> <span class="s2">&quot;fkrhist.unp&quot;</span>
+
+ <span class="n">input_type</span>           <span class="o">=</span> <span class="s2">&quot;HISTOGRAM&quot;</span>
+ <span class="n">output_histogram</span>     <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_dissociate_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">use_reflection_state</span> <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">use_product_state</span>    <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_steady</span>          <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">calc_Pint</span>            <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">extrapolate</span>          <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">nstate</span>               <span class="o">=</span> <span class="mi">4</span> 
+ <span class="n">ndim</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">nmol</span>                 <span class="o">=</span> <span class="mi">1</span>
+ <span class="n">dt</span>                   <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_sparse</span>             <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">t_range</span>              <span class="o">=</span> <span class="mf">1.0</span>
+ <span class="n">t_extend</span>             <span class="o">=</span>  <span class="mf">10.0</span>
+ <span class="n">dt_tcfout</span>            <span class="o">=</span> <span class="mf">2e-05</span>
+ <span class="n">initial_state_ids</span>    <span class="o">=</span> <span class="mi">1</span> <span class="mi">2</span> 
+ <span class="n">dissociate_state_ids</span> <span class="o">=</span> <span class="mi">4</span> 
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">state</span>
+<span class="mf">0.0</span>     <span class="mf">2.0</span>      <span class="mf">0.9874940E+00</span>
+<span class="mf">2.0</span>     <span class="mf">3.5</span>      <span class="mf">0.1066799E-01</span>
+<span class="mf">3.5</span>     <span class="mf">4.0</span>      <span class="mf">0.0</span>
+<span class="mf">4.0</span>     <span class="mf">1.0</span><span class="n">d10</span>   <span class="mf">0.0</span>
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">iepdyn</span> <span class="n">Pint</span><span class="o">.</span><span class="n">inp</span>
+</pre></div>
+</div>
+<p>実行後，<code class="docutils literal notranslate"><span class="pre">Pint/out.int</span></code>が得られる．</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../05_fanatra_usage/combined.html" class="btn btn-neutral float-left" title="fanatraの使い方" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

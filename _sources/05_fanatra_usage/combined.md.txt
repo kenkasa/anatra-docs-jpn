@@ -1,0 +1,1539 @@
+# fanatraの使い方
+
+## はじめに
+
+**fanatra**は"Fortran ANATRA"の略であり，その名の通りFortranを用いて解析を行うプログラムである．この章では**fanatra**の使い方を解説する．**fanatra**はVMDを通さずに解析を行うプログラム群であるため，計算ノード上でのVMDの利用が難しい計算機システムでも
+利用が可能となる．``fanatra -h``を実行することでその種類の一覧が表示される．
+
+```
+$ fanatra -h
+Available analysis in Fortran ANATRA
+histogram               (hist)   : Histogram Analysis
+potential_of_mean_force (pmf)    : Free-energy Profile Analysis
+restricted_radial       (rrpmf)  : Restricted Radial Analysis
+extract_frame           (extf)   : Extract Frames Using CV
+random_frame            (randf)  : Randomly Extract Frames
+state_define            (sdef)   : Define States From Time-series Data
+moving_average          (movave) : Moving Average Analysis
+average_function        (avef)   : Function Average Analysis
+bootstrap_prepper       (boot)   : Bootstrap Sample Generator
+return_prob             (rp)     : Returning Probability Analysis
+rprate                  (rprate) : Rate Constant Analysis based on RP theory
+iepdyn                  (iepdyn) : Integral-equation Formalism of Population Dynamics
+```
+
+上記のうち，``histogram``などが解析モードであり，
+省略して``hist``として入力することも可能である．
+**anatra**がコマンドライン上でパラメータを指定して解析可能だったのに対して，
+**fanatra**ではパラメータファイルを別に用意して読み込ませる形で実行する．例えば，
+```
+$ fanatra hist コントロールファイル
+```
+のように実行する．読み込ませるパラメータファイルはFortranのnamelist形式である．
+また，各解析モードでのパラメータファイルの形式やその内容は``"fanatra <解析モード>　-h"``
+で簡単な説明とサンプルが表示されるため大体の使い方はそれで理解ができる．``histogram``を例を以下に示す．
+```
+$ fanatra histogram -h
+
+==================================================
+
+              Histogram Analysis
+
+==================================================
+&input_param
+ fcv      = "cvdata1" "cvdata2" ! Time-series CV data
+ flist_cv = "list" ! CV-file list (Either fcv or flist_cv should be specified)
+/
+&output_param
+ fhead = "run" ! header of output filename
+/
+&option_param
+  dx       = 0.1d0  ! grid spacing
+  xsta     = 0.0d0  ! minimum value of the coordinate
+  nx       = 100    ! number of grids
+  ncol     = 1      ! number of data column
+/
+
+
+::: format of time-series data :::
+1st column: time (arbitrary), Nth column (N>1): data
+example)
+
+0.00   0.02120
+0.01   0.03140
+0.02   0.22310
+....   .......
+```
+
+## 共通パラメータ
+
+**fanatra**におけるパラメータファイルのほとんどはFortranのnamelist形式に依拠しており，
+**input_param**セクション，**output_param**セクション，**option_param**セクションに分けてパラメータを指定する．
+全ての解析モードで共通している**input_param**と**output_param**について，ここで示しておく．
+
+### &input_param
+
+このnamelistでは，入力ファイルに関するパラメータを指定する．
+
+**パラメータ名**                       | **機能**                                               | **例**
+:--------------------------------------|:------------------------------------------------------:|:------------------------------:
+ftraj                                  | 入力トラジェクトリ名を指定(複数指定可)                 | ftraj      = "inp1.dcd", "inp2.dcd"
+fcv                                    | 入力時系列データ名を指定(複数指定可)                   | fcv        = "cv1.txt", "cv2.txt"
+fweight                 | 入力時系列データに対応する各ステップでの統計重みを指定(複数指定可)                   | fweight        = "weight1.txt", "weight2.txt"
+flist_traj$^{1}$                       | 入力トラジェクトリの一覧を格納したファイルを指定       | flist_traj = "list.txt" 
+flist_cv$^{2}$                         | 入力時系列データの一覧を格納したファイルを指定         | flist_cv   = "list.txt" 
+flist_weight$^{3}$     | 統計重みファイルの一覧を格納したファイルを指定         | flist_weight   = "list.txt" 
+
+$^{1}$ ``ftraj``と``flist_traj``の両方を指定した場合，``flist_traj``の内容が優先される．  
+$^{2}$ ``fcv``と``flist_cv``の両方を指定した場合，``flist_cv``の内容が優先される．  
+$^{3}$ ``fweight``と``flist_weight``の両方を指定した場合，``flist_weight``の内容が優先される．
+
+
+ ---
+* **``ftraj``** 
+    * Default: N/A
+    * Example: ``ftraj = "inp1.dcd", "inp2.dcd"`` 
+
+    入力のトラジェクトリファイルを指定する．例に示す通り，複数のファイルを指定することも可能である．
+    ファイル数が膨大な場合は，``flist_traj``で指定することも可能である． 
+
+ ---
+* **``fcv``**
+    * Default: N/A
+    * Example: ``fcv = "cv1.txt", "cv2.txt"``
+
+    入力の時系列データファイルを指定する．例に示す通り，複数のファイルを指定することも可能である．
+    ファイル数が膨大な場合は，``flist_cv``で指定することも可能である．
+
+ ---
+* **``fweight``**
+    * Default: N/A
+    * Example: ``fweight = "cv1.txt", "cv2.txt"``
+
+    入力の統計重みファイルを指定する．
+    統計重みファイルでは，時系列データの各ステップでの統計的重みを与えることができる．統計的重みとしてエンハンスドサンプリング法やMultistate Bennett Acceptance Ratio (MBAR)法によって得られたものを入力することが可能である．統計重みの総和値はプログラム内で自動的に1に規格化される．
+例に示す通り，複数のファイルを指定することも可能である．
+    ファイル数が膨大な場合は，``flist_weight``で指定することも可能である．
+
+ ---
+* **``flist_traj``**
+    * Default: N/A
+    * Example: ``flist_traj = "list.txt"``
+
+    入力のトラジェクトファイルのリストを格納したファイルを指定する．``flist_traj``で指定された内容が，``ftraj``で指定した内容よりも優先される．
+    リストファイルには，下記の例の通り，入力のトラジェクトリファイルが1行ごとに記されている必要がある．
+
+    ```
+    inp1.dcd
+    inp2.dcd
+    inp3.dcd
+    inp4.dcd
+    ```
+
+ ---
+* **``flist_cv``**
+    * Default: N/A
+    * Example: ``flist_cv = "list.txt"``
+
+    入力の時系列データファイルのリストを格納したファイルを指定する．``flist_cv``で指定された内容が，``fcv``で指定した内容よりも優先される．
+    リストファイルには，下記の例の通り，入力の時系列データファイルが1行ごとに記されている必要がある．
+   
+    ```
+    inp1.txt
+    inp2.txt
+    inp3.txt
+    inp4.txt
+    ```
+
+ ---
+* **``flist_weight``**
+    * Default: N/A
+    * Example: ``flist_weight = "list.txt"``
+    
+    入力の統計重みデータファイルのリストを格納したファイルを指定する．``flist_weight``で指定された内容が，``fweight``で指定した内容よりも優先される．
+    リストファイルには，下記の例の通り，入力の統計重みファイルが1行ごとに記されている必要がある．
+
+    ```
+    inp1.txt
+    inp2.txt
+    inp3.txt
+    inp4.txt
+    ```
+
+### 時系列データのフォーマット
+
+時系列データのフォーマットは下記である．
+
+* 1列目: 時間軸
+* 2列目: 1つめの時系列データ
+* 3列目: 2つめの時系列データ
+
+1列目は，全ての解析モードにおいて読み込まれず，2列目から1つめのデータ列としてカウントされる．
+
+### 統計重みデータのフォーマット
+
+統計重みデータのフォーマットは下記である．
+
+* 1列目: 時間軸
+* 2列目: 統計重み値
+
+1列目は，全ての解析モードにおいて読み込まれず，2列目のみ利用される．
+統計重みデータの行数は対応する時系列データの行数と一致している必要がある．
+
+
+### &output_param
+
+このnamelistでは，出力に関するパラメータを指定する．
+
+**パラメータ名**                       | **機能**                                               | **例**
+:--------------------------------------|:------------------------------------------------------:|:------------------------------:
+fhead                                  | 出力ファイル名の拡張子以外の部分を指定                 | fhead          = "run"
+file_extension$^{1}$                   | 出力ファイル名の拡張子を指定                           | file_extension = "dat"
+
+$^{1}$ このパラメータが有効化される解析モードは多くない．
+
+ ---
+* **``fhead``**
+    * Default: ``run``
+    * Example: ``fhead = "run"``
+
+    出力するファイル名の拡張子を除いた部分(basename)を指定する．
+    例えば，``fhead = run``と指定した場合，次に述べる解析モード``histogram``は，
+    デフォルトでは``run.dat``というファイルを出力する．
+
+ ---
+* **``file_extension``**
+    * Default: ``dat``
+    * Example: ``file_extension = "dat"``
+
+    出力するファイル名の拡張子を指定する．ただし，このパラメータが有効化される解析モードは，``histogram``などごく一部である．
+
+<!---
+ **セクション名**                      |**オプション名**                  | **機能**                                 | **例**             
+:----------------------------------|:----------------------------------|:----------------------------------------:|---------------:
+``&input_param``                       | ``flist``                             | 解析対象のデータファイル名を記述した入力ファイルを指定          | ``flist = "input_list.txt"``    
+``&output_param``                      | ``fhead``                             | 解析結果の出力ファイル名のヘッダーを指定        | ``fhead = "out" ``
+
+上記のflistで指定する入力ファイルの例を以下に示しておく．
+このように**fanatra**では"解析対象のファイル名を記述した"ファイルを入力として渡す．これは複数のデータを一挙に解析するためである．
+```
+$cat input_list.txt
+
+../../../06_2d/02_2dene/03_atr/combined_0001.dat
+../../../06_2d/02_2dene/03_atr/combined_0002.dat
+../../../06_2d/02_2dene/03_atr/combined_0003.dat
+../../../06_2d/02_2dene/03_atr/combined_0004.dat
+../../../06_2d/02_2dene/03_atr/combined_0005.dat
+../../../06_2d/02_2dene/03_atr/combined_0006.dat
+../../../06_2d/02_2dene/03_atr/combined_0007.dat
+../../../06_2d/02_2dene/03_atr/combined_0008.dat
+../../../06_2d/02_2dene/03_atr/combined_0009.dat
+../../../06_2d/02_2dene/03_atr/combined_0010.dat
+../../../06_2d/02_2dene/03_atr/combined_0011.dat
+../../../06_2d/02_2dene/03_atr/combined_0012.dat
+../../../06_2d/02_2dene/03_atr/combined_0013.dat
+../../../06_2d/02_2dene/03_atr/combined_0014.dat
+../../../06_2d/02_2dene/03_atr/combined_0015.dat
+../../../06_2d/02_2dene/03_atr/combined_0016.dat
+```
+
+## 解析対象ファイルのフォーマット
+
+``flist``内で指定した解析対象ファイルのフォーマットは，**anatra**にて出力されるファイル形式と同様であり，
+* 一列目: 時系列データ
+* 二列目: 解析対象データ  
+
+という構造である必要がある．
+--->
+## ヒストグラム(histogram, hist)
+
+この解析モードでは，何らかの時系列データ$\xi\left(t\right)$から分布関数$P\left(x\right)$を計算する．
+
+\begin{align}
+P\left(x\right) =  \dfrac{1}{N}\Braket{\delta\left(x - \xi\right)} 
+\end{align}
+
+ここで，$N$はデータ点の数であり，上式は規格化条件
+
+\begin{align}
+\int_{-\infty}^{\infty} dx P\left(x\right) = 1
+\end{align}
+
+を満たす．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt  
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|flist_cv|  & -- \\
+                     & \verb|fcv|       & -- \\
+\hline
+\verb|&output_param| & \verb|fhead|    & -- \\
+                     & \verb|file_extension| & -- \\
+\hline
+\verb|&option_param| & \verb|dx|       & 分布関数のグリッド幅 \\
+                     & \verb|xsta|     & グリッドを張るスタート位置 \\
+                     & \verb|nx|       & グリッド数 \\
+                     & \verb|ncol|     & 1ファイルあたりのデータ列数\\
+\hline 
+\end{tabular}
+}
+```
+
+### &option_param
+
+* **``dx``**
+    * Default: 0.1
+    * Example: ``dx = 0.1``
+
+    分布関数を計算する際のグリッド幅$\Delta x$を指定する．
+
+----
+* **``xsta``**
+    * Default: 0.0
+    * Example: ``xsta = 0.0``
+
+    グリッドを張るスタート位置$x_{0}$を指定する．$i$番目のグリッドの位置を$x_{i}$とすると，
+
+    \begin{align}
+    x_{i} = x_{0} + \left(i - 1 \right) \Delta x
+    \end{align}
+
+    である．
+
+----
+* **``ncol``**
+    * Default: 1
+    * Example: ``ncol = 10``
+
+    1つの時系列データファイルあたりに含まれるデータ列数を指定する．
+
+### 出力ファイルのフォーマット
+
+* ``*.dat`` (拡張子は``file_extension``によって変更可)
+    * 1列目: $x$座標
+    * 2列目: 分布関数$P\left(x\right)$
+
+### 解析例
+
+3つのデータ列を持つ時系列データ``inp.ts``から，$5\leq x \leq 10$の範囲で分布関数$P\left(x\right)$を計算する例を以下に示す．
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+fcv = "inp.ts"
+/
+&output_param
+fhead = "run"
+/
+&option_param
+dx   = 0.1d0
+xsta = 5.0d0
+nx   = 50
+ncol = 3 
+/
+EOF
+
+fanatra hist run.inp 
+
+``` 
+## 平均力ポテンシャル(potential_of_mean_force, pmf)
+
+この解析モードでは，
+反応座標に対する時系列データ$\boldsymbol{\xi}\left(t\right)$から，
+反応座標$\boldsymbol{\zeta}$に沿った自由エネルギープロファイル$W\left(\boldsymbol{\zeta}\right)$を計算する．
+$W\left(\boldsymbol{\zeta}\right)$は平均力ポテンシャルとも呼ばれる．
+
+### 理論背景
+
+系の配置を${\bf X}$，そしてポテンシャルを$U\left({\bf X}\right)$とする．
+このとき，配置積分$Z$は逆温度を$\beta$として
+
+\begin{align}
+Z & =\int d{\bf X}\,\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}
+
+で与えられる．
+同様に，系が反応座標空間($\boldsymbol{\zeta}\left({\bf X}\right)$)上の
+微小区間$\boldsymbol{\zeta} - \boldsymbol{\zeta}+\Delta \boldsymbol{\zeta}$にトラップされている状態に対応する分配関数は
+
+\begin{align}
+Z\left(\boldsymbol{\zeta}\right) & =\Delta\boldsymbol{\zeta}\int d{\bf X}\,\delta\left(\boldsymbol{\zeta}-\boldsymbol{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}
+
+である．$\boldsymbol{\zeta}$に対する確率密度を
+
+\begin{align}
+\rho\left(\boldsymbol{\zeta}\right) & = \Braket{\delta\left(\boldsymbol{\zeta} - \boldsymbol{\xi}\left({\bf X}\right)\right)} = \dfrac{1}{Z}\int d{\bf X}\,\delta\left(\boldsymbol{\zeta}-\boldsymbol{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}
+
+と定義すると，
+
+\begin{align}
+\dfrac{Z\left(\boldsymbol{\zeta}\right)}{Z} & =\rho\left(\boldsymbol{\zeta}\right)\Delta\boldsymbol{\zeta}
+\end{align}
+
+が成り立つ．したがって，系が領域$\boldsymbol{\zeta}-\boldsymbol{\zeta} + \Delta \boldsymbol{\zeta}$に制限されている状態と制限されていない状態の自由エネルギー差$\Delta F\left(\boldsymbol{\zeta}\right)$は
+
+\begin{align}
+\Delta F\left(\boldsymbol{\zeta}\right) & =-\dfrac{1}{\beta}\log\dfrac{Z\left(\boldsymbol{\zeta}\right)}{Z} 
+ = -\dfrac{1}{\beta}\log \left(\rho\left(\boldsymbol{\zeta}\right)\Delta \boldsymbol{\zeta}\right)
+\end{align}
+
+と表せる．$\boldsymbol{\zeta}_{0}$を基準にとった自由エネルギーは
+
+\begin{align}
+W\left(\boldsymbol{\zeta}\right) & =\Delta F\left(\boldsymbol{\zeta}\right)-\Delta F\left(\boldsymbol{\zeta}_{0}\right)\notag\\
+ & =-\dfrac{1}{\beta}\log\dfrac{\rho\left(\boldsymbol{\zeta}\right)}{\rho\left(\boldsymbol{\zeta}_{0}\right)}
+ \label{pmf:pmf}
+\end{align}
+
+である．この$W$のことを平均力ポテンシャルと呼ぶ．$\boldsymbol{\zeta}_{0}$の設定は任意であるが，
+多くの場合，$W\left(\boldsymbol{\zeta}\right)$の最小値が0となるようにとる．
+$W\left(\boldsymbol{\zeta}\right)$を計算することで，$\boldsymbol{\zeta}$に応じた熱力学的な安定性の変化を
+議論することが可能となる．式\eqref{pmf:pmf}は，$\boldsymbol{\zeta}$に依存する部分と定数$C$に分けて
+
+\begin{align}
+W\left(\boldsymbol{\zeta}\right) & =-\dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\boldsymbol{\zeta}-\boldsymbol{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)+C
+\label{pmf:pmf2}
+\end{align}
+
+と書き直すこともできる．ただし，$C$は
+
+\begin{align}
+C & = \dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\boldsymbol{\zeta}_{0}-\boldsymbol{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}
+
+で与えられる．
+
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|flist_cv|     & CVファイル一覧を格納したファイル名 \\
+                     & \verb|flist_weight| & 重みファイル一覧を格納したファイル名（オプション） \\
+                     & \verb|fcv|           & CVファイル名 \\
+                     & \verb|flist_weight|  & 重みファイル名（オプション） \\
+\hline
+\verb|&output_param| & \verb|fhead|        & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|ndim|               & CVの次元数 \\
+                     & \verb|xyzcol|             & CVデータ中の列番号 \\
+                     & \verb|ng3|                & 各CV方向のグリッド数 \\
+                     & \verb|del|                & 各CV方向のグリッド間隔 \\
+                     & \verb|origin|             & 各CV方向のグリッド原点 \\
+                     & \verb|temperature|        & 温度 [K] \\
+                     & \verb|use_radial|         & 動径成分のCVを含むかどうか \\
+                     & \verb|radcol|             & CVデータ中にある動径成分の列番号 \\
+                     & \verb|box_system|         & 系のボックスサイズ（\verb|ndim=3| の場合のみ使用） \\
+                     & \verb|use_spline|         & スプライン補間の有無 \\
+                     & \verb|spline_resolution|  & スプライン補間の分解能 \\
+                     & \verb|gen_script_mpl2d|   & 2次元PMF描画用Pythonスクリプト生成の有無 \\
+                     & \verb|skip_calc|          & PMF計算をスキップするかどうか \\
+\hline
+\verb|&matplotlib_param| & \verb|fpdf|    & 出力PDFファイル名 \\
+                         & \verb|labels|  & 軸ラベルおよびカラーバーラベル \\
+                         & \verb|ranges|  & 描画範囲 \\
+                         & \verb|tics|    & 軸目盛り間隔 \\
+                         & \verb|scales|  & 軸の単位変換係数 \\
+\hline
+\end{tabular}
+}
+```
+
+### &option_param
+
+* **``ndim``**
+    * Default: None
+    * Example: ``ndim = 2``
+
+    Collective Variable (CV) の次元数を指定する．
+    例えば ``ndim = 2`` の場合は2次元PMF，``ndim = 3`` の場合は3次元PMFを計算する．
+
+----
+* **``xyzcol``**
+    * Default: ``1`` 
+    * Example: ``xyzcol = 1 2``
+
+    CVデータファイル中で，各CVに対応する列番号を指定する．
+    先頭列は時刻やステップ数として扱われるため無視される．
+
+    例えば
+
+    ```
+    time  cv1  cv2  cv3
+    ```
+
+    の形式でデータが格納されている場合，
+
+    ```
+    xyzcol = 1 2
+    ```
+
+    とすると，``cv1`` と ``cv2`` を用いて2次元PMFを計算する．
+
+----
+* **``ng3``**
+    * Default: ``1 1 1`` 
+    * Example: ``ng3 = 10 20``
+
+    各CV方向のグリッド数を指定する．
+
+    ``ndim = N`` の場合，``ng3`` には各次元に対するグリッド数を順番に与える．
+
+----
+* **``del``**
+    * Default: ``1.0 1.0 1.0`` 
+    * Example: ``del = 0.1d0 0.2d0``
+
+    各CV方向のグリッド間隔を指定する．
+
+    $i$番目のCVについて，グリッド間隔を$\Delta_i$とすると，隣接するグリッド点の距離は$\Delta_i$となる．
+
+----
+* **``origin``**
+    * Default: ``0.0 0.0 0.0``
+    * Example: ``origin = 0.0d0 1.0d0``
+
+    各CV方向のグリッドの原点を指定する．
+
+    $k$番目のCVについて，原点を$x_k^{(0)}$，グリッド間隔を$\Delta_k$とすると，$i$番目のグリッド位置は
+
+    \begin{align}
+    x_k^{(i)} = x_k^{(0)} + (i-1)\Delta_k
+    \end{align}
+
+    で与えられる．
+
+----
+* **``temperature``**
+    * Default: ``300.0d0`` 
+    * Example: ``temperature = 298.0d0``
+
+    PMF計算で用いる温度 $T$ [K] を指定する．
+
+----
+* **``use_radial``**
+    * Default: ``.false.``
+    * Example: ``use_radial = .true.``
+
+    CVが動径成分であるかどうかを指定する．
+    ``.true.``の場合には，次の``radcol``で指定したCV成分$x_k$について，ビンあたりの体積を
+    $4\pi x_{k}^{2} \Delta_{k}^{2}$として分布関数を計算する．
+
+----
+* **``radcol``**
+    * Default: N/A
+    * Example: ``radcol = 1``
+
+    何番目のCVが動径成分であるかを指定する．
+    ``use_radial = .true.``の場合のみ有効となる．
+
+
+----
+* **``box_system``**
+    * Default: ``0.0 0.0 0.0`` 
+    * Example: ``box_system = 50.0d0 50.0d0 50.0d0``
+
+    系のボックスサイズを指定する．
+
+    このパラメータは ``ndim = 3`` の場合に使用される．
+    各方向のボックス長を順番に与える．
+
+----
+* **``use_spline``**
+    * Default: ``.false.``
+    * Example: ``use_spline = .true.``
+
+    PMF計算後にスプライン補間を行うかどうかを指定する．
+
+    ``.true.`` の場合はスプライン補間を実施し，``.false.`` の場合は元のグリッドをそのまま使用する．
+
+----
+* **``spline_resolution``**
+    * Default: ``4``
+    * Example: ``spline_resolution = 8``
+
+    スプライン補間時の分解能を指定する．
+
+    大きな値を指定するほど細かい補間グリッドが生成される．
+
+----
+* **``gen_script_mpl2d``**
+    * Default: ``.false.``
+    * Example: ``gen_script_mpl2d = .true.``
+
+    2次元PMFを可視化するための Python スクリプトを生成するかどうかを指定する．
+
+    現在は ``ndim = 2`` の場合のみサポートされている．
+
+----
+* **``skip_calc``**
+    * Default: ``.false.``
+    * Example: ``skip_calc = .true.``
+
+    PMF計算をスキップするかどうかを指定する．
+
+    ``.true.`` の場合はPMF計算を行わず，補助ファイルの生成などのみを実行する．
+    ``.false.`` の場合は通常通りPMF計算を実行する．
+    このオプションは，Matplotlib (Python)スクリプトを設定変した上で再作成したい場合に便利である．
+
+### &matplotlib_param
+
+Python (Matplotlib)で2次元PMFを可視化するためのスクリプト作成するためのオプション．
+``&option_param``内で``gen_script_mpl2d = .true.``とした場合に有効となる．
+
+* **``fpdf``**
+    * Default: None
+    * Example: ``fpdf = "pmf.pdf"``
+
+    出力するPDFファイル名を指定する．
+
+----
+* **``labels``**
+    * Default: None
+    * Example: ``labels = "$x$" "$y$" "PMF"``
+
+    プロットに表示する軸ラベルを指定する．
+
+    ``ndim = 2`` の場合は，
+
+    ```
+    labels = "xlabel" "ylabel" "zlabel"
+    ```
+
+    の順に，$x$軸，$y$軸，およびPMF値に対応するカラーバーのラベルを指定する．
+
+    LaTeX形式の数式表記を利用できる．
+
+----
+* **``ranges``**
+    * Default: None
+    * Example: ``ranges = -10.0 10.0 -5.0 5.0 0.0 10.0``
+
+    描画範囲を指定する．
+
+    ``ndim = 2`` の場合は，
+
+    ```
+    ranges = xmin xmax ymin ymax zmin zmax
+    ```
+
+    の順に指定する．
+
+    ここで，
+
+    * ``xmin``, ``xmax`` : $x$軸の表示範囲
+    * ``ymin``, ``ymax`` : $y$軸の表示範囲
+    * ``zmin``, ``zmax`` : PMF値の表示範囲
+
+    を表す．
+
+----
+* **``tics``**
+    * Default: None
+    * Example: ``tics = 1.0 1.0 0.5``
+
+    軸目盛りの間隔を指定する．
+
+    ``ndim = 2`` の場合は，
+
+    ```
+    tics = xtic ytic ztic
+    ```
+
+    の順に指定する．
+
+    ここで，
+
+    * ``xtic`` : $x$軸の目盛り間隔
+    * ``ytic`` : $y$軸の目盛り間隔
+    * ``ztic`` : PMF値に対応するカラーバーの目盛り間隔
+
+    を表す．
+
+----
+* **``scales``**
+    * Default: ``1.0 1.0 1.0``
+    * Example: ``scales = 10.0 10.0 0.239006``
+
+    軸の単位変換係数を指定する．
+
+    ``ndim = 2`` の場合は，
+
+    ```
+    scales = xscale yscale zscale
+    ```
+
+    の順に指定する．
+
+    読み込まれたデータ値は描画時に各係数倍される．
+
+    例えば，
+
+    ```
+    scales = 10.0 10.0 1.0
+    ```
+
+    とすると，$x$軸および$y$軸の値は10倍された状態で表示される． 
+
+### 出力ファイルのフォーマット
+
+* ``*_original.gnplt``
+
+    このファイルにPMF ($W(\boldsymbol{\zeta})$)が出力される．
+    
+    * 1列目: 座標
+    * 2列目: PMF
+
+* ``*_g_original.gnplt``
+
+    このファイルに分布関数($\rho\left(\boldsymbol{\zeta}\right)/\rho_{0}\left(\boldsymbol{\zeta}_{0}\right)$)が出力される．
+   
+    * 1列目: 座標
+    * 2列目: 分布関数
+
+``use_spline = .true.``の場合には，スプライン後のPMFと
+分布関数がそれぞれ``*_spline.gnplt``, ``*_g_spline.gnplt``という名前で出力される．
+
+### 解析例
+
+1つのデータ列を持つ時系列データ``inp.ts``から，$5\leq x \leq 10$の範囲について
+$\Delta x = 0.1$の間隔でPMF ($W\left(x\right)$)を計算する例を以下に示す．
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ fcv     = "inp.ts"
+/
+&output_param
+ fhead = "out"
+/
+&option_param
+  ndim        = 1
+  xyzcol      = 1
+  ng3         = 50 
+  del         = 0.1
+  origin      = 5.0 
+  temperature = 300.0d0
+  use_spline  = .false.
+  use_radial  = .false.
+/
+EOF
+
+fanatra potential_of_mean_force run.inp 
+
+```
+## 制限つき動径平均力ポテンシャル(restricted_radial, rrpmf)
+
+この解析モードでは，何らかの反応座標(集団座標)によって
+条件づけられた状態の動径方向に対する自由エネルギープロファイルを計算できる．
+また，このプロファイルから，ホスト分子とゲスト分子の結合に伴う自由エネルギー変化
+(結合自由エネルギー)の計算が可能である．
+
+### 理論背景
+
+系が配置${\bf X}$をとるときの
+ホスト–ゲスト分子間の距離，結合状態を規定する反応座標の値をそれぞれ$d\left({\bf X}\right)$, $\boldsymbol{\xi}\left({\bf X}\right)$とする．
+距離に対する平均力ポテンシャルを
+
+\begin{align}
+w\left(r\right) & =-\dfrac{1}{\beta}\log\left[\int d{\bf X}\,\dfrac{\delta\left(r-d\left({\bf X}\right)\right)}{4\pi r^{2}}\exp\left(-\beta U\left({\bf X}\right)\right)\right]+C
+\end{align}
+
+と定義する．
+さらに，反応座標空間上の結合状態に対応する領域を$\boldsymbol{\Upsilon}$とし，次式に示す特性関数$\Theta\left(\boldsymbol{\xi}\right)$を導入する．
+
+\begin{align}
+\Theta_{\mathrm{B}}\left(\boldsymbol{\xi}\right) & =\begin{cases}
+1 & \boldsymbol{\xi}\in\boldsymbol{\Upsilon}\\
+0 & \boldsymbol{\xi}\notin\boldsymbol{\Upsilon}
+\end{cases}
+\end{align}
+
+この$\Theta\left(\boldsymbol{\xi}\right)$を用いれば，結合状態に属する配置に対する平均力ポテンシャルは
+
+\begin{align}
+w_{\mathrm{B}}\left(r\right) & =-\dfrac{1}{\beta}\log\left[\int d{\bf X}\,\dfrac{\delta\left(r-d\left({\bf X}\right)\right)}{4\pi r^{2}}\Theta_{\mathrm{B}}\left(\boldsymbol{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)\right]+C
+\end{align}
+
+と表せる．$w\left(r\right)$と$w_{\mathrm{B}}\left(r\right)$に含まれる定数$C$は同一の値とし，
+$w_{\mathrm{B}}\left(r\right)$が最小値がゼロとなるように設定する．
+$w\left(r\right)$は$r$が十分に大きいときに定数となるので，
+その定数を$\Delta w$とし，$w\left(r\right) = \Delta w$を満たす領域Uを$r_{0}\leq r\leq r_{1}$と定める．
+$r_{0}, r_{1}$の設定は，$w\left(r\right) = \Delta w$を満たしてさえいれば，任意に決めて良い．このことについては後で述べる．
+2分子が$r_{0}\leq r \leq r_{1}$の距離範囲に存在する状態Uと結合状態Bの
+存在確率比は
+
+\begin{align}
+\dfrac{{\displaystyle \int_{\boldsymbol{\Upsilon}}dr\,\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)}}{{\displaystyle \int_{r_{0}}^{r_{1}}dr\,\exp\left(-\beta w\left(r\right)\right)}}
+\end{align}
+
+であることから，UからBの変化に伴う自由エネルギー変化$\Delta G_{\mathrm{PMF}}$は
+
+\begin{align}
+\Delta G_{\mathrm{PMF}} & =-\dfrac{1}{\beta}\log\dfrac{{\displaystyle \int_{\boldsymbol{\Upsilon}}dr\,4\pi r^{2}\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)}}{{\displaystyle \int_{r_{0}}^{r_{1}}dr\,4\pi r^{2}\exp\left(-\beta w\left(r\right)\right)}}
+\end{align}
+
+と表せる．
+分母に含まれる$w\left(r\right)$は$r_{0}\leq r\leq r_{1}$の範囲で$\Delta w$なので，
+
+\begin{align}
+\Delta G_{\mathrm{PMF}} & =-\Delta w-\dfrac{1}{\beta}\log\dfrac{V_{\mathrm{B}}}{V_{\mathrm{U}}}
+\label{pmf:dGpmf}
+\end{align}
+
+と書き直せる．ただし，$V_{\mathrm{B}}$, $V_{\mathrm{U}}$は
+
+\begin{align}
+V_{\mathrm{B}} & =\int_{\boldsymbol{\Upsilon}}dr\,4\pi r^{2}\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)\\
+V_{\mathrm{U}} & =\int_{r_{0}}^{r_{1}}dr\,4\pi r^{2}
+\end{align}
+
+で定義される．式\eqref{pmf:dGpmf}の第2項は，ゲスト分子が濃度$1/V_{\mathrm{U}}$の状態から濃度$1/V_{\mathrm{B}}$の
+状態への移行に伴う自由エネルギー変化である．実験での結合自由エネルギーは標準状態濃度(典型的には$c^{\circ} = 1~\mathrm{mol~L^{-1}}$)
+のゲスト分子がホスト分子に結合するのに伴う自由エネルギー変化($\Delta G^{\circ}$)であり，$\Delta G_{\mathrm{PMF}}$とは異なる．
+ゲスト分子1つで濃度$c^{\circ}$となるときの体積を$V^{\circ}$とするとこれは$V^{\circ} = 1661$ Angstrom$^{3}$である．
+ゲスト分子が濃度$c^{\circ} = 1/V^{\circ} $の状態から濃度が$1/V_{\mathrm{U}}$の状態への移行に対する自由エネルギー変化$\Delta G^{\circ}_{\mathrm{corr}}$は
+
+\begin{align}
+\Delta G^{\circ}_{\mathrm{corr}} = - \dfrac{1}{\beta} \log \dfrac{V_{\mathrm{U}}}{V^{\circ}}
+\label{pmf:dGcorr}
+\end{align}
+
+である．つまり，$1/V^{\circ} \to 1/V_{\mathrm{B}}$の変化を$1/V^{\circ} \to 1/V_{\mathrm{U}}$と$1/V_{\mathrm{U}} 
+\to 1/V_{\mathrm{B}}$の2段階に分けることで，
+
+\begin{align}
+\Delta G^{\circ} = \Delta G_{\mathrm{PMF}} + \Delta G_{\mathrm{corr}}^{\circ}
+\end{align}
+
+と表すことができる．式\eqref{pmf:dGpmf}, \eqref{pmf:dGcorr}を上式に代入することで，
+
+\begin{align}
+\Delta G^{\circ} = - \Delta w - \dfrac{1}{\beta} \log \dfrac{V_{\mathrm{B}}}{V^{\circ}}
+\end{align}
+
+を得る．この式には$V_{\mathrm{U}}$が含まれていないことから，$\Delta G^{\circ}$の値は$r_{0},r_{1}$の選択に依存しない．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|flist_cv|      & CVファイル一覧を格納したファイル名 \\
+                     & \verb|flist_weight|  & 重みファイル一覧を格納したファイル名（オプション） \\
+                     & \verb|fcv|           & CVファイル名 \\
+                     & \verb|fweight|       & 重みファイル名 \\
+\hline
+\verb|&output_param| & \verb|fhead|         & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|calcfe|        & 標準自由エネルギーを計算するかどうか \\
+                     & \verb|ndim|          & CVの次元数 \\
+                     & \verb|only_r|        & 分子間距離が唯一のCVの場合かどうか\\
+                     & \verb|temperature|   & 温度 [K] \\
+                     & \verb|dr|            & 距離グリッド間隔 \\
+                     & \verb|ngrid|         & 距離グリッド数 \\
+                     & \verb|nsta|          & 解析開始フレーム番号 \\
+                     & \verb|use_bootstrap| & ブートストラップ解析の有無 \\
+                     & \verb|vol0|          & 標準状態体積 \\
+                     & \verb|urange|        & 非結合状態の距離範囲 \\
+                     & \verb|bound_range|   & 結合状態の距離範囲 \\
+\hline
+\verb|&bootopt_param| & \verb|iseed|        & 乱数シード \\
+                      & \verb|nsample|      & 各試行で抽出するサンプル数 \\
+                      & \verb|duplicate|    & 重複抽出を許可するかどうか \\
+                      & \verb|ntrial|       & ブートストラップ試行回数 \\
+\hline
+\end{tabular}
+}
+```
+
+### 入力ファイル(時系列データ)のフォーマット
+
+* 1列目：時間軸
+* 2列目〜$(N+1)$列目：CV値
+* 最終列：分子間距離
+
+1 列目は読み込まれず，2 列目から1 つめのデータ列としてカウントされる．
+分子間距離のみがCVの場合，つまり
+
+* 1列目：時間軸
+* 2列目：分子間距離
+
+の場合には，``&option_param``内で``only_r = .true.``を指定すれば良い．
+
+### ``&option_param``
+
+* **``calcfe``**
+    * Default: ``.true.``
+    * Example: ``calcfe = .true.``
+
+    標準結合自由エネルギーを計算するかどうかを指定する．
+    ``.true.`` の場合は標準結合自由エネルギーを計算し，``.false.`` の場合はPMFのみを出力する．
+
+----
+* **``ndim``**
+    * Default: None
+    * Example: ``ndim = 1``
+
+    CVの次元数を指定する．
+    現在は1次元および多次元PMFに対応している．
+
+----
+* **``only_r``**
+    * Default: ``.false.`` 
+    * Example: ``only_r = .false.``
+
+    分子間距離がCVであり，それ以外のCVが存在しない場合に``.true.``を指定する．
+----
+* **``temperature``**
+    * Default: ``298.0``
+    * Example: ``temperature = 300.0``
+
+    自由エネルギー計算に用いる温度 $T$ [K] を指定する．
+
+----
+* **``dr``**
+    * Default: None
+    * Example: ``dr = 0.1d0``
+
+    距離方向のグリッド間隔を指定する．
+    グリッド点間の間隔 $\Delta r$ として用いられる．
+
+----
+* **``ngrid``**
+    * Default: None
+    * Example: ``ngrid = 1000``
+
+    距離方向のグリッド数を指定する．
+    PMFは ``ngrid`` 個のグリッド上で評価される．
+
+----
+* **``nsta``**
+    * Default: ``1``
+    * Example: ``nsta = 100``
+
+    解析を開始するフレーム番号を指定する．
+    ``nsta`` より前のフレームは解析から除外される．
+
+----
+* **``use_bootstrap``**
+    * Default: ``.false.``
+    * Example: ``use_bootstrap = .true.``
+
+    ブートストラップ法による誤差評価を実施するかどうかを指定する．
+    ``.true.`` の場合は ``&bootopt_param`` の設定に従ってブートストラップ解析を行う．
+
+----
+* **``vol0``**
+    * Default: ``1661.0d0``
+    * Example: ``vol0 = 1661.0d0``
+
+    標準状態体積 $V^\circ$を指定する．
+    デフォルト値はAngstrom単位で1 mol/Lに対応する体積(1661 Angstrom$^3$)である．
+
+----
+* **``urange``**
+    * Default: None
+    * Example: ``urange = 25.0 30.0``
+
+    非結合状態（unbound state）とみなす距離範囲を指定する．
+    1つ目の値が下限，2つ目の値が上限を表す．
+
+----
+* **``bound_range``**
+    * Default: None
+    * Example:
+      ```
+      react_range = 0.0 10.0
+                    5.0 20.0
+      ```
+
+    結合状態（bound state）のCV範囲を指定する．
+    各行について，1つ目の値が下限，2つ目の値が上限を表す．
+    ``ndim`` 個の範囲を指定することで，多次元結合領域を定義できる．
+
+
+### ``&bootopt_param``
+
+ここでは，ブートストラップ法による誤差解析の設定を行う．
+``use_bootstrap = .true.``の場合に有効となる．
+
+* **``iseed``**
+    * Default: 自動生成
+    * Example: ``iseed = 3141592``
+
+    ブートストラップ解析で使用する乱数シードを指定する．
+    ``iseed <= 0`` の場合はプログラムが自動的にシードを生成する．
+
+----
+* **``nsample``**
+    * Default: None
+    * Example: ``nsample = 1000``
+
+    各ブートストラップ試行で抽出するサンプル数を指定する．
+
+----
+* **``duplicate``**
+    * Default: ``.true.``
+    * Example: ``duplicate = .false.``
+
+    ブートストラップサンプリング時に重複抽出を許可するかどうかを指定する．
+
+----
+* **``ntrial``**
+    * Default: None
+    * Example: ``ntrial = 100``
+
+    ブートストラップ試行回数を指定する．
+    試行回数を増やすことで統計誤差の推定精度が向上するが，計算コストも増加する．
+
+### 出力ファイルのフォーマット
+
+* ``*.rd`` 
+    * 1列目: 分子間距離$r$
+    * 2列目: $r$に沿った通常のPMF
+    * 3列目: 結合状態に対応するPMF  
+
+### 解析例
+
+CV数が1，最終列に分子間距離を格納した時系列データ``inp.ts``から，$18\leq r/$Angstrom$\leq 20$の範囲を解離状態，結合状態に対応するCV ($\zeta$)の値域が$5.0\leq \zeta \leq 10.0$の範囲のときの結合自由エネルギーの値を計算する例を下記に記す．
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ fcv      = "inp.ts" 
+/
+&output_param
+ fhead         = "out"
+/
+&option_param
+ calcfe        = .true.
+ only_r        = .false.
+ ndim          =  1       
+ temperature   =  300.0   
+ dr            =  0.1d0   
+ ngrid         =  1000    
+ nsta          =  1       
+ use_bootstrap = .false.  
+ vol0          = 1661.0d0
+ urange        =  18.0  20.0
+ bound_range   =  5.0  10.0 
+/
+EOF
+
+fanatra restricted_radial run.inp 
+```
+これを実行すると，ログファイルの後半に結果が出力される．
+```
+... Thermodynamic analysis ...
+vb      (A^3)      =      21.5444908
+wu      (kcal/mol) =      -1.3486059
+wb      (kcal/mol) =       0.0000000
+dw      (kcal/mol) =      -1.3486059
+dGv     (kcal/mol) =       2.5903536
+dGzero  (kcal/mol) =       3.9389595
+Keq     (M^-1)     =   1.3506025E-03
+```
+ 
+## フレーム抽出(extract_frame, extf)
+
+この解析モードでは，CVの値域指定により，特定の条件を満たすスナップショット(フレーム)を抽出する．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|flist_traj| & トラジェクトリファイル一覧を格納したファイル名 \\
+                     & \verb|flist_cv|   & CVファイル一覧を格納したファイル名 \\
+                     & \verb|ftraj|      & トラジェクトリファイル名 \\
+                     & \verb|fcv|        & CVファイル名 \\
+\hline
+\verb|&output_param| & \verb|fhead|      & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|dt|            & トラジェクトリの時間刻み \\
+                     & \verb|ndim|          & CVの次元数 \\
+                     & \verb|extract_range| & フレーム抽出を行うCV範囲 \\
+\hline
+\end{tabular}
+}
+```
+
+### ``&option_param``
+
+* **``ndim``**
+    * Default: None
+    * Example: ``ndim = 2``
+
+    時系列CVデータの次元数を指定する．
+
+    ``extract_range`` には，この次元数に対応した範囲を指定する必要がある．
+
+----
+* **``extract_range``**
+    * Default: None
+    * Example:
+
+      ```
+      extract_range = -5.0d0 5.0d0
+                       1.0d0 0.0d0
+      ```
+
+    フレームを抽出するCV領域を指定する．
+
+    各CVについて，下限値と上限値を1組として与える．
+
+    上記の例では，
+
+    * CV1: $-5.0 \leq \mathrm{CV}_1 \leq 5.0$
+    * CV2: $0.0 \leq \mathrm{CV}_2 \leq 1.0$
+
+    を満たすフレームが抽出される．
+
+    ``ndim`` 個の範囲を指定することで，多次元の抽出条件を設定できる．
+
+### 出力ファイルのフォーマット
+
+出力ファイル(トラジェクトリ)のフォーマットは，
+入力のトラジェクトリのフォーマット(dcd or xtc or nc (netcdf))と同じものとなる．
+
+### 解析例
+
+CV数が1，CV ($\zeta$)の時系列データ``inp.ts``をもとに，$5\leq \zeta \leq 10$の条件を満たす
+フレームを入力トラジェクトリから抽出する場合の解析例を示す．
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ ftraj    = "input.dcd" 
+ fcv      = "inp.ts"
+/
+&output_param
+ fhead         = "out"
+/
+&option_param
+ ndim          =  1       
+ extract_range =  5.0  10.0 
+/
+EOF
+
+fanatra extract_frame run.inp 
+```
+これを実行すると，``out.dcd``が出力される．
+## フレームのランダム抽出(random_frame, randf)
+
+この解析モードでは，ランダムにスナップショット(フレーム)を抽出する．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|ftraj|      & 入力トラジェクトリファイル名 \\
+                     & \verb|flist_traj| & トラジェクトリファイル一覧を格納したファイル名 \\
+\hline
+\verb|&output_param| & \verb|fhead|      & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|nsample|         & ランダム抽出するフレーム数 \\
+                     & \verb|iseed|           & 乱数シード \\
+                     & \verb|output_trajtype| & 出力トラジェクトリ形式 \\
+                     & \verb|duplicate|       & 重複抽出を許可するかどうか \\
+                     & \verb|out_rst7|        & AMBER rst7形式の出力有無 \\
+                     & \verb|shuffle|         & フレームをシャッフルするかどうか \\
+\hline
+\end{tabular}
+}
+```
+
+### ``&option_param``
+
+* **``nsample``**
+    * Default: ``100`` 
+    * Example: ``nsample = 100``
+
+    ランダムに抽出するフレーム数を指定する．
+
+----
+* **``iseed``**
+    * Default: ``-1`` (自動生成) 
+    * Example: ``iseed = 3141592``
+
+    ランダム抽出に使用する乱数シードを指定する．
+
+    ``iseed <= 0`` の場合はプログラムが自動的にシードを生成する．
+
+----
+* **``output_trajtype``**
+    * Default: ``dcd`` 
+    * Example: ``output_trajtype = "dcd"``
+
+    出力するトラジェクトリ形式を指定する．
+
+    現在は
+
+    * ``dcd``
+    * ``xtc``
+    * ``netcdf``
+
+    を指定できる．
+
+----
+* **``duplicate``**
+    * Default: ``.false.``
+    * Example: ``duplicate = .true.``
+
+    同じフレームを複数回抽出することを許可するかどうかを指定する．
+
+----
+* **``out_rst7``**
+    * Default: ``.false.``
+    * Example: ``out_rst7 = .true.``
+
+    抽出した各フレームをAMBER rst7形式でも出力するかどうかを指定する．
+
+----
+* **``shuffle``**
+    * Default: ``.false.``
+    * Example: ``shuffle = .true.``
+
+    フレームをシャッフルして出力するかどうかを指定する．
+    ``.true.`` の場合は全フレームをランダムな順序に並べ替えて出力する．
+
+### 出力ファイルのフォーマット
+
+出力ファイル(トラジェクトリ)のフォーマットは，
+入力のトラジェクトリのフォーマット(dcd or xtc or nc (netcdf))と同じものとなる．
+
+### 解析例
+
+トラジェクトリファイルとして，``input.dcd``を指定し，ランダムに100フレームを抽出する場合の例を以下に示す．また，トラジェクトリと合わせて``rst7``形式(``inpcrd``)で各フレームでの構造を出力する．
+
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ ftraj    = "input.dcd" 
+/
+&output_param
+ fhead         = "out"
+/
+&option_param
+ nsample = 100
+ output_trajtype = "dcd"
+ duplicate       = .false.
+ out_rst7        = .true. 
+/
+EOF
+
+fanatra random_frame run.inp 
+```
+これを実行すると，``out.dcd``と``outXXXXX.inpcrd`` (``XXXXX=00001, ..., 00100``)が出力される．
+## 移動平均(moving_average, movave)
+
+この解析モードでは，与えられた1次元データ(分布関数など)の移動平均による平滑化を行う．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|fcv|      & 関数データファイル名 \\
+                     & \verb|flist_cv| & 関数データファイル一覧を格納したファイル名 \\
+\hline
+\verb|&output_param| & \verb|fhead|    & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|dx|            & グリッド間隔 \\
+                     & \verb|xsta|          & グリッドの開始位置 \\
+                     & \verb|xsep|          & 領域の境界位置 \\
+                     & \verb|nregion|       & 領域数 \\
+                     & \verb|npoint|        & 各領域で移動平均に用いる点数 \\
+                     & \verb|include_zero|  & 原点を保持するかどうか \\
+\hline
+\end{tabular}
+}
+```
+
+### ``&option_param``
+
+* **``dx``**
+    * Default: None
+    * Example: ``dx = 0.1d0``
+
+    関数データのグリッド間隔を指定する．
+
+----
+* **``xsta``**
+    * Default: ``0.0d0`` 
+    * Example: ``xsta = 0.0d0``
+
+    グリッドの開始位置を指定する．
+
+    $i$番目のグリッド位置を$x_i$とすると，
+
+    $$
+    x_i = x_0 + (i-1)\Delta x
+    $$
+
+    で与えられる．
+
+----
+* **``nregion``**
+    * Default: ``1``
+    * Example: ``nregion = 2``
+
+    異なる移動平均条件を適用する領域数を指定する．
+    ``npoint`` には，この領域数に対応した個数の値を指定する．
+
+----
+* **``xsep``**
+    * Default: ``0.0d0``
+    * Example: ``xsep = 1.0d0``
+
+    異なる移動平均幅を適用する領域の境界を指定する．
+    ``nregion = 1`` の場合は使用されず，``xsep = 0.0d0`` を指定すればよい．
+    例えば，$N$領域に分ける場合には，境界値を$N-1$個指定する必要がある．
+
+----
+* **``npoint``**
+    * Default: None
+    * Example: ``npoint = 3 5``
+
+    各領域で移動平均に用いるデータ点数を指定する．
+    奇数を指定する必要がある．
+    上記の例では，
+
+    * 第1領域：3点移動平均
+    * 第2領域：5点移動平均
+
+    を適用する．
+
+----
+* **``include_zero``**
+    * Default: ``.true.``
+    * Example: ``include_zero = .false.``
+
+    移動平均後に原点での値を保持するかどうかを指定する．
+    ``.true.`` の場合は，原点での値は入力値のまま固定される．
+
+### 出力ファイルのフォーマット
+* ``*XXXX.dat``
+    * 1列目：$x$軸
+    * 2列目: 関数値
+
+    ``flist_cv``などで入力したファイルごとに平滑化されたファイルが出力される．
+
+### 解析例
+
+1次元の関数$f\left(x\right)$を格納した
+ファイル``input.dat`` (軸の始点``0``, グリッド間隔``0.1``)を
+$x\leq 1.0$, $x> 1.0$の2つの領域に分割して，それぞれの領域について3点平均，
+5点平均する場合のインプットを下記に示す．
+
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ fcv      = "input.dat"
+/
+&output_param
+ fhead = "out"
+/
+&option_param
+  dx          = 0.1d0  
+  xsta        = 0.0d0  
+  xsep        = 1.0d0  
+  nregion      = 2     
+  npoint       = 3 5   
+  include_zero = .true.
+/
+EOF
+
+fanatra moving_average run.inp 
+```
+これを実行すると，平滑化された関数データを格納した``out0001.dat``が出力される．
+## 関数の平均(average_function, avef)
+
+この解析モードでは，複数の入力ファイルに格納されている1次元関数を平均する．
+例えば，$i$番目のファイルに格納されている関数を$f_{i}\left(x\right)$，ファイル数を$N$とすると，平均後の関数$f_{\mathrm{ave}}\left(x\right)$は
+\begin{align}
+f_{\mathrm{ave}}\left(x\right) = \dfrac{1}{N}\sum_{i=1}^{N}f_{i}\left(x\right),
+\end{align}
+で表される．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|flist_cv|      & 関数データファイル一覧を格納したファイル名 \\
+\hline
+\verb|&output_param| & \verb|fhead|         & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|use_bootstrap| & ブートストラップ解析の有無 \\
+                     & \verb|xsta|          & グリッドの開始位置 \\
+                     & \verb|dx|            & グリッド間隔 \\
+\hline
+\verb|&bootopt_param| & \verb|duplicate|    & 重複抽出を許可するかどうか \\
+                      & \verb|iseed|        & 乱数シード \\
+                      & \verb|nsample|      & 各試行で抽出するサンプル数 \\
+                      & \verb|ntrial|       & ブートストラップ試行回数 \\
+\hline
+\end{tabular}
+}
+```
+
+### ``&option_param``
+
+* **``use_bootstrap``**
+    * Default: ``.false.``
+    * Example: ``use_bootstrap = .true.``
+
+    ブートストラップ法による誤差評価を実施するかどうかを指定する．
+    ``.true.`` の場合は，``&bootopt_param`` の設定に従ってブートストラップ解析を行う．
+
+----
+* **``xsta``**
+    * Default: ``0.0d0``
+    * Example: ``xsta = 0.0d0``
+
+    グリッドの開始位置を指定する．
+
+    $i$番目のグリッド位置を$x_i$とすると，
+
+    $$
+    x_i = x_0 + (i-1)\Delta x
+    $$
+
+    で与えられる．
+
+----
+* **``dx``**
+    * Default: ``0.1d0``
+    * Example: ``dx = 0.1d0``
+
+    関数データのグリッド間隔を指定する．
+
+### ``&bootopt_param``
+
+ここでは，ブートストラップ法による誤差解析の設定を行う．
+``use_bootstrap = .true.``の場合に有効となる．
+
+* **``iseed``**
+    * Default: 自動生成
+    * Example: ``iseed = 3141592``
+
+    ブートストラップ解析で使用する乱数シードを指定する．
+    ``iseed <= 0`` の場合はプログラムが自動的にシードを生成する．
+
+----
+* **``nsample``**
+    * Default: None
+    * Example: ``nsample = 1000``
+
+    各ブートストラップ試行で抽出するサンプル数を指定する．
+
+----
+* **``duplicate``**
+    * Default: ``.true.``
+    * Example: ``duplicate = .false.``
+
+    ブートストラップサンプリング時に重複抽出を許可するかどうかを指定する．
+
+----
+* **``ntrial``**
+    * Default: None
+    * Example: ``ntrial = 100``
+
+    ブートストラップ試行回数を指定する．
+    試行回数を増やすことで統計誤差の推定精度が向上するが，計算コストも増加する．
+
+### 出力ファイルのフォーマット
+* ``*.ave``
+    * 1列目：$x$軸
+    * 2列目：関数値
+    * 3列目：標準誤差(``use_bootstrap = .true.``の場合)
+
+### 解析例
+
+1次元の関数$f\left(x\right)$ (軸の始点``0``, グリッド間隔``0.1``)がファイルごとに格納されていて，そのファイルリストが``list``にまとめられているとして，その平均と標準誤差をブートストラップ法で計算する例を示す．
+
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ flist_cv = "list"
+/
+&output_param
+ fhead         = "out"
+/
+&option_param
+ use_bootstrap =  .false.
+ xsta          =  0.0d0  
+ dx            =  0.1d0  
+/
+
+&bootopt_param
+ duplicate     = .true.   
+ iseed         =  3141592 
+ nsample       =  1000    
+ ntrial        =  100     
+/
+EOF
+
+fanatra average_function run.inp 
+```
+これを実行すると，平均化された関数データを格納した``out.ave``が出力される．

@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>重心解析・平均二乗変位(center_of_mass, com) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">重心解析・平均二乗変位(center_of_mass, com)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/03_anatra_usage/04_center_of_mass.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="center-of-mass-com">
+<h1>重心解析・平均二乗変位(center_of_mass, com)<a class="headerlink" href="#center-of-mass-com" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">center_of_mass</span></code> (<code class="docutils literal notranslate"><span class="pre">com</span></code>)は分子の重心の時間変化や平均二乗変位(Mean square displacement, MSD)
+を求めるプログラムである．
+また，脂質膜内部での分子の2次元的拡散(側方拡散)に対応するため，
+2次元(<span class="math notranslate nohighlight">\(xy\)</span>平面)でのMSD計算も可能である．</p>
+<section id="id1">
+<h2>理論背景<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>平均二乗変位<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>平均二乗変位(MSD) <span class="math notranslate nohighlight">\(\chi(t)\)</span>の定義を導入すると同時に，
+それを求める意義について，拡散方程式に基づいて述べる．</p>
+<p>分子の時刻<span class="math notranslate nohighlight">\(t\)</span>での位置を<span class="math notranslate nohighlight">\({\bf r}(t)\)</span>とすると，MSDは次式で定義される．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-58835ae7-1e5b-41dc-8efb-d1286490ffb8">
+<span class="eqno">()<a class="headerlink" href="#equation-58835ae7-1e5b-41dc-8efb-d1286490ffb8" title="Permalink to this equation"></a></span>\[\begin{align}
+\chi\left(t\right)  =\braket{\left|{\bf r}\left(t\right)-{\bf r}\left(0\right)\right|^{2}}.
+\end{align}\]</div>
+<p>つまり<span class="math notranslate nohighlight">\(\chi(t)\)</span>は，時間が<span class="math notranslate nohighlight">\(t\)</span>だけたった後における分子の移動距離の2乗平均を表す．MSDが拡散方程式に基づくと，どのように表されるのかを次に考えてみる．
+分子の確率密度場を<span class="math notranslate nohighlight">\(\rho({\bf r},t)\)</span>，拡散係数を<span class="math notranslate nohighlight">\(D\)</span>とすると，拡散方程式は次式で表される．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-4511f8a0-f6e5-46ff-997f-0d31bc1080d6">
+<span class="eqno">()<a class="headerlink" href="#equation-4511f8a0-f6e5-46ff-997f-0d31bc1080d6" title="Permalink to this equation"></a></span>\[\begin{align}
+\dfrac{\partial}{\partial t}\rho\left({\bf r},t\right) =D\nabla^{2}\rho\left({\bf r},t\right).
+\end{align}\]</div>
+<p>時刻<span class="math notranslate nohighlight">\(t=0\)</span>で分子は位置<span class="math notranslate nohighlight">\({\bf 0}\)</span>に存在していたとすると，初期条件は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-752eb47e-e2b4-42d8-9109-3d1b7de7b12b">
+<span class="eqno">()<a class="headerlink" href="#equation-752eb47e-e2b4-42d8-9109-3d1b7de7b12b" title="Permalink to this equation"></a></span>\[\begin{align}
+\rho\left({\bf r},t=0\right) &amp; =\delta\left({\bf r}\right),
+\end{align}\]</div>
+<p>となる．この条件の下，拡散方程式を解くと，次式が得られる．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-1b69f2fb-deaf-4465-9e6f-e3a31b8516a6">
+<span class="eqno">()<a class="headerlink" href="#equation-1b69f2fb-deaf-4465-9e6f-e3a31b8516a6" title="Permalink to this equation"></a></span>\[\begin{align}
+\rho\left({\bf r},t\right) =\dfrac{1}{\left(4\pi Dt\right)^{3/2}}\exp\left[-\dfrac{\left|{\bf r}\right|^{2}}{4Dt}\right].
+\end{align}\]</div>
+<p>この解を用いると，MSDは</p>
+<div class="amsmath math notranslate nohighlight" id="equation-cd307256-5110-4965-9907-4e28ef26ab1d">
+<span class="eqno">()<a class="headerlink" href="#equation-cd307256-5110-4965-9907-4e28ef26ab1d" title="Permalink to this equation"></a></span>\[\begin{align}
+\chi\left(t\right) &amp; =\int d{\bf r}\,\left|{\bf r}\right|^{2}\rho\left({\bf r},t\right) \\
+                   &amp; = 6Dt,
+\end{align}\]</div>
+<p>と表される．つまり，MSDは傾き<span class="math notranslate nohighlight">\(6D\)</span>で時間に比例して増加していくことになる．
+ただし，拡散方程式は長時間極限において成り立つ関係式なので，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-c15552ff-ede1-42d7-895b-ae92cff3530e">
+<span class="eqno">()<a class="headerlink" href="#equation-c15552ff-ede1-42d7-895b-ae92cff3530e" title="Permalink to this equation"></a></span>\[\begin{align}
+D &amp; =\dfrac{1}{6}\lim_{t\to\infty}\dfrac{\braket{\left|{\bf r}\left(t\right)-{\bf r}\left(0\right)\right|^{2}}}{t},
+\end{align}\]</div>
+<p>とすべきである．上式はEinsteinの関係式と呼ばれる．
+この式は，MSDの長時間領域の傾きから拡散係数が求められること
+を意味している．</p>
+</section>
+</section>
+<section id="id3">
+<h2>オプション一覧<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p><strong>オプション</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+<th class="head text-center"><p><strong>オプション</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-stype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sfile</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tintype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tin</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-flist_traj</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-fhead</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel0</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-mode</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-outmsd</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-unwarp</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-msddim</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-dt</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-t_sparse</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-t_range</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-prep_only</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p></p></td>
+<td class="text-center"><p></p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<ul>
+<li><p><strong>-outmsd &lt;true or false&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-outmsd</span> <span class="pre">true</span></code></p></li>
+<li><p>Note: <code class="docutils literal notranslate"><span class="pre">true</span></code>の場合は<code class="docutils literal notranslate"><span class="pre">-msddim</span></code>と<code class="docutils literal notranslate"><span class="pre">-msdrange</span></code>も指定する必要がある．</p></li>
+</ul>
+<p>MSDを計算するかどうかを指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-unwrap &lt;true or false&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-unwrap</span> <span class="pre">false</span></code></p></li>
+</ul>
+<p>ラップされているトラジェクトリをアンラップするかどうかを指定する．
+ラップされているトラジェクトリではMSDが正しく計算できないため，
+<code class="docutils literal notranslate"><span class="pre">true</span></code>にする必要がある．
+ただし，GROMACSのように，分子がPBCによりぶつ切りになっている
+トラジェクトリには対応できないので，注意されたい．
+その場合はあらかじめ，GROMACSのtrjconvにて修正しておく必要がある．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-msddim &lt;2 or 3&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">3</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-msddim</span> <span class="pre">3</span></code></p></li>
+</ul>
+<p>MSDの次元を指定する．通常の拡散では3を指定するが，
+脂質膜系での側方拡散を調べる場合には2を指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-dt &lt;時間刻み&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-dt</span> <span class="pre">0.1</span></code></p></li>
+</ul>
+<p>スナップショット間の時間刻みを指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-t_range &lt;MSDを計算する時間スケール&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">10</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-t_range</span> <span class="pre">10</span></code></p></li>
+</ul>
+<p>MSDを計算する時間スケールを指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-t_sparse &lt;MSDを出力するときの時間刻み&gt;</strong></p>
+<p>MSDを出力するときの時間刻みを指定する．
+例えば，<code class="docutils literal notranslate"><span class="pre">-dt</span> <span class="pre">0.1</span></code> (<span class="math notranslate nohighlight">\(=\delta t\)</span>), <code class="docutils literal notranslate"><span class="pre">-t_sparse</span> <span class="pre">1</span></code> (=<span class="math notranslate nohighlight">\(\Delta t\)</span>)のとき，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-7c565f2e-f6e9-47f3-9782-484e1e16c0b1">
+<span class="eqno">()<a class="headerlink" href="#equation-7c565f2e-f6e9-47f3-9782-484e1e16c0b1" title="Permalink to this equation"></a></span>\[\begin{align}
+   \Delta T = \mathrm{nint}\left(\dfrac{\Delta t}{\delta t}\right) \delta t
+\end{align}  \]</div>
+<p>の時間刻みでMSD (ANGSTROM<span class="math notranslate nohighlight">\(^{2}\)</span>)が計算される．</p>
+</li>
+</ul>
+</section>
+<section id="id4">
+<h2>出力ファイルのフォーマット<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.com</span></code></p>
+<p>このファイルには，選択部位内の分子それぞれの重心の座標が<code class="docutils literal notranslate"><span class="pre">xyz</span></code>形式で出力される．</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.msd</span></code></p>
+<p>このファイルには，分子ごとのMSDが出力されている．
+&quot;<code class="docutils literal notranslate"><span class="pre">-outmsd</span> <span class="pre">true</span></code>&quot;の場合に出力される．</p>
+<ul class="simple">
+<li><p>1列目: 時間軸</p></li>
+<li><p>2列目: 分子1のMSD</p></li>
+<li><p>3列目: 分子2のMSD<br />
+…</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.msdave</span></code></p>
+<p>このファイルには，全分子に対して平均をとったMSDが出力されている．
+&quot;<code class="docutils literal notranslate"><span class="pre">-outmsd</span> <span class="pre">true</span></code>&quot;の場合に出力される．</p>
+<ul class="simple">
+<li><p>1列目: 時間軸</p></li>
+<li><p>2列目: MSD</p></li>
+<li><p>3列目: MSDの標準偏差</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id5">
+<h2>解析例<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<section id="msd">
+<h3>タンパク質のMSD計算<a class="headerlink" href="#msd" title="Link to this heading"></a></h3>
+<p>水溶液中にタンパク質(<code class="docutils literal notranslate"><span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">192</span></code>)が1つ溶解している系において，
+タンパク質のMSDを計算する例を以下に示す．
+タンパク質は複数のアミノ酸残基から構成されているので，&quot;<code class="docutils literal notranslate"><span class="pre">-mode</span> <span class="pre">whole</span></code>&quot;を指定する必要がある．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="n">anatra</span> <span class="n">center_of_mass</span>        \
+  <span class="o">-</span><span class="n">stype</span>     <span class="n">parm7</span>           \
+  <span class="o">-</span><span class="n">sfile</span>     <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>  \
+  <span class="o">-</span><span class="n">tintype</span>   <span class="n">dcd</span>             \
+  <span class="o">-</span><span class="n">tin</span>       <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>         \
+  <span class="o">-</span><span class="n">fhead</span>     <span class="n">out</span>             \
+  <span class="o">-</span><span class="n">outmsd</span>    <span class="n">true</span>            \
+  <span class="o">-</span><span class="n">sel0</span>      <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">192</span>  \
+  <span class="o">-</span><span class="n">mode</span>      <span class="n">whole</span>           \
+  <span class="o">-</span><span class="n">msddim</span>    <span class="mi">3</span>               \
+  <span class="o">-</span><span class="n">dt</span>        <span class="mf">0.01</span>            \
+  <span class="o">-</span><span class="n">t_range</span>   <span class="mi">100</span>             \
+  <span class="o">-</span><span class="n">t_sparse</span>  <span class="mf">0.1</span> 
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>複数個存在する小分子のMSD計算<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>水溶液中にリガンド小分子(<code class="docutils literal notranslate"><span class="pre">resname</span> <span class="pre">LIG</span></code>)が100分子存在する系を考える．
+分子ごとのMSDとその平均を計算する例を以下に示す．
+この場合は残基番号によって分子の切れ目を定めることができるので，&quot;<code class="docutils literal notranslate"><span class="pre">-mode</span> <span class="pre">residue</span></code>&quot;を指定する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="n">anatra</span> <span class="n">center_of_mass</span>        \
+  <span class="o">-</span><span class="n">stype</span>     <span class="n">parm7</span>           \
+  <span class="o">-</span><span class="n">sfile</span>     <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>  \
+  <span class="o">-</span><span class="n">tintype</span>   <span class="n">dcd</span>             \
+  <span class="o">-</span><span class="n">tin</span>       <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>         \
+  <span class="o">-</span><span class="n">fhead</span>     <span class="n">out</span>             \
+  <span class="o">-</span><span class="n">outmsd</span>    <span class="n">true</span>            \
+  <span class="o">-</span><span class="n">sel0</span>      <span class="n">resname</span> <span class="n">LIG</span>     \
+  <span class="o">-</span><span class="n">mode</span>      <span class="n">residue</span>         \
+  <span class="o">-</span><span class="n">msddim</span>    <span class="mi">3</span>               \
+  <span class="o">-</span><span class="n">dt</span>        <span class="mf">0.01</span>            \
+  <span class="o">-</span><span class="n">t_range</span>   <span class="mi">100</span>             \
+  <span class="o">-</span><span class="n">t_sparse</span>  <span class="mf">0.01</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

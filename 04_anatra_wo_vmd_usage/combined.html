@@ -1,0 +1,276 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>anatra_wo_vmdの使い方 &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">anatra_wo_vmdの使い方</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/04_anatra_wo_vmd_usage/combined.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="anatra-wo-vmd">
+<h1>anatra_wo_vmdの使い方<a class="headerlink" href="#anatra-wo-vmd" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2>はじめに<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>前章で述べた通り，<strong>anatra</strong>プログラムはVMDの分子情報の選択等の前処理，
+Fortranによる解析の二段階に分かれて実行される．
+従って，VMDのビルドや使用が難しい外部計算機の計算ノード上での利用は
+制限される場合がある．
+そこで，VMDによる前処理を事前に済ませておき，実際の解析のみを計算ノード上で行う
+<strong>anatra_wo_vmd</strong>プログラムを開発した．</p>
+</section>
+<section id="id2">
+<h2>使用について<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>このプログラムは<strong>anatra</strong>プログラムの中の数種類の解析モードに対応しており
+（のちに説明），使用の際は</p>
+<ol class="arabic simple">
+<li><p>vmdが使える環境下にて，<code class="docutils literal notranslate"><span class="pre">-prep_only</span> <span class="pre">true</span></code>オプション指定
+して<strong>anatra</strong>コマンドを実行，中間ファイルを生成する．</p></li>
+<li><p>計算ノード上などで<strong>anatra_wo_vmd</strong>を実行して解析を行う．</p></li>
+</ol>
+<p>という二段階の操作をすることとなる．</p>
+<p><strong>anatra_wo_vmd</strong>プログラムにて利用可能な解析は
+<code class="docutils literal notranslate"><span class="pre">anatra_wo_vmd</span> <span class="pre">-h</span></code>を実行することで表示される．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ anatra_wo_vmd -h
+Available analysis in ANATRA w/o VMD
+comcrd      : Center-of-Mass Analysis
+lipidorder  : Scd order-parameter Analysis
+z_profile   : Z-profile Analysis
+area        : Area Per Lipid Analysis
+rdf         : RDF Analysis
+z_orient    : Orientation Analysis
+sdf         : SDF Analysis
+distance    : PBC Distance Analysis
+energy      : Energy Analysis
+strucsample : Structural Sampling Analysis
+sasa        : SASA Analysis
+rotation    : rotation Analysis
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">comcrd</span></code>などが解析モードである．
+以上から分かる通り，<strong>anatra</strong>プログラムの一部が実装されている．
+また，実行の際は</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">anatra_wo_vmd</span> <span class="n">comcrd</span> <span class="o">&lt;</span><span class="n">インプットファイル</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>のように実行する．
+ここでのインプットファイルは<strong>anatra</strong>プログラムにて
+<code class="docutils literal notranslate"><span class="pre">-prep_only</span> <span class="pre">true</span></code>を指定した際に生成される中間
+ファイルを指す．また，<strong>anatra</strong>側で指定してあるため
+<strong>anatra_wo_vmdにオプションは不要である．</strong></p>
+</section>
+<section id="id3">
+<h2>解析例<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>タンパク質(<code class="docutils literal notranslate"><span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">161</span></code>)とリガンド分子(<code class="docutils literal notranslate"><span class="pre">resname</span> <span class="pre">LIG</span></code>)の間のLJ相互作用
+を，<code class="docutils literal notranslate"><span class="pre">anatra_wo_vmd</span></code>にて解析する場合の例を示しておく．</p>
+<section id="anatra">
+<h3>anatra側での操作<a class="headerlink" href="#anatra" title="Link to this heading"></a></h3>
+<p>内部計算機や外部計算機ログインノードなどvmdの動作する環境にて，
+作業ディレクトリに解析対象のトラジェクトリファイル<code class="docutils literal notranslate"><span class="pre">INP.dcd</span></code>と
+その構造ファイル<code class="docutils literal notranslate"><span class="pre">complex.prmtop</span></code>が存在する場合を前提とする．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ls 
+
+INP.dcd  complex.prmtop
+</pre></div>
+</div>
+<p>以下のbashスクリプトを実行する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="n">anatra</span> <span class="n">energy</span> <span class="o">-</span><span class="n">stype</span>      <span class="n">parm7</span>                \
+              <span class="o">-</span><span class="n">sfile</span>      <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>       \
+              <span class="o">-</span><span class="n">tintype</span>    <span class="n">dcd</span>                  \
+              <span class="o">-</span><span class="n">tin</span>        <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>              \
+              <span class="o">-</span><span class="n">fhead</span>      <span class="n">out</span>                  \
+              <span class="o">-</span><span class="n">pbc</span>        <span class="n">true</span>                 \
+              <span class="o">-</span><span class="n">calc_elec</span>  <span class="n">false</span>                \
+              <span class="o">-</span><span class="n">calc_vdw</span>   <span class="n">false</span>                \
+              <span class="o">-</span><span class="n">vdw</span>        <span class="n">standard</span>             \
+              <span class="o">-</span><span class="n">dt</span>         <span class="mf">0.01</span>                 \
+              <span class="o">-</span><span class="n">rljcut</span>     <span class="mf">12.0</span>                 \
+              <span class="o">-</span><span class="n">relcut</span>     <span class="mf">1.0e10</span>               \
+              <span class="o">-</span><span class="n">sel0</span>       <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">161</span>       \
+              <span class="o">-</span><span class="n">sel1</span>       <span class="n">resname</span> <span class="n">LIG</span>          \
+              <span class="o">-</span><span class="n">mode0</span>      <span class="n">whole</span>                \
+              <span class="o">-</span><span class="n">mode1</span>      <span class="n">whole</span>                \
+              <span class="o">-</span><span class="n">prep_only</span>  <span class="n">true</span>
+
+</pre></div>
+</div>
+<p>この時，パラメータとして<code class="docutils literal notranslate"><span class="pre">-prep_only</span> <span class="pre">true</span></code>を指定していることに注意されたい．
+実行後は以下のように<code class="docutils literal notranslate"><span class="pre">.molfile</span></code>と<code class="docutils literal notranslate"><span class="pre">.inp</span></code>拡張子の中間ファイルが生成される．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ls
+ 
+ INP.dcd         en.inp        en_1.molinfo
+complex.prmtop  en_0.molinfo
+</pre></div>
+</div>
+<p>ここで，<code class="docutils literal notranslate"><span class="pre">en.inp</span></code>ファイルは<strong>anatra_wo_vmd</strong>プログラムの
+インプットファイルに該当する．このファイルはFortranのnamelist形式で記述されており
+，中には指定したパラメータが格納されている．Fortranで書かれた<strong>anatra_wo_vmd</strong>
+プログラムは各種パラメータをこのファイルから読み取って解析を行う．<br />
+また，この時点では指定したアウトプットファイルは生成しないので注意が必要である．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cat en.inp
+
+&amp;input_param
+   fprmtop  = &quot;complex.prmtop&quot;
+   ftraj = &quot;INP.dcd&quot;
+   fanaparm = &quot;complex.anaparm&quot;
+ /
+ &amp;output_param
+   fhead = &quot;out&quot;
+ /
+ &amp;trajopt_param
+   dt        = 0.01
+   molinfo   = &quot;en_0.molinfo&quot; &quot;en_1.molinfo&quot;
+ /
+ &amp;option_param
+   parmformat = &quot;prmtop&quot;
+   pbc        = .true.
+   calc_vdw   = .true.
+   calc_elec  = .false.
+   tottype    = &quot;standard&quot;
+   vdw        = &quot;standard&quot;
+   elec       = &quot;bare&quot;
+   mode       = &quot;whole&quot; &quot;whole&quot;
+   rljcut     = 12.0
+   relcut     = 1.0e10
+   pme_alpha  = 0.35e0
+   pme_grids  = 64 64 64
+   pme_rigid  = .false.
+   pme_dual   = .false.
+ /
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>anatra_wo_vmdでの解析<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>続いて，実際に解析を行う計算機上やディレクトリ内に，前段階での操作で得た中間ファイル
+（<code class="docutils literal notranslate"><span class="pre">*.molinfo</span></code>や<code class="docutils literal notranslate"><span class="pre">*.inp</span></code>）と解析に用いるファイル
+（<code class="docutils literal notranslate"><span class="pre">*.prmtop</span></code>や<code class="docutils literal notranslate"><span class="pre">*.dcd</span></code>など前段階でパラメータ指定したファイル）を移動しておく．
+同一ディレクトリで作業する場合はそのままで問題ない．<br />
+ここでは外部計算機「富岳」上にて1ノード，24並列で解析する場合のbashスプリプト
+を示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#!/bin/bash
+#PJM -L &quot;rscgrp=small&quot;
+#PJM -L &quot;rscunit=rscunit_ft01&quot;
+#PJM -L &quot;node=1&quot;
+#PJM -L &quot;elapse=00:25:00&quot;
+#PJM -j
+#PJM -S
+
+export OMP_NUM_THREADS=24
+export exe=/vol0005/hpXXXXX/data/uXXXXX/packages/vmd_scripts/anatra/bin/anatra_wo_vmd
+
+export PLE_MPI_STD_EMPTYFILE=off
+
+$exe energy en.inp
+</pre></div>
+</div>
+<p>上記中，プログラム実行は最終行，“<code class="docutils literal notranslate"><span class="pre">anatra_wo_vmd</span> <span class="pre">energy</span> <span class="pre">en.inp</span></code>”
+にて行っている．
+実行後はインプットファイルと結果のファイル，計算ノード上での実行結果ファイルがディレクトリに残る．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ls
+
+INP.dcd         en.inp        en_1.molinfo  out.uij             run.sh.8944563.stats
+complex.prmtop  en_0.molinfo  out.fsq       run.sh.8944563.out
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+# anatraの使い方
+
+## はじめに
+
+**anatra**はVMDとFortranを用いて解析を行うプログラムである．
+この章では，**anatra**の使い方を解説する．  
+
+先にも述べたが，基本的にこのプログラムを用いる解析では，まずVMDを用いた分子の選択などの処理を通して
+中間ファイルを生成，それをFortranにて解析するという二段階の処理を踏んでいる．
+<!---
+一段階目までのVMD処理を**anatra**にて済ませた後，実際の解析のみを実行する**anatra_wo_vmd**
+コマンドも存在しており，これについては次章にて述べる．
+また，VMDを用いずに解析を行うプログラム**fanatra**については，
+次々章を参照されたい．
+--->
+
+利用可能な解析は"``anatra -h``"を実行することで表示される．
+```
+$ anatra -h
+Available analysis in ANATRA
+trjconv             (trj)   : Convert trajectory
+distance            (dis)   : Distance Analysis
+center_of_mass      (com)   : Center-of-Mass Analysis
+radial_distr        (rdf)   : Radial-Distribution Analysis
+spatial_distr       (sdf)   : Spatial-Distribution Analysis
+rmsd                (rmsd)  : Root-Mean-Square-Deviation Analysis
+interaction_energy  (ene)   : Interaction Energy Analysis
+lipid_order         (scd)   : Lipid S_CD order-parameter Analysis
+area_per_lipid      (apl)   : Area Per Lipid Analysis
+z_profile           (zprof) : Z-profile Analysis
+z_orient            (zori)  : Orientation Analysis along z
+rotation            (rot)   : Rotation Analysis
+cluster_size        (cls)   : Cluster-size Analysis
+free_volume         (fvol)  : Free-Volume Analysis
+species_info        (spec)  : Get Species information
+gauqm_prepper       (gau)   : Gaussian QM input prepper
+```
+``trjconv``などが解析モードであり，
+```
+$ anatra trjconv -option1 ...
+```
+のように実行する．また括弧内に示されているのはそれぞれの解析モード名の省略版であり，例えば``trjconv``は，
+```
+$ anatra trj -option1 ...
+```
+と実行しても良い．
+
+各解析モードでのオプションなどは"``anatra 解析モード -h``"
+で簡単な説明とサンプルが表示される．このヘルプメッセージだけで大体の使い方が分かるように
+なっているが，より詳細な説明が必要な場合に
+このマニュアルを参照すると良いだろう．
+以下では，``trjconv``の場合を例として示しておく(VMDのデフォルト出力は省略している)．
+```
+$ anatra trjconv -h
+============================================================
+
+                    Trajectory Convert
+
+============================================================
+Usage:
+anatra trjconv                                                            \
+  -stype      <structure file type>                                       \
+  -sfile      <structure file name>                                       \
+  -tintype    <input trajectory file type>                                \
+  -tin        <input trajectory file name>                                \
+  -totype     <output trajectory file type>                               \
+  -to         <output trajectory file name>                               \
+  -beg        <first frame to be read> (default: 1)                       \
+  -end        <last frame to be read>                                     \
+              (default: 0, correspoding to last frame))                   \
+  -selX       <X-th VMD selection> (X=0,1,2...)                           \
+  -fit        <fit is performed or not (true or false)>                   \
+  -centering  <centering is performed or not (true or false)>             \
+              (default: false)                                            \
+  -wrap       <wrap is performed or not (true or false)>                  \
+              (default: false)                                            \
+  -wrapcenter <wrapping center (origin or com) (default: fragment)>       \
+  -wrapcomp   <how to wrap molecules (residue, segid,chain, or fragment)> \
+              (residue or segid or chain or fragment or nomp)             \
+              (default: fragment)                                         \
+  -refpdb     <reference pdb file name>                                   \
+              (necessary if fit = true)                                   \
+  -outselid   <selection id for output molecules>                         \
+  -fitselid   <selection id for fitting or centering>                     \
+  -refselid   <selection id for reference>
+
+Remark:
+o If you specify fit = true & wrap = true, wrapcomp is automatically changed to 'com'
+
+Example (fitting):
+anatra trjconv                           \
+  -stype      parm7                      \
+  -sfile      str.prmtop                 \
+  -tintype    dcd                        \
+  -tin        inp.dcd                    \
+  -totype     dcd                        \
+  -to         out.dcd                    \
+  -beg        1                          \
+  -end        150                        \
+  -sel0       not water                  \
+  -sel1       resid 1 to 275 and name CA \
+  -sel2       resid 1 to 275 and name CA \
+  -fit        true                       \
+  -centering  false                      \
+  -wrap       true                       \
+  -wrapcenter origin                     \
+  -wrapcomp   fragment                   \
+  -refpdb     ref.pdb                    \
+  -outselid   0                          \
+  -fitselid   1                          \
+  -refselid   2
+```
+上記の例が示すように，**anatra**では多くのオプションを含んでいるため，
+``bash``スクリプトなどの中で実行すると良い．
+以下にスクリプト例を示しておく．
+```
+#!/bin/bash
+
+anatra trjconv            \
+  -stype    parm7         \
+  -sfile    str.prmtop    \
+  -tintype  dcd           \
+  -tin      INP.dcd       \
+  -totype   dcd           \
+  -to       OUT.dcd       \
+  -sel0     resid 1 to 20 \
+  -outselid 0 
+```
+
+## 共通オプション
+
+**anatra**には多くの解析モードが存在するが，解析モード間で多くの共有オプションが存在する．
+まず，それらを一覧として以下に示しておく．
+その後に，各オプションの内容について解説する．
+
+ **オプション名**                  | **機能**                                 | **例**             
+:----------------------------------|:----------------------------------------:|---------------:
+ -stype                            | 構造ファイルの種類を指定                 | -sfile parm7    
+ -sfile                            | 構造ファイル名を指定                     | -stype A.prmtop
+ -tintype                          | 入力トラジェクトリの種類を指定           | -tintype dcd
+ -tin                              | 入力トラジェクトリ名を指定               | -tin in.dcd
+ -flist_traj                       | 入力トラジェクトリ一覧を記載したファイルを指定 | -flist_traj list.txt
+ -totype                           | 出力トラジェクトリの種類を指定           | -totype dcd
+ -to                               | 出力トラジェクトリ名を指定               | -to out.dcd
+ -sel$x$ ($x=0, 1, ...$)           | 選択する部位を指定($x$をselidと呼ぶ)     | -sel0 resid 1 to 20
+ -mode or -mode$x$ ($x=0, 1, ...$) | 選択した部位をどのように分割するかを指定 | -mode residue
+ -fhead                            | 解析結果の出力ファイル名のヘッダー       | -fhead out
+ -prep_only                        | 解析の前処理のみを行うか指定            | -prep_only true
+
+  ---
+* **-stype <構造ファイルの種類>**
+  * Default: N/A
+  * Example: ``-stype parm7``
+ 
+  構造ファイル(structure file)を指定する．構造ファイルは原子種情報(や原子間の結合情報)を格納しているファイルのことを指す．
+  多くのタイプのトラジェクトリファイル(``dcd``や``xtc``など)では原子の座標情報のみが格納されており，
+  解析を進めるためには構造ファイルが必要となる．対応している構造ファイルは，
+  おおよそVMDがサポートしている全ての構造ファイルの種類を指定することが可能である．
+  代表的なものを以下に示す．
+
+  * **pdb**: PDBファイル
+  * **gro**: GROファイル
+  * **psf**: CHARMM PSFファイル
+  * **parm7**: Amberパラメータファイル(多くの場合拡張子は``.prmtop``)
+ 
+  最も完全な情報を含んでいるのは，CHARMMの場合には``psf``，Amberの場合には``parm7``なので，
+  できる限り，これらのファイルを指定しておくと良い．
+
+  ---
+* **-sfile <構造ファイル>**
+  * Default: N/A
+  * Example: ``-sfile complex.prmtop``
+
+  構造ファイルの名前を指定する．
+
+  ---
+* **-tintype <入力トラジェクトリファイルの種類>**
+  * Default: ``dcd``
+  * Example: ``-tintype dcd``
+
+  入力トラジェクトリファイルの種類を指定する．
+  現在，``trjconv``を除いて，指定できるのは``dcd``と``xtc``と``netcdf``に限定されている．
+  ``trjconv``では，VMDがサポートする全ての種類のトラジェクトリが指定可能である．
+
+  ---
+* **-tin <入力トラジェクトリファイル>**
+  * Default: N/A
+  * Example: ``-tin INP.dcd``
+
+  入力トラジェクトリのファイル名を指定する．
+  複数のトラジェクトリファイルを読み込ませる場合は，"``-tin run1.dcd run2.dcd``"のように並べて書く．
+またワイルドカード(\*)を用いることも可能であり，"``-tin run*.dcd``"のように書く．
+次に示す``-flist_traj``を用いて入力のトラジェクトリを指定することも可能である．
+
+
+  ---
+* **-flist_traj <テキストファイル>**
+    * Default: N/A
+    * Example: ``-flist_traj trajlist.txt``
+
+    入力トラジェクトリの一覧を記したテキストファイルを指定する．``-tin``と``-flist_traj``の両方が指定された場合には，``-flist_traj``が優先される．
+入力テキストファイルのフォーマットについては，次に示すように，入力のトラジェクトリ名が一行ずつ記されている必要がある．
+    ```
+    traj1.dcd
+    traj2.dcd
+    traj3.dcd
+    ```
+
+  ---
+* **-totype <出力トラジェクトリファイルの種類>**
+  * Default: ``dcd``
+  * Example: ``-totype dcd``
+
+  出力トラジェクトリファイルの種類を指定する．
+  現在，``trjconv``を除いて，指定できるのは``dcd``と``xtc``に限定されている．
+  ``trjconv``では，VMDがサポートする全ての種類のトラジェクトリが指定可能である．
+
+  ---
+* **-to <出力トラジェクトリファイル>**
+  * Default: N/A
+  * Example: ``-to OUT.dcd``
+
+  出力トラジェクトリのファイル名を指定する．
+
+  ---
+* **-sel$x$ <部位選択>** ($x=0,1,\cdots$)
+  * Default: N/A
+  * Example: ``-sel0 resid 1 to 20 and name CA`` 
+
+  選択する部位をVMDのAtomselectionの文法に従って指定する．
+  ``-sel``$x$の$x$のことをselidと呼ぶ．
+  多くの解析モードでは，``-sel``$x$で指定された部位の解析を行う．
+  また，解析モードによっては，どのselidを解析に使うかを明示的に指定することも多い．
+  (例えば，``trjconv``の``-outselid``など)
+
+  ---
+* **-mode$x$ \<residue or whole or atom\>** ($x=0,1,\cdots$)
+   * Default: 解析モードに依存
+   * Example: ``-mode0 residue``
+
+   ``-sel``$x$で指定した部位をどのように分割して分子を定義するかを指定する({numref}`figuremode`)．
+   解析によっては，``-sel0``の1つしか必要がない場合もあり，その解析では``-mode``で指定し，
+   複数の部位選択が必要な場合には，``-mode0``，``-mode1``のようにそれぞれで対応する分割スキームを指定する．
+   どちらのオプションで指定するかは各解析モードでの解説にて述べる．
+
+  * **residue**: 選択部位を残基ごとに分割して分子と定義する．
+  * **whole**: 選択部位全体を一つの分子と定義する．
+  * **atom**: 選択部位の構成分子一つ一つを分子と定義する．
+
+  例えば，``-sel0 resname LIG``で複数のリガンド分子が選択されたとして，それぞれのリガンドの重心を知りたい
+  場合には，``-mode residue``と設定する必要がある．
+  逆に，``-sel0 protein``と選択して，タンパク質一つを丸ごと解析対象としたい
+  場合(タンパク質の重心の時間変化など)，"``-mode whole``"とする必要がある．
+
+```{figure} ./figures/mode.eps
+:name: figuremode
+
+``-mode``の使い分け．``residue``では，選択した部位を残基ごとに分割して分子と定義する．
+``whole``では，選択した部位をひとかたまりの分子として定義する．
+``atom``では，選択した部位を構成原子ごとに分割して分子と定義する． 
+```
+
+  ---
+* **-fhead <出力ファイル名のヘッダー>**
+  * Default: 解析モードに依存
+  * Example: ``-fhead out``
+
+  解析の出力結果を格納するファイル名のヘッダーを指定する．
+  例えば，``-fhead out``と指定すると，``out.XXX``，``out.YYY``などのファイルが出力される．
+
+  ---
+* **-prep_only <true or false>**
+  * Default: ``false``
+  * Example: ``-prep_only true``
+
+  実際の解析まで行わず，それに必要な前処理（パラメータファイルの作成）までで止めるかを指定する．
+<!---
+  これは計算機上での並列処理を実現する**anatra_wo_vmd**コマンドへの接続を前提としたオプションである．
+例えば，``-prep_only true``と指定すると，``*.molinfo``などのファイルが出力される．
+--->

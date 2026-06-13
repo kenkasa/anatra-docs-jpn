@@ -1,0 +1,196 @@
+## 重心解析・平均二乗変位(center_of_mass, com)
+
+``center_of_mass`` (``com``)は分子の重心の時間変化や平均二乗変位(Mean square displacement, MSD)
+を求めるプログラムである．
+また，脂質膜内部での分子の2次元的拡散(側方拡散)に対応するため，
+2次元($xy$平面)でのMSD計算も可能である．
+
+### 理論背景
+
+#### 平均二乗変位
+
+平均二乗変位(MSD) $\chi(t)$の定義を導入すると同時に，
+それを求める意義について，拡散方程式に基づいて述べる．
+
+分子の時刻$t$での位置を${\bf r}(t)$とすると，MSDは次式で定義される．
+
+\begin{align}
+\chi\left(t\right)  =\braket{\left|{\bf r}\left(t\right)-{\bf r}\left(0\right)\right|^{2}}.
+\end{align}
+
+つまり$\chi(t)$は，時間が$t$だけたった後における分子の移動距離の2乗平均を表す．MSDが拡散方程式に基づくと，どのように表されるのかを次に考えてみる．
+分子の確率密度場を$\rho({\bf r},t)$，拡散係数を$D$とすると，拡散方程式は次式で表される．
+
+\begin{align}
+\dfrac{\partial}{\partial t}\rho\left({\bf r},t\right) =D\nabla^{2}\rho\left({\bf r},t\right).
+\end{align}
+
+時刻$t=0$で分子は位置${\bf 0}$に存在していたとすると，初期条件は
+
+\begin{align}
+\rho\left({\bf r},t=0\right) & =\delta\left({\bf r}\right),
+\end{align}
+
+となる．この条件の下，拡散方程式を解くと，次式が得られる．
+
+\begin{align}
+\rho\left({\bf r},t\right) =\dfrac{1}{\left(4\pi Dt\right)^{3/2}}\exp\left[-\dfrac{\left|{\bf r}\right|^{2}}{4Dt}\right].
+\end{align}
+
+この解を用いると，MSDは
+
+\begin{align}
+\chi\left(t\right) & =\int d{\bf r}\,\left|{\bf r}\right|^{2}\rho\left({\bf r},t\right) \\
+                   & = 6Dt,
+\end{align}
+
+と表される．つまり，MSDは傾き$6D$で時間に比例して増加していくことになる．
+ただし，拡散方程式は長時間極限において成り立つ関係式なので，
+
+\begin{align}
+D & =\dfrac{1}{6}\lim_{t\to\infty}\dfrac{\braket{\left|{\bf r}\left(t\right)-{\bf r}\left(0\right)\right|^{2}}}{t},
+\end{align}
+
+とすべきである．上式はEinsteinの関係式と呼ばれる．
+この式は，MSDの長時間領域の傾きから拡散係数が求められること
+を意味している．
+
+### オプション一覧
+
+
+**オプション**     |  **備考**          | **オプション**       | **備考**
+|:----------------:|:------------------:|:--------------------:|:-----------------:|
+``-stype``         | Common             | ``-sfile``           | Common
+``-tintype``       | Common             | ``-tin``             | Common
+``-flist_traj``    | Common             | ``-fhead``           | Common             
+``-sel0``          | Common             | ``-mode``            | Common             
+``-outmsd``        | Mode specific      | ``-unwarp``          | Mode specific      
+``-msddim``        | Mode specific      | ``-dt``              | Mode specific      
+``-t_sparse``      | Mode specific      | ``-t_range``         | Mode specific 
+``-prep_only``     | Common
+
+  ---
+* **-outmsd \<true or false\>**
+  * Default: ``false``
+  * Example: ``-outmsd true``
+  * Note: ``true``の場合は``-msddim``と``-msdrange``も指定する必要がある．
+
+  MSDを計算するかどうかを指定する．
+
+  ---
+* **-unwrap \<true or false\>**
+  * Default: ``false``
+  * Example: ``-unwrap false``
+
+  ラップされているトラジェクトリをアンラップするかどうかを指定する．
+  ラップされているトラジェクトリではMSDが正しく計算できないため，
+  ``true``にする必要がある．
+  ただし，GROMACSのように，分子がPBCによりぶつ切りになっている
+  トラジェクトリには対応できないので，注意されたい．
+  その場合はあらかじめ，GROMACSのtrjconvにて修正しておく必要がある．
+
+  ---
+* **-msddim \<2 or 3\>**
+  * Default: ``3``
+  * Example: ``-msddim 3``
+
+  MSDの次元を指定する．通常の拡散では3を指定するが，
+  脂質膜系での側方拡散を調べる場合には2を指定する．
+
+  ---
+* **-dt <時間刻み>**
+  * Default: ``0.1``
+  * Example: ``-dt 0.1``
+
+  スナップショット間の時間刻みを指定する．
+
+  ---
+* **-t_range <MSDを計算する時間スケール>**
+  * Default: ``10``
+  * Example: ``-t_range 10``
+
+  MSDを計算する時間スケールを指定する．
+
+  ---
+* **-t_sparse <MSDを出力するときの時間刻み>**
+
+    MSDを出力するときの時間刻みを指定する．
+    例えば，``-dt 0.1`` ($=\delta t$), ``-t_sparse 1`` (=$\Delta t$)のとき，
+
+    \begin{align}
+       \Delta T = \mathrm{nint}\left(\dfrac{\Delta t}{\delta t}\right) \delta t
+    \end{align}  
+    の時間刻みでMSD (ANGSTROM$^{2}$)が計算される．
+
+### 出力ファイルのフォーマット
+
+* ``*.com``
+
+  このファイルには，選択部位内の分子それぞれの重心の座標が``xyz``形式で出力される．
+   
+* ``*.msd``
+
+  このファイルには，分子ごとのMSDが出力されている．
+  "``-outmsd true``"の場合に出力される．
+
+  * 1列目: 時間軸
+  * 2列目: 分子1のMSD
+  * 3列目: 分子2のMSD  
+    ...
+
+* ``*.msdave``
+
+  このファイルには，全分子に対して平均をとったMSDが出力されている．
+  "``-outmsd true``"の場合に出力される．
+
+  * 1列目: 時間軸
+  * 2列目: MSD
+  * 3列目: MSDの標準偏差
+
+### 解析例
+
+#### タンパク質のMSD計算
+
+水溶液中にタンパク質(``resid 1 to 192``)が1つ溶解している系において，
+タンパク質のMSDを計算する例を以下に示す．
+タンパク質は複数のアミノ酸残基から構成されているので，"``-mode whole``"を指定する必要がある．
+```
+#!/bin/bash
+
+anatra center_of_mass        \
+  -stype     parm7           \
+  -sfile     complex.prmtop  \
+  -tintype   dcd             \
+  -tin       INP.dcd         \
+  -fhead     out             \
+  -outmsd    true            \
+  -sel0      resid 1 to 192  \
+  -mode      whole           \
+  -msddim    3               \
+  -dt        0.01            \
+  -t_range   100             \
+  -t_sparse  0.1 
+```
+
+#### 複数個存在する小分子のMSD計算
+
+水溶液中にリガンド小分子(``resname LIG``)が100分子存在する系を考える．
+分子ごとのMSDとその平均を計算する例を以下に示す．
+この場合は残基番号によって分子の切れ目を定めることができるので，"``-mode residue``"を指定する．
+```
+#!/bin/bash
+
+anatra center_of_mass        \
+  -stype     parm7           \
+  -sfile     complex.prmtop  \
+  -tintype   dcd             \
+  -tin       INP.dcd         \
+  -fhead     out             \
+  -outmsd    true            \
+  -sel0      resname LIG     \
+  -mode      residue         \
+  -msddim    3               \
+  -dt        0.01            \
+  -t_range   100             \
+  -t_sparse  0.01
+```

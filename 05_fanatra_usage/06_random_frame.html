@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>フレームのランダム抽出(random_frame, randf) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">フレームのランダム抽出(random_frame, randf)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/05_fanatra_usage/06_random_frame.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="random-frame-randf">
+<h1>フレームのランダム抽出(random_frame, randf)<a class="headerlink" href="#random-frame-randf" title="Link to this heading"></a></h1>
+<p>この解析モードでは，ランダムにスナップショット(フレーム)を抽出する．</p>
+<section id="id1">
+<h2>パラメータ一覧<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+</section>
+<section id="option-param">
+<h2><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code><a class="headerlink" href="#option-param" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nsample</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">100</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nsample</span> <span class="pre">=</span> <span class="pre">100</span></code></p></li>
+</ul>
+<p>ランダムに抽出するフレーム数を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">iseed</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">-1</span></code> (自動生成)</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">iseed</span> <span class="pre">=</span> <span class="pre">3141592</span></code></p></li>
+</ul>
+<p>ランダム抽出に使用する乱数シードを指定する．</p>
+<p><code class="docutils literal notranslate"><span class="pre">iseed</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code> の場合はプログラムが自動的にシードを生成する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">output_trajtype</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">dcd</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">output_trajtype</span> <span class="pre">=</span> <span class="pre">&quot;dcd&quot;</span></code></p></li>
+</ul>
+<p>出力するトラジェクトリ形式を指定する．</p>
+<p>現在は</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dcd</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xtc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">netcdf</span></code></p></li>
+</ul>
+<p>を指定できる．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">duplicate</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">duplicate</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>同じフレームを複数回抽出することを許可するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">out_rst7</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">out_rst7</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>抽出した各フレームをAMBER rst7形式でも出力するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">shuffle</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">shuffle</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>フレームをシャッフルして出力するかどうかを指定する．
+<code class="docutils literal notranslate"><span class="pre">.true.</span></code> の場合は全フレームをランダムな順序に並べ替えて出力する．</p>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h2>出力ファイルのフォーマット<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>出力ファイル(トラジェクトリ)のフォーマットは，
+入力のトラジェクトリのフォーマット(dcd or xtc or nc (netcdf))と同じものとなる．</p>
+</section>
+<section id="id3">
+<h2>解析例<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>トラジェクトリファイルとして，<code class="docutils literal notranslate"><span class="pre">input.dcd</span></code>を指定し，ランダムに100フレームを抽出する場合の例を以下に示す．また，トラジェクトリと合わせて<code class="docutils literal notranslate"><span class="pre">rst7</span></code>形式(<code class="docutils literal notranslate"><span class="pre">inpcrd</span></code>)で各フレームでの構造を出力する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">ftraj</span>    <span class="o">=</span> <span class="s2">&quot;input.dcd&quot;</span> 
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span>         <span class="o">=</span> <span class="s2">&quot;out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">nsample</span> <span class="o">=</span> <span class="mi">100</span>
+ <span class="n">output_trajtype</span> <span class="o">=</span> <span class="s2">&quot;dcd&quot;</span>
+ <span class="n">duplicate</span>       <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">out_rst7</span>        <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span> 
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">random_frame</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+</pre></div>
+</div>
+<p>これを実行すると，<code class="docutils literal notranslate"><span class="pre">out.dcd</span></code>と<code class="docutils literal notranslate"><span class="pre">outXXXXX.inpcrd</span></code> (<code class="docutils literal notranslate"><span class="pre">XXXXX=00001,</span> <span class="pre">...,</span> <span class="pre">00100</span></code>)が出力される．</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

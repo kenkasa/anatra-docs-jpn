@@ -1,0 +1,100 @@
+## ヒストグラム(histogram, hist)
+
+この解析モードでは，何らかの時系列データ$\xi\left(t\right)$から分布関数$P\left(x\right)$を計算する．
+
+\begin{align}
+P\left(x\right) =  \dfrac{1}{N}\Braket{\delta\left(x - \xi\right)} 
+\end{align}
+
+ここで，$N$はデータ点の数であり，上式は規格化条件
+
+\begin{align}
+\int_{-\infty}^{\infty} dx P\left(x\right) = 1
+\end{align}
+
+を満たす．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt  
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|flist_cv|  & -- \\
+                     & \verb|fcv|       & -- \\
+\hline
+\verb|&output_param| & \verb|fhead|    & -- \\
+                     & \verb|file_extension| & -- \\
+\hline
+\verb|&option_param| & \verb|dx|       & 分布関数のグリッド幅 \\
+                     & \verb|xsta|     & グリッドを張るスタート位置 \\
+                     & \verb|nx|       & グリッド数 \\
+                     & \verb|ncol|     & 1ファイルあたりのデータ列数\\
+\hline 
+\end{tabular}
+}
+```
+
+### &option_param
+
+* **``dx``**
+    * Default: 0.1
+    * Example: ``dx = 0.1``
+
+    分布関数を計算する際のグリッド幅$\Delta x$を指定する．
+
+----
+* **``xsta``**
+    * Default: 0.0
+    * Example: ``xsta = 0.0``
+
+    グリッドを張るスタート位置$x_{0}$を指定する．$i$番目のグリッドの位置を$x_{i}$とすると，
+
+    \begin{align}
+    x_{i} = x_{0} + \left(i - 1 \right) \Delta x
+    \end{align}
+
+    である．
+
+----
+* **``ncol``**
+    * Default: 1
+    * Example: ``ncol = 10``
+
+    1つの時系列データファイルあたりに含まれるデータ列数を指定する．
+
+### 出力ファイルのフォーマット
+
+* ``*.dat`` (拡張子は``file_extension``によって変更可)
+    * 1列目: $x$座標
+    * 2列目: 分布関数$P\left(x\right)$
+
+### 解析例
+
+3つのデータ列を持つ時系列データ``inp.ts``から，$5\leq x \leq 10$の範囲で分布関数$P\left(x\right)$を計算する例を以下に示す．
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+fcv = "inp.ts"
+/
+&output_param
+fhead = "run"
+/
+&option_param
+dx   = 0.1d0
+xsta = 5.0d0
+nx   = 50
+ncol = 3 
+/
+EOF
+
+fanatra hist run.inp 
+
+``` 

@@ -1,0 +1,92 @@
+## フレーム抽出(extract_frame, extf)
+
+この解析モードでは，CVの値域指定により，特定の条件を満たすスナップショット(フレーム)を抽出する．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|flist_traj| & トラジェクトリファイル一覧を格納したファイル名 \\
+                     & \verb|flist_cv|   & CVファイル一覧を格納したファイル名 \\
+                     & \verb|ftraj|      & トラジェクトリファイル名 \\
+                     & \verb|fcv|        & CVファイル名 \\
+\hline
+\verb|&output_param| & \verb|fhead|      & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|dt|            & トラジェクトリの時間刻み \\
+                     & \verb|ndim|          & CVの次元数 \\
+                     & \verb|extract_range| & フレーム抽出を行うCV範囲 \\
+\hline
+\end{tabular}
+}
+```
+
+### ``&option_param``
+
+* **``ndim``**
+    * Default: None
+    * Example: ``ndim = 2``
+
+    時系列CVデータの次元数を指定する．
+
+    ``extract_range`` には，この次元数に対応した範囲を指定する必要がある．
+
+----
+* **``extract_range``**
+    * Default: None
+    * Example:
+
+      ```
+      extract_range = -5.0d0 5.0d0
+                       1.0d0 0.0d0
+      ```
+
+    フレームを抽出するCV領域を指定する．
+
+    各CVについて，下限値と上限値を1組として与える．
+
+    上記の例では，
+
+    * CV1: $-5.0 \leq \mathrm{CV}_1 \leq 5.0$
+    * CV2: $0.0 \leq \mathrm{CV}_2 \leq 1.0$
+
+    を満たすフレームが抽出される．
+
+    ``ndim`` 個の範囲を指定することで，多次元の抽出条件を設定できる．
+
+### 出力ファイルのフォーマット
+
+出力ファイル(トラジェクトリ)のフォーマットは，
+入力のトラジェクトリのフォーマット(dcd or xtc or nc (netcdf))と同じものとなる．
+
+### 解析例
+
+CV数が1，CV ($\zeta$)の時系列データ``inp.ts``をもとに，$5\leq \zeta \leq 10$の条件を満たす
+フレームを入力トラジェクトリから抽出する場合の解析例を示す．
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ ftraj    = "input.dcd" 
+ fcv      = "inp.ts"
+/
+&output_param
+ fhead         = "out"
+/
+&option_param
+ ndim          =  1       
+ extract_range =  5.0  10.0 
+/
+EOF
+
+fanatra extract_frame run.inp 
+```
+これを実行すると，``out.dcd``が出力される．

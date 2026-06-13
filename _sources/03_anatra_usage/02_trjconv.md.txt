@@ -1,0 +1,258 @@
+## トラジェクトリ変換(trjconv)
+
+``trjconv``はMD計算で得られたトラジェクトリに対して，種々の変換を行う解析モードである．
+主な用途として次のようなものが挙げられる．
+* トラジェクトリのファイル形式を変更したい場合
+* トラジェクトリ内の特定の部位のみを含むトラジェクトリを作成したい場合  
+  (例．トラジェクトリ内の水を除いたトラジェクトリの作成)
+* ラップされていないトラジェクトリを周期境界条件に基づいてラップしたい場合(PBCラップ)
+* トラジェクトリの特定の部位を参照構造と重なるように系全体を並進回転させたい場合(フィッティング)
+* トラジェクトリの特定の部位の位置が座標原点となるように系全体を並進させたい場合(センタリング)
+
+### オプション一覧
+
+**オプション名**  | **備考**         | **オプション名** | **備考**
+:----------------:|:----------------:|:----------------:|:----------------:
+  ``-stype``      |   Common         | ``-sfile``       |   Common         
+  ``-tintype``    |   Common         | ``-tin``         |   Common
+  ``-totype``     |   Common         | ``-to``          |   Common
+  ``-sel``$x$     |   Common         | ``-beg``         |   Mode specific
+  ``-end``        |   Mode specific  | ``-fit``         |   Mode specific 
+  ``-centering `` |   Mode specific  | ``-wrap``        |   Mode specific 
+  ``-wrapcenter`` |   Mode specific  | ``-wrapcomp``    |   Mode specific 
+  ``-refpdb``     |   Mode specific  | ``-outselid``    |   Mode specific
+  ``-fitselid``   |   Mode specific  | ``-refselid``    |   Mode specific  
+
+  ---
+* **-beg \<トラジェクトリの読み込み開始ステップ\>**
+  * Default: ``1``
+  * Example: ``-beg 10``
+
+  トラジェクトリの読み込み開始ステップを指定する．
+  ただし，ステップ数は1始まりでカウントしていることに注意されたい．
+  上記の例は，10ステップ目からトラジェクトリの読み込みを開始することを意味している．
+
+  ---
+* **-end \<トラジェクトリの読み込み終了ステップ\>**
+  * Default: ``0`` (トラジェクトリの最終ステップに対応)
+  * Example: ``-end 100``
+
+  トラジェクトリの読み込み終了ステップを指定する．
+  ただし，ステップ数は1始まりでカウントしていることに注意されたい．
+  上記の例は，100ステップ目までトラジェクトリを読み込むことを意味している． 
+
+  ---
+* **-fit \<true or false\>**
+  * Default: ``false``
+  * Example: ``-fit true``
+  * Note: ``true``の場合は，``-fitselid``, ``-refpdb``, ``-refselid``の指定が必要となる．
+
+  フィッティングを行うかどうかを指定する．
+  フィッティングとは，トラジェクトリの特定部位を参照構造に重なるように
+  系全体の並進・回転を行う操作のことを意味する．
+  利用する際，トラジェクトリ内のフィッティング部位に対応するselid (``-sel``$x$の$x$のこと)
+  を指定する``-fitselid``，参照構造のPDBファイルを指定する``-refpdb``，
+  参照構造内のフィッティングに使う部位のselidを指定する``-refselid``が必要となる．
+
+  ---
+* **-wrap \<true or false\>**
+  * Default: ``false``
+  * Example: ``-wrap true -wrapcomp fragment -wrapcenter origin``
+  * Note: ラップを行うときの中心を座標原点から変更したいときには，``-wrapcenter``を利用する．
+          どのようなユニットを1つの分子として扱ってラップするかは``-wrapcomp``で指定する．
+
+  アンラップされた状態のトラジェクトリをラップするかどうかを指定する．
+  ラップするときの中心は，デフォルトで座標原点$(x,y,z) = (0, 0, 0)$に設定されているが，
+  ``-wrapcenter``オプションを利用することで特定部位の重心に変更することが可能である．
+
+  ---
+* **-centering \<true or false\>**
+  * Default: ``false``
+  * Example: ``-centering true -sel1 resid 1 to 200 -fitselid 1``
+  * Note: 中心に並進移動させる部位のselidは``-fitselid``で指定する．
+
+  センタリングを行うかどうかを指定する．
+  センタリングとは，トラジェクトリの特定の部位(の重心)が座標原点に配置されるように系全体を
+  並進移動させる操作のことを指す．
+  どの部分を中心に移動させるかは``-fitselid``で指定する．
+
+  ---
+* **-refpdb \<PDB file\>**
+  * Default: N/A
+  * Example: ``-refpdb A.pdb -sel2 resid 1 to 200 -refselid 2``
+  * Note: 参照構造内のフィッティングに使う部位のselidを``-refselid``で指定する．
+
+  フィッティングを行う際の，参照構造のPDBファイル名を指定する．
+  従って，このオプションは``-fit true``のときに必須となる．
+  参照構造内のフィッティングに使う部位は``-refselid``で指定する．
+
+  ---
+* **-outselid \<selid\>**
+  * Default: N/A
+  * Example: ``-sel0 resid 1 to 200 -outselid 0``
+
+  トラジェクトリとして出力する部位に対応するselidを指定する．
+
+  ---
+* **-fitselid \<selid\>**
+  * Default: N/A
+  * Example: ``-sel1 resid 1 to 200 -fitselid 1``
+
+  フィッティングに使うトラジェクトリ内の部位に対応するselidを指定する．
+
+  ---
+* **-wrapcenter \<origin or com\>**
+  * Default: ``origin`` 
+  * Example: ``-wrapcenter origin``
+  * Note: ``com``の場合は中心に据える部位のselidを``-fitselid``で指定する．
+
+  ラップする際の系の中心をどこに据えるかを指定する．
+
+  * **origin**: 系の中心として座標原点を指定する．
+  * **com**: 系の中心として特定の部位を指定する．中心に据える部位のselidを``-fitselid``で指定する．
+             フィッティングまたはセンタリングを同時に行う場合，強制的に``com``が指定される．
+
+  ---
+* **-wrapcomp \<fragment or residue or nocomp\>**
+  * Default: ``fragment``
+  * Example: ``-wrapcomp fragment``
+
+  ラップを実行する際，どのようなユニットで分子を区切るかを指定する．
+  例えば，シミュレーションボックスをはみ出した原子が存在する場合に
+  その原子のみをPBCに基づいて反対側に移動させるようにするか，
+  もしくは，分子全体がボックスからはみ出した場合にのみ反対側に移動させるかを指定する．
+  その際，ユーザー側はどういう原子団(ユニット)を分子として定義するかを指定する必要がある． 
+
+  * **fragment**: 原子$i$と$j$が他の原子との結合を介して繋がっている場合，
+                  それらは同じユニットに属していると考える．
+                  このような原子のセットを一つの分子としてラップが実行される．
+  * **residue**: 一つの残基番号に属する原子群を一つの分子としてラップが実行される．
+  * **nocomp**: 原子1つ1つを分子として扱ってラップが実行される．
+  ---
+
+### 解析例
+
+ここでは，よく行う解析について，最低限のオプションを使ったスクリプトの例を示しておく．
+従って，``-beg``，``-end``などのオプションは使用しない．
+
+#### トラジェクトリから水を除去
+
+```
+#!/bin/bash
+
+anatra trjconv                           \
+  -stype      parm7                      \
+  -sfile      complex.prmtop             \
+  -tintype    dcd                        \
+  -tin        INP.dcd                    \
+  -totype     dcd                        \
+  -to         OUT.dcd                    \
+  -sel0       not water                  \
+  -outselid   0
+```
+
+#### PBCラップ
+
+```
+#!/bin/bash
+
+anatra trjconv                           \
+  -stype      parm7                      \
+  -sfile      complex.prmtop             \
+  -tintype    dcd                        \
+  -tin        INP.dcd                    \
+  -totype     dcd                        \
+  -to         OUT.dcd                    \
+  -sel0       all                        \
+  -wrap       true                       \
+  -wrapcenter origin                     \
+  -wrapcomp   fragment                   \
+  -outselid   0
+```
+
+#### フィッティング
+ここでは，水溶液中にタンパク質(``resid 1 to 192``とする)が一つ存在する系を考える．
+トラジェクトリ中のタンパク質のC$\alpha$原子を参照構造PDBのC$\alpha$原子にフィットさせる場合の例を示す．
+```
+anatra trjconv                           \
+  -stype      parm7                      \
+  -sfile      complex.prmtop             \
+  -tintype    dcd                        \
+  -tin        INP.dcd                    \
+  -totype     dcd                        \
+  -to         OUT.dcd                    \
+  -refpdb     REF.pdb                    \
+  -sel0       all                        \
+  -sel1       resid 1 to 192 and name CA \
+  -sel2       resid 1 to 192 and name CA \
+  -fit        true                       \
+  -outselid   0                          \
+  -fitselid   1                          \
+  -refselid   2
+```
+
+#### センタリング
+ここでは，水溶液中にタンパク質(``resid 1 to 192``とする)が一つ存在する系を考える．
+トラジェクトリ中のタンパク質の重心を座標原点に配置させるセンタリングを行う場合の例を示す．
+```
+anatra trjconv                           \
+  -stype      parm7                      \
+  -sfile      complex.prmtop             \
+  -tintype    dcd                        \
+  -tin        INP.dcd                    \
+  -totype     dcd                        \
+  -to         OUT.dcd                    \
+  -sel0       all                        \
+  -sel1       resid 1 to 192             \
+  -centering  true                       \
+  -outselid   0                          \
+  -fitselid   1
+```
+
+#### PBCラップ&フィッティング
+ここでは，水溶液中にタンパク質(``resid 1 to 192``とする)が一つ存在する系を考える．
+トラジェクトリ中のタンパク質のC$\alpha$原子を参照構造PDBのC$\alpha$原子にフィットさせるのと同時に，
+PBCラップを実行する例を示す．この際，ラップ中心はC$\alpha$原子の重心である．
+```
+anatra trjconv                           \
+  -stype      parm7                      \
+  -sfile      complex.prmtop             \
+  -tintype    dcd                        \
+  -tin        INP.dcd                    \
+  -totype     dcd                        \
+  -to         OUT.dcd                    \
+  -refpdb     REF.pdb                    \
+  -sel0       all                        \
+  -sel1       resid 1 to 192 and name CA \
+  -sel2       resid 1 to 192 and name CA \
+  -fit        true                       \
+  -wrap       true                       \
+  -wrapcenter com                        \
+  -wrapcomp   fragment                   \
+  -outselid   0                          \
+  -fitselid   1                          \
+  -refselid   2
+```
+
+#### PBCラップ&センタリング
+中心に据える部分として，脂質膜(``resid 1 to 200 and segid MEMB``とする)
+を設定した場合の例を示す．
+```
+anatra trjconv                              \
+  -stype      psf                           \
+  -sfile      complex.psf                   \
+  -tintype    dcd                           \
+  -tin        INP.dcd                       \
+  -totype     dcd                           \
+  -to         OUT.dcd                       \
+  -sel0       all                           \
+  -sel1       resid 1 to 200 and segid MEMB \
+  -centering  false                         \
+  -wrap       true                          \
+  -wrapcenter com                           \
+  -wrapcomp   fragment                      \
+  -outselid   0                             \
+  -fitselid   1
+```
+
+

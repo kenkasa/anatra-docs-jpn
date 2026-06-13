@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>平均二乗偏差(rmsd) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">平均二乗偏差(rmsd)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/03_anatra_usage/07_rmsd.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rmsd">
+<h1>平均二乗偏差(rmsd)<a class="headerlink" href="#rmsd" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2>理論背景<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>ここでは，平均二乗偏差（Root-mean-square deviation, RMSD）の定義について解説する．RMSDは注目する分子やその特定部位について，MD計算中のある時刻での構造が，参照とする構造(参照構造)からどの程度ずれているかを定量的に評価するものである．
+例えばあるタンパク質について，結晶構造を参照構造として，平衡化過程で参照構造からどの程度構造のズレが生じ，また構造が緩和しているかを判別する際によく用いられる．</p>
+<p>原子<span class="math notranslate nohighlight">\(N_{\mathrm{sel}}\)</span>個からなる分子について，<span class="math notranslate nohighlight">\({\bf r}_{i}\)</span>を<span class="math notranslate nohighlight">\(i\)</span>番目の原子の座標，<span class="math notranslate nohighlight">\({\bf r} ^{\mathrm{ref}}\)</span>を参照構造中の原子の座標，<span class="math notranslate nohighlight">\({\bf r} (t)\)</span>を時刻<span class="math notranslate nohighlight">\(t\)</span>での座標とする．この時，
+平均二乗偏差<span class="math notranslate nohighlight">\(\chi\left(t\right)\)</span>は以下の式で定義される．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-f34119db-6e42-4d88-ba9b-a1f4f4f07bab">
+<span class="eqno">()<a class="headerlink" href="#equation-f34119db-6e42-4d88-ba9b-a1f4f4f07bab" title="Permalink to this equation"></a></span>\[\begin{align}
+\chi\left(t\right) &amp; =\sqrt{\dfrac{1}{N_{\mathrm{sel}}}\sum_{i=1}^{N_{\mathrm{sel}}}\left|{\bf r}_{i}\left(t\right)-{\bf r}_{i}^{\mathrm{ref}}\right|^{2}}.
+\end{align}\]</div>
+</section>
+<section id="id2">
+<h2>オプション一覧<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p><strong>オプション</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+<th class="head text-center"><p><strong>オプション</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-stype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sfile</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tintype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tin</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-fout</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel0</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel1</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel2</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel3</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-fit</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-refpdb</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-fitselid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-refselid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-rmsdselid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-rmsdrefselid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p></p></td>
+<td class="text-center"><p></p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<ul>
+<li><p><strong>-fout &lt;出力ファイル&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: out.rmsd</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-fout</span> <span class="pre">out.rmsd</span></code></p></li>
+</ul>
+<p>計算結果を出力するファイルを指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-refpdb &lt;参照構造のPDBファイル&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-refpdb</span> <span class="pre">ref.pdb</span></code></p></li>
+</ul>
+<p>参照構造のPDBファイルを指定する．この場合はRMSD計算における参照構造である．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-fit &lt;true or false&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-fit</span> <span class="pre">true</span></code></p></li>
+<li><p>Note: <code class="docutils literal notranslate"><span class="pre">true</span></code>の場合，<code class="docutils literal notranslate"><span class="pre">-refselid</span></code>，<code class="docutils literal notranslate"><span class="pre">-fitselid</span></code>の指定が必要となる．</p></li>
+</ul>
+<p>RMSD計算の前にフィッティングを行うかどうかを指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-fitselid &lt;selid&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-fitselid</span> <span class="pre">1</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>-refselid &lt;selid&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-fitselid</span> <span class="pre">2</span></code></p></li>
+</ul>
+<p>フィッティングを行う際，その対象部位に対応するselidを指定する．
+従って，このオプションは&quot;<code class="docutils literal notranslate"><span class="pre">-fit</span> <span class="pre">true</span></code>&quot;のときに必須となる．
+参照構造内のフィッティングに使う部位は&quot;<code class="docutils literal notranslate"><span class="pre">-refselid</span></code>&quot;で指定する.</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-rmsdselid &lt;selid&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-rmsdselid</span> <span class="pre">2</span></code></p></li>
+</ul>
+<p>RMSD計算を行う分子や部位に対応するselidを指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-rmsdrefselid &lt;selid&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-rmsdrefselid</span> <span class="pre">3</span></code></p></li>
+</ul>
+<p>RMSD計算を行う際の参照構造に対応するselidを指定する．</p>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h2>出力ファイルのフォーマット<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.rmsd</span></code>ファイル</p>
+<p>このファイルには，RMSDが出力される．</p>
+<ul class="simple">
+<li><p>1列目: 時間</p></li>
+<li><p>2列目: RMSD</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id4">
+<h2>解析例<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<section id="id5">
+<h3>水中におけるタンパク質の結晶構造からのRMSD<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>タンパク質(<code class="docutils literal notranslate"><span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">161</span></code>)のC<span class="math notranslate nohighlight">\(\alpha\)</span>原子に対するRMSDを計算する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">anatra</span> <span class="n">rmsd</span>                                   \
+  <span class="o">-</span><span class="n">stype</span>        <span class="n">parm7</span>                         \
+  <span class="o">-</span><span class="n">sfile</span>        <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>                \
+  <span class="o">-</span><span class="n">tintype</span>      <span class="n">dcd</span>                           \
+  <span class="o">-</span><span class="n">tin</span>          <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>                       \
+  <span class="o">-</span><span class="n">fout</span>         <span class="n">out</span><span class="o">.</span><span class="n">rmsd</span>                      \
+  <span class="o">-</span><span class="n">sel0</span>         <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">161</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">CA</span>    \
+  <span class="o">-</span><span class="n">sel1</span>         <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">161</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">CA</span>    \
+  <span class="o">-</span><span class="n">sel2</span>         <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">161</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">CA</span>    \
+  <span class="o">-</span><span class="n">sel3</span>         <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">161</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">CA</span>    \
+  <span class="o">-</span><span class="n">fit</span>          <span class="n">true</span>                          \
+  <span class="o">-</span><span class="n">refpdb</span>       <span class="n">ref</span><span class="o">.</span><span class="n">pdb</span>                       \
+  <span class="o">-</span><span class="n">fitselid</span>     <span class="mi">0</span>                             \
+  <span class="o">-</span><span class="n">refselid</span>     <span class="mi">1</span>                             \
+  <span class="o">-</span><span class="n">rmsdselid</span>    <span class="mi">2</span>                             \
+  <span class="o">-</span><span class="n">rmsdrefselid</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,298 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANATRAとは？ &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="ANATRAのインストール" href="../02_Installation/main.html" />
+    <link rel="prev" title="ANATRA User Guide" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ANATRAとは？</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/01_about_anatra/main.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="anatra">
+<h1>ANATRAとは？<a class="headerlink" href="#anatra" title="Link to this heading"></a></h1>
+<p><strong>ANATRA</strong> (<em>Ana</em>lyze <em>Tra</em>jectories)は
+分子動力学(Molecular Dynamics, MD)シミュレーションのトラジェクトリを解析するTcl/Fortran90プログラム群である．</p>
+<p>系の特定の原子・分子やタンパク質の特定のアミノ酸残基に注目して解析を行うことが多いが，
+その特定の部位を抜き出してくる汎用プログラムを書くのは容易ではない．
+というのも，研究レベルでは『残基番号11番目から50番目までの部分でかつ残基名がALAでかつ重原子』
+のような複数の条件を同時に満たす原子群を取り出す必要があるが，
+これらの条件により生ずる集合の和や積を解読するプログラムの作成は相当に大変だからである．
+一方で，世界中のMDユーザが利用しているVMD (<em>V</em>isual <em>M</em>olecular <em>D</em>ynamics)では，
+特定の部位を選択するための優れた機能(Atomselection)が提供されている．
+例えば，上記の例をVMDのAtomselectionの文法で書くと，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">resid</span> <span class="mi">11</span> <span class="n">to</span> <span class="mi">50</span> <span class="ow">and</span> <span class="n">resname</span> <span class="n">ALA</span> <span class="ow">and</span> <span class="n">noh</span>
+</pre></div>
+</div>
+<p>であり，直感的にも理解しやすい．
+そこで<strong>ANATRA</strong>では，VMDのAtomselectionを利用したプログラム構成にすることとした．
+従って，部位選択に関しては，Atomselectionと全く同じ文法を使うことが可能であり，
+VMDユーザーにとっては新しい部位選択の文法を覚える必要がない．</p>
+<p><strong>ANATRA</strong>は解析の種類に応じた多数のTcl/Fortranプログラムから構成されているが，
+これらを一元的に管理する&quot;<code class="docutils literal notranslate"><span class="pre">anatra</span></code>&quot;という名前のプログラムを提供した．ユーザーは</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ anatra 解析モード -option1 -option2 ...
+</pre></div>
+</div>
+<p>の形で様々な解析を実行できる．このプログラムでは，
+解析モードに応じたTclスクリプトをVMD上から実行することでAtomselection機能を用い，
+選択した部位の情報をFortranプログラムに入力として与えることで特定の部位に特化した解析を行っているが，
+ユーザーはそのことを意識する必要はなく，一連の作業を一気に行える．</p>
+<p>同時に，Fortranプログラム側ではAtomselectionに対応する実装がないために，
+ソースコードの複雑化を回避できており，ユーザー側が<strong>ANATRA</strong>で提供しているライブラリを元に新たな解析プログラムを作成することも容易である．<a class="footnote-reference brackets" href="#footnote-intro" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p>一方で，時系列データからの分布や時間相関関数の計算など，部位選択の機能が必要がない場合も多い．
+これらについては，Tclスクリプトを経由せずに機能するFortranプログラム群を&quot;<code class="docutils literal notranslate"><span class="pre">fanatra</span></code>&quot; (<em>F</em>ortran <em>ANATRA</em>)
+として一元化したプログラムを提供している．<code class="docutils literal notranslate"><span class="pre">fanatra</span></code>の場合は</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ fanatra 解析モード コントロールファイル
+</pre></div>
+</div>
+<p>の形で解析を実行する．</p>
+<hr class="docutils" />
+<ul class="simple">
+<li><p><strong>Project Leader/Main Developer</strong></p>
+<ul>
+<li><p>笠原 健人(大阪大学基礎工学研究科化学工学領域　松林研究室)</p></li>
+</ul>
+</li>
+<li><p><strong>Contributor</strong></p>
+<ul>
+<li><p>昌山 廉(大阪大学基礎工学研究科化学工学領域　松林研究室)</p></li>
+<li><p>沖田 和也(大阪大学基礎工学研究科化学工学領域　松林研究室)</p></li>
+<li><p>松原 優弥(大阪大学基礎工学研究科化学工学領域　松林研究室)</p></li>
+<li><p>丸山 優星(大阪大学基礎工学研究科化学工学領域　松林研究室)</p></li>
+<li><p>岡部 涼(大阪大学基礎工学研究科化学工学領域　松林研究室)</p></li>
+<li><p>山下 湧輝(大阪大学基礎工学研究科化学工学領域　松林研究室)</p></li>
+<li><p>佐伯 修都(大阪大学基礎工学研究科化学工学領域　松林研究室)</p></li>
+<li><p>松林 伸幸(大阪大学基礎工学研究科化学工学領域　松林研究室)</p></li>
+</ul>
+</li>
+</ul>
+<hr class="docutils" />
+<p>ANATRAは，<strong>GNU General Public License version 2.0（GPL v2.0）</strong> の下，配布されている．</p>
+<p><strong>ANATRA</strong><br />
+Copyright © 2025  Kento Kasahara (Univ. of Osaka)</p>
+<p>This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see https://www.gnu.org/licenses/.</p>
+<p>また，下記に示す外部ライブラリに依存して開発が進められており，パッケージ内に同梱されている．これらについては，下記に示すライセンスが適用される．</p>
+<ul>
+<li><p><strong>HDF5 (Hierarchical Data Format 5) Software Library and Utilities</strong><br />
+Copyright 2006 by The HDF Group.</p>
+<p>NCSA HDF5 (Hierarchical Data Format 5) Software Library and Utilities<br />
+Copyright 1998-2006 by The Board of Trustees of the University of Illinois.</p>
+<p>All rights reserved.</p>
+<p>This software library and utilities is covered by the 3-clause BSD License.</p>
+<p>Redistribution and use in source and binary forms, with or without
+modification, are permitted for any purpose (including commercial purposes)
+provided that the following conditions are met:</p>
+<ol class="arabic simple">
+<li><p>Redistributions of source code must retain the above copyright notice,
+this list of conditions, and the following disclaimer.</p></li>
+<li><p>Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions, and the following disclaimer in the documentation
+and/or materials provided with the distribution.</p></li>
+<li><p>Neither the name of The HDF Group, the name of the University, nor the
+name of any Contributor may be used to endorse or promote products derived
+from this software without specific prior written permission from
+The HDF Group, the University, or the Contributor, respectively.</p></li>
+</ol>
+<p>DISCLAIMER:
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+“AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p>For further details, please refer to the full license text available
+at https://opensource.org/licenses/bsd-3-clause</p>
+<p>You are under no obligation whatsoever to provide any bug fixes, patches, or
+upgrades to the features, functionality or performance of the source code
+(“Enhancements”) to anyone; however, if you choose to make your Enhancements
+available either publicly, or directly to The HDF Group, without imposing a
+separate written license agreement for such Enhancements, then you hereby
+grant the following license: a non-exclusive, royalty-free perpetual license
+to install, use, modify, prepare derivative works, incorporate into other
+computer software, distribute, and sublicense such enhancements or derivative
+works thereof, in binary and source code form.</p>
+</li>
+<li><p><strong>NetCDF</strong><br />
+Copyright 2025 Unidata</p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
+<ol class="arabic simple">
+<li><p>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</p></li>
+<li><p>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p></li>
+<li><p>Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.</p></li>
+</ol>
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+</li>
+<li><p><strong>xdrfile-1.1.4</strong><br />
+Copyright © 2009-2014, Erik Lindahl &amp; David van der Spoel<br />
+All rights reserved.</p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
+<ol class="arabic simple">
+<li><p>Redistributions of source code must retain the above copyright notice, this
+list of conditions and the following disclaimer.</p></li>
+<li><p>Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation
+and/or other materials provided with the distribution.</p></li>
+</ol>
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+<p>https://ftp.gromacs.org/pub/contrib/</p>
+</li>
+<li><p><strong>xdf.F90</strong><br />
+This routine was originally developed by Wes Barnett and distributed under the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.<br />
+https://github.com/wesbarnett/libgmxfort<br />
+Modified version of the routine was developed by Kai-Min Tu.<br />
+https://github.com/kmtu/xdrfort</p></li>
+<li><p><strong>mt19937.f</strong><br />
+This routine was developed by Makoto Matsumoto and Takuji Nishimura and was distributed under the GNU Library General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.<br />
+https://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/VERSIONS/FORTRAN/fortran.html</p></li>
+<li><p><strong>FFTE</strong><br />
+Copyright© 2000-2003 Daisuke Takahashi</p>
+<p>You may use, copy, modify this code for any purpose (include commercial use) and without fee. You may distribute this ORIGINAL package.</p>
+<p>https://www2.ccs.tsukuba.ac.jp/SC/sc2003/Software/FFTE_Package-3.0/doc/index.html</p>
+</li>
+<li><p><strong>IEPDYN (Integral-Equation formalism of Population DYNamics)</strong><br />
+Copyright 2026 Kento Kasahara</p>
+<p>IEPDYN is distributed under the <strong>GNU General Public License version 2.0 (GPL v2.0)</strong>.
+This software is distributed under the GNU GENERAL PUBLIC LICENSE Version 2, June 1991.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with this program.  If not, see https://www.gnu.org/licenses/.</p>
+<p>https://github.com/kenkasa/iepdyn</p>
+</li>
+</ul>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="footnote-intro" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>将来的には，開発者向けのマニュアルも整備したいと考えている．</p>
+</aside>
+</aside>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="ANATRA User Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../02_Installation/main.html" class="btn btn-neutral float-right" title="ANATRAのインストール" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

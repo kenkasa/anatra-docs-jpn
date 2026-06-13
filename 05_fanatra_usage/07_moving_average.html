@@ -1,0 +1,236 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>移動平均(moving_average, movave) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">移動平均(moving_average, movave)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/05_fanatra_usage/07_moving_average.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="moving-average-movave">
+<h1>移動平均(moving_average, movave)<a class="headerlink" href="#moving-average-movave" title="Link to this heading"></a></h1>
+<p>この解析モードでは，与えられた1次元データ(分布関数など)の移動平均による平滑化を行う．</p>
+<section id="id1">
+<h2>パラメータ一覧<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+</section>
+<section id="option-param">
+<h2><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code><a class="headerlink" href="#option-param" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dx</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">=</span> <span class="pre">0.1d0</span></code></p></li>
+</ul>
+<p>関数データのグリッド間隔を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">xsta</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0.0d0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">xsta</span> <span class="pre">=</span> <span class="pre">0.0d0</span></code></p></li>
+</ul>
+<p>グリッドの開始位置を指定する．</p>
+<p><span class="math notranslate nohighlight">\(i\)</span>番目のグリッド位置を<span class="math notranslate nohighlight">\(x_i\)</span>とすると，</p>
+<div class="math notranslate nohighlight">
+\[
+    x_i = x_0 + (i-1)\Delta x
+    \]</div>
+<p>で与えられる．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nregion</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nregion</span> <span class="pre">=</span> <span class="pre">2</span></code></p></li>
+</ul>
+<p>異なる移動平均条件を適用する領域数を指定する．
+<code class="docutils literal notranslate"><span class="pre">npoint</span></code> には，この領域数に対応した個数の値を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">xsep</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0.0d0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">xsep</span> <span class="pre">=</span> <span class="pre">1.0d0</span></code></p></li>
+</ul>
+<p>異なる移動平均幅を適用する領域の境界を指定する．
+<code class="docutils literal notranslate"><span class="pre">nregion</span> <span class="pre">=</span> <span class="pre">1</span></code> の場合は使用されず，<code class="docutils literal notranslate"><span class="pre">xsep</span> <span class="pre">=</span> <span class="pre">0.0d0</span></code> を指定すればよい．
+例えば，<span class="math notranslate nohighlight">\(N\)</span>領域に分ける場合には，境界値を<span class="math notranslate nohighlight">\(N-1\)</span>個指定する必要がある．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">npoint</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">npoint</span> <span class="pre">=</span> <span class="pre">3</span> <span class="pre">5</span></code></p></li>
+</ul>
+<p>各領域で移動平均に用いるデータ点数を指定する．
+奇数を指定する必要がある．
+上記の例では，</p>
+<ul class="simple">
+<li><p>第1領域：3点移動平均</p></li>
+<li><p>第2領域：5点移動平均</p></li>
+</ul>
+<p>を適用する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">include_zero</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.true.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">include_zero</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></li>
+</ul>
+<p>移動平均後に原点での値を保持するかどうかを指定する．
+<code class="docutils literal notranslate"><span class="pre">.true.</span></code> の場合は，原点での値は入力値のまま固定される．</p>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h2>出力ファイルのフォーマット<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">*XXXX.dat</span></code></p>
+<ul class="simple">
+<li><p>1列目：<span class="math notranslate nohighlight">\(x\)</span>軸</p></li>
+<li><p>2列目: 関数値</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>などで入力したファイルごとに平滑化されたファイルが出力される．</p>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h2>解析例<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<p>1次元の関数<span class="math notranslate nohighlight">\(f\left(x\right)\)</span>を格納した
+ファイル<code class="docutils literal notranslate"><span class="pre">input.dat</span></code> (軸の始点<code class="docutils literal notranslate"><span class="pre">0</span></code>, グリッド間隔<code class="docutils literal notranslate"><span class="pre">0.1</span></code>)を
+<span class="math notranslate nohighlight">\(x\leq 1.0\)</span>, <span class="math notranslate nohighlight">\(x&gt; 1.0\)</span>の2つの領域に分割して，それぞれの領域について3点平均，
+5点平均する場合のインプットを下記に示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">fcv</span>      <span class="o">=</span> <span class="s2">&quot;input.dat&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+  <span class="n">dx</span>          <span class="o">=</span> <span class="mf">0.1</span><span class="n">d0</span>  
+  <span class="n">xsta</span>        <span class="o">=</span> <span class="mf">0.0</span><span class="n">d0</span>  
+  <span class="n">xsep</span>        <span class="o">=</span> <span class="mf">1.0</span><span class="n">d0</span>  
+  <span class="n">nregion</span>      <span class="o">=</span> <span class="mi">2</span>     
+  <span class="n">npoint</span>       <span class="o">=</span> <span class="mi">3</span> <span class="mi">5</span>   
+  <span class="n">include_zero</span> <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">moving_average</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+</pre></div>
+</div>
+<p>これを実行すると，平滑化された関数データを格納した<code class="docutils literal notranslate"><span class="pre">out0001.dat</span></code>が出力される．</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

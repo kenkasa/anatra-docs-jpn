@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANATRAのインストール &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="anatraの使い方" href="../03_anatra_usage/combined.html" />
+    <link rel="prev" title="ANATRAとは？" href="../01_about_anatra/main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ANATRAのインストール</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">ANATRAを利用する上で必要となるプログラム</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">ソースコードからインストールする</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hdf5">HDF5ライブラリを併せてビルドする場合</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openblas">OpenBLASを利用する場合</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ANATRAのインストール</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/02_Installation/main.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="anatra">
+<h1>ANATRAのインストール<a class="headerlink" href="#anatra" title="Link to this heading"></a></h1>
+<p>この章では，ANATRAのインストール方法について紹介する．</p>
+<section id="id1">
+<h2>ANATRAを利用する上で必要となるプログラム<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>VMD (&gt; 1.7.3)</p></li>
+<li><p>Intelコンパイラ(Intel OneAPI) またはGCC (&gt; 8.5.0)</p></li>
+<li><p>bash</p></li>
+</ul>
+<p>ログインシェルとして，bashを用いていることを前提としている．<a class="footnote-reference brackets" href="#footnote-bash" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p>VMDについては，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>https://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD
+</pre></div>
+</div>
+<p>から無料でダウンロードできる．ただし，アカウント登録が必要である．<a class="footnote-reference brackets" href="#footnote-vmd" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
+<!---
+松林研内部計算機には，VMDがインストールされているので，``~/.bashrc``に下記を追加することで，
+VMDが利用可能になる．
+```
+source /data2/APPLI/packages/vmd/vmd.rc
+```
+--->
+<!---
+## 松林研内部計算機にインストールされているプログラムを利用する
+
+松林研内部計算機には最新版のANATRAが``/data2/APPLI``ディレクトリにインストールされている．  
+```
+/data2/APPLI/GitHub/anatra_dev
+```
+このANATRAを利用するための環境セットアップスクリプト``anatra.rc`` が用意されているので，
+``~/.bashrc``かANATRAを実行するスクリプト内部にて
+下記を実行すると良い．
+```
+$ source /data2/APPLI/GitHub/anatra_dev/anatra.rc
+```
+--->
+</section>
+<section id="id4">
+<h2>ソースコードからインストールする<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<p>ここでは，自身でソースコードからANATRAをインストールする方法を紹介する．
+最新版のソースコードはGitHub上で管理されている．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">kenkasa</span><span class="o">/</span><span class="n">anatra</span>
+</pre></div>
+</div>
+<!---
+ただし2025年時点ではプライベートリポジトリとして設定されており，
+権限のあるユーザーしかアクセスできない．
+開発者以外でリポジトリへのアクセス権限が必要な人は笠原(kasahara@cheng.es.osaka-u.ac.jp)まで連絡されたい．
+--->
+<p>まず，GitHubリポジトリからソースコードをダウンロードする．ANATRAをインストールしたいディレクトリを
+<code class="docutils literal notranslate"><span class="pre">/home/USER/software</span></code>とすると，まずこのディレクトリに移動ののち，<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span></code>を実行する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd /home/USER/software
+$ git clone https://github.com/kenkasa/anatra.git
+$ ls
+anatra
+
+$ cd anatra 
+$ ls
+README.md
+install.sh
+bin/
+tcl/
+f90/
+docs/
+utility/
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">install.sh</span></code>を実行することで，ANATRAのインストールが開始される．
+過去にANATRAのインストールを行ったことがある場合は，<code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code>または<code class="docutils literal notranslate"><span class="pre">~/.zshrc</span></code>に次の3行が含まれているので，
+実行前に，あらかじめ削除しておく必要がある．ただし，<code class="docutils literal notranslate"><span class="pre">$ANATRA_PATH</span></code>が今回インストールするANATRAと同じディレクトリを指し示している場合は，そのままにしておいても良い(もし分からない場合は下記3行を削除すると良い)．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export ANATRA_PATH=...
+export PATH=$ANATRA_PATH/bin:$PATH
+export LD_LIBRARY_PATH=$ANATRA_PATH/f90/lib/external/netcdf/netcdf/lib:$LD_LIBRARY_PATH
+</pre></div>
+</div>
+<!---
+bashやzsh以外のログインシェルを利用している場合は，上記に対応するものを自身でrcファイルに記入すれば良い．例えば，``zsh``の場合には，
+```
+export ANATRA_PATH=/path/to/vmd_scripts/anatra
+export PATH=$ANATRA_PATH/bin:$PATH
+export LD_LIBRARY_PATH=$ANATRA_PATH/f90/lib/external/netcdf/netcdf/lib
+```
+--->
+<p><code class="docutils literal notranslate"><span class="pre">install.sh</span></code>の実行オプションを下記に記す．</p>
+<p><code class="docutils literal notranslate"><span class="pre">install.sh</span></code>を実行する際，引数でコンパイラを指定することが出来る．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./install.sh --compiler=&lt;gcc or intel&gt;
+</pre></div>
+</div>
+<p>デフォルトは<code class="docutils literal notranslate"><span class="pre">intel</span></code>である．Intel OneAPIが利用できる環境の場合は<code class="docutils literal notranslate"><span class="pre">intel</span></code>を指定することを推奨する．</p>
+<!--- いくつかのプログラムはIntelのMath Kernel Library (MKL)に依拠しているため，``gcc``の場合には，それらのインストールがスキップされる．
+--->
+<p>Intel compilerを利用する場合は，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./install.sh --compiler=intel
+</pre></div>
+</div>
+<p>のように実行する．</p>
+<p>スクリプトを実行すると，ビルドの進捗がログとして表示される．ビルド終了直前で下記のメッセージが表示されれば，
+全ての解析プログラムのビルドが正常終了したと考えて良い．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Installation of ANATRA fortran programs have been
+succesfully finished!!
+</pre></div>
+</div>
+<p>また，変数として<code class="docutils literal notranslate"><span class="pre">$ANATRA_PATH</span></code>が定義されており，<code class="docutils literal notranslate"><span class="pre">anatra</span></code>コマンドにPATHが通っていれば，
+インストール成功である．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ echo $ANATRA_PATH
+/home/USER/software/anatra
+
+$ which anatra
+/home/USER/software/anatra/bin/anatra
+</pre></div>
+</div>
+<p>Fortranソースコードを書き換えて再ビルドする場合，<code class="docutils literal notranslate"><span class="pre">install.sh</span></code>を上記のオプションで実行すると，外部ライブラリを一からビルドするため，時間がかかる．そこで，オプションとして<code class="docutils literal notranslate"><span class="pre">--skip-install-lib</span></code>を加えると，ライブラリのビルドをスキップできる．ただし，前回のビルドからコンパイラを変更する場合には，外部ライブラリも含めて再ビルドする必要がある．</p>
+<p>ANATRAをインストールするマシンの環境によっては要求しているライブラリなどが不足しているために，
+インストールに失敗することがある．その場合の対応法については，以下を参照されたい．</p>
+<section id="hdf5">
+<h3>HDF5ライブラリを併せてビルドする場合<a class="headerlink" href="#hdf5" title="Link to this heading"></a></h3>
+<p>ANATRAはNetCDF形式のトラジェクトリをサポートする関係で，HDF5ライブラリが必要となる．
+Linuxディストリビューションの多くは，標準でHDF5ライブラリをプリインストールしている．もし，インストールされていない，またはインストールされているか分からない場合には，<code class="docutils literal notranslate"><span class="pre">--install-hdf5</span></code>を下記のように加えれば，ANATRAに同梱されているHDF5をインストールする．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./install.sh --compiler=&lt;gcc or intel&gt; --install-hdf5
+</pre></div>
+</div>
+</section>
+<section id="openblas">
+<h3>OpenBLASを利用する場合<a class="headerlink" href="#openblas" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">install.sh</span></code>は，デフォルトではIntel OneAPIに同梱されている数学ライブラリIntel Math Kernel Library (MKL)を利用してコンパイルするようになっているが，Intel OneAPIをインストールしていない場合でも，OpenBLASで代替することが可能である．</p>
+<p>OpenBLASはGitHub上からダウンロードすることが可能である．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">OpenMathLib</span><span class="o">/</span><span class="n">OpenBLAS</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<p>上記コマンドを実行すると，<code class="docutils literal notranslate"><span class="pre">OpenBLAS</span></code>というディレクトリにソースコードが格納される．
+そのディレクトリ内に入って，<code class="docutils literal notranslate"><span class="pre">make</span></code>と<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code>を実行すれば良い．
+<code class="docutils literal notranslate"><span class="pre">OpenBLAS</span></code>ディレクトリ上にライブラリ等をインストールする場合を下記に記す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">OpenBLAS</span>
+<span class="n">make</span>
+<span class="n">make</span> <span class="n">PREFIX</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">OpenBLAS</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>インストール後に，グローバル変数として<code class="docutils literal notranslate"><span class="pre">OPENBLAS_ROOT</span></code>を<code class="docutils literal notranslate"><span class="pre">~/.bashrc</span></code>や<code class="docutils literal notranslate"><span class="pre">~/.zshrc</span></code>の中に下記のように定義しておく．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">OPENBLAS_ROOT</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">OpenBLAS</span>
+</pre></div>
+</div>
+<p>その上で，ANATRAの<code class="docutils literal notranslate"><span class="pre">install.sh</span></code>を<code class="docutils literal notranslate"><span class="pre">--with-openblas</span></code>のオプションをつけて実行すれば良い．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">install</span> <span class="o">--</span><span class="n">compiler</span><span class="o">=</span><span class="n">gcc</span> <span class="o">--</span><span class="k">with</span><span class="o">-</span><span class="n">openblas</span>
+</pre></div>
+</div>
+<p>なお，OpenBLASを利用する数学ライブラリとして指定すると，
+自動的に高速フーリエ変換(Fast Fourier Transform, FFT)のライブラリとして<code class="docutils literal notranslate"><span class="pre">ffte</span></code>が利用されるようになる．</p>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="footnote-bash" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
+<p>ただし，次節で述べるように，zshなどの場合についても，自身でrcファイル(<code class="docutils literal notranslate"><span class="pre">~/.zshrc</span></code>など)を修正すれば，bash以外をログインシェルに用いている場合でも利用が可能である．</p>
+</aside>
+<aside class="footnote brackets" id="footnote-vmd" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">2</a><span class="fn-bracket">]</span></span>
+<p>VMDのインストール方法も簡単に述べておく．webサイトからダウンロードした<code class="docutils literal notranslate"><span class="pre">vmd-XXX.tar.gz</span></code>
+を解凍すると，<code class="docutils literal notranslate"><span class="pre">vmd-XXX</span></code>というディレクトリが生成されるので，そのディレクトリへ移動する．
+<code class="docutils literal notranslate"><span class="pre">configure</span></code>ファイルをテキストエディタで開き，
+ファイル上部にある<code class="docutils literal notranslate"><span class="pre">install_bin_dir=</span></code>にVMDをインストールしたいディレクトリを入力する．
+その後，Linuxマシンの場合は&quot;<code class="docutils literal notranslate"><span class="pre">./configure</span> <span class="pre">LINUXAMD64</span></code>&quot;と実行した上で，<code class="docutils literal notranslate"><span class="pre">src</span></code>ディレクトリに移動し，
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">install</span></code>を実行すると，<code class="docutils literal notranslate"><span class="pre">install_bin_dir=</span></code>で指定したディレクトリに<code class="docutils literal notranslate"><span class="pre">vmd</span></code>プログラムが配置されているはずである．
+このディレクトリにPATHを通しておけば，インストール完了である．</p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../01_about_anatra/main.html" class="btn btn-neutral float-left" title="ANATRAとは？" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../03_anatra_usage/combined.html" class="btn btn-neutral float-right" title="anatraの使い方" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

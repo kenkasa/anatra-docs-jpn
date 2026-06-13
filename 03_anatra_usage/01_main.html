@@ -1,0 +1,441 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>anatraの使い方 &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">anatraの使い方</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/03_anatra_usage/01_main.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="anatra">
+<h1>anatraの使い方<a class="headerlink" href="#anatra" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2>はじめに<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p><strong>anatra</strong>はVMDとFortranを用いて解析を行うプログラムである．
+この章では，<strong>anatra</strong>の使い方を解説する．</p>
+<p>先にも述べたが，基本的にこのプログラムを用いる解析では，まずVMDを用いた分子の選択などの処理を通して
+中間ファイルを生成，それをFortranにて解析するという二段階の処理を踏んでいる．</p>
+<!---
+一段階目までのVMD処理を**anatra**にて済ませた後，実際の解析のみを実行する**anatra_wo_vmd**
+コマンドも存在しており，これについては次章にて述べる．
+また，VMDを用いずに解析を行うプログラム**fanatra**については，
+次々章を参照されたい．
+--->
+<p>利用可能な解析は&quot;<code class="docutils literal notranslate"><span class="pre">anatra</span> <span class="pre">-h</span></code>&quot;を実行することで表示される．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ anatra -h
+Available analysis in ANATRA
+trjconv             (trj)   : Convert trajectory
+distance            (dis)   : Distance Analysis
+center_of_mass      (com)   : Center-of-Mass Analysis
+radial_distr        (rdf)   : Radial-Distribution Analysis
+spatial_distr       (sdf)   : Spatial-Distribution Analysis
+rmsd                (rmsd)  : Root-Mean-Square-Deviation Analysis
+interaction_energy  (ene)   : Interaction Energy Analysis
+lipid_order         (scd)   : Lipid S_CD order-parameter Analysis
+area_per_lipid      (apl)   : Area Per Lipid Analysis
+z_profile           (zprof) : Z-profile Analysis
+z_orient            (zori)  : Orientation Analysis along z
+rotation            (rot)   : Rotation Analysis
+cluster_size        (cls)   : Cluster-size Analysis
+free_volume         (fvol)  : Free-Volume Analysis
+species_info        (spec)  : Get Species information
+gauqm_prepper       (gau)   : Gaussian QM input prepper
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">trjconv</span></code>などが解析モードであり，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ anatra trjconv -option1 ...
+</pre></div>
+</div>
+<p>のように実行する．また括弧内に示されているのはそれぞれの解析モード名の省略版であり，例えば<code class="docutils literal notranslate"><span class="pre">trjconv</span></code>は，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ anatra trj -option1 ...
+</pre></div>
+</div>
+<p>と実行しても良い．</p>
+<p>各解析モードでのオプションなどは&quot;<code class="docutils literal notranslate"><span class="pre">anatra</span> <span class="pre">解析モード</span> <span class="pre">-h</span></code>&quot;
+で簡単な説明とサンプルが表示される．このヘルプメッセージだけで大体の使い方が分かるように
+なっているが，より詳細な説明が必要な場合に
+このマニュアルを参照すると良いだろう．
+以下では，<code class="docutils literal notranslate"><span class="pre">trjconv</span></code>の場合を例として示しておく(VMDのデフォルト出力は省略している)．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ anatra trjconv -h
+============================================================
+
+                    Trajectory Convert
+
+============================================================
+Usage:
+anatra trjconv                                                            \
+  -stype      &lt;structure file type&gt;                                       \
+  -sfile      &lt;structure file name&gt;                                       \
+  -tintype    &lt;input trajectory file type&gt;                                \
+  -tin        &lt;input trajectory file name&gt;                                \
+  -totype     &lt;output trajectory file type&gt;                               \
+  -to         &lt;output trajectory file name&gt;                               \
+  -beg        &lt;first frame to be read&gt; (default: 1)                       \
+  -end        &lt;last frame to be read&gt;                                     \
+              (default: 0, correspoding to last frame))                   \
+  -selX       &lt;X-th VMD selection&gt; (X=0,1,2...)                           \
+  -fit        &lt;fit is performed or not (true or false)&gt;                   \
+  -centering  &lt;centering is performed or not (true or false)&gt;             \
+              (default: false)                                            \
+  -wrap       &lt;wrap is performed or not (true or false)&gt;                  \
+              (default: false)                                            \
+  -wrapcenter &lt;wrapping center (origin or com) (default: fragment)&gt;       \
+  -wrapcomp   &lt;how to wrap molecules (residue, segid,chain, or fragment)&gt; \
+              (residue or segid or chain or fragment or nomp)             \
+              (default: fragment)                                         \
+  -refpdb     &lt;reference pdb file name&gt;                                   \
+              (necessary if fit = true)                                   \
+  -outselid   &lt;selection id for output molecules&gt;                         \
+  -fitselid   &lt;selection id for fitting or centering&gt;                     \
+  -refselid   &lt;selection id for reference&gt;
+
+Remark:
+o If you specify fit = true &amp; wrap = true, wrapcomp is automatically changed to &#39;com&#39;
+
+Example (fitting):
+anatra trjconv                           \
+  -stype      parm7                      \
+  -sfile      str.prmtop                 \
+  -tintype    dcd                        \
+  -tin        inp.dcd                    \
+  -totype     dcd                        \
+  -to         out.dcd                    \
+  -beg        1                          \
+  -end        150                        \
+  -sel0       not water                  \
+  -sel1       resid 1 to 275 and name CA \
+  -sel2       resid 1 to 275 and name CA \
+  -fit        true                       \
+  -centering  false                      \
+  -wrap       true                       \
+  -wrapcenter origin                     \
+  -wrapcomp   fragment                   \
+  -refpdb     ref.pdb                    \
+  -outselid   0                          \
+  -fitselid   1                          \
+  -refselid   2
+</pre></div>
+</div>
+<p>上記の例が示すように，<strong>anatra</strong>では多くのオプションを含んでいるため，
+<code class="docutils literal notranslate"><span class="pre">bash</span></code>スクリプトなどの中で実行すると良い．
+以下にスクリプト例を示しておく．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="n">anatra</span> <span class="n">trjconv</span>            \
+  <span class="o">-</span><span class="n">stype</span>    <span class="n">parm7</span>         \
+  <span class="o">-</span><span class="n">sfile</span>    <span class="nb">str</span><span class="o">.</span><span class="n">prmtop</span>    \
+  <span class="o">-</span><span class="n">tintype</span>  <span class="n">dcd</span>           \
+  <span class="o">-</span><span class="n">tin</span>      <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>       \
+  <span class="o">-</span><span class="n">totype</span>   <span class="n">dcd</span>           \
+  <span class="o">-</span><span class="n">to</span>       <span class="n">OUT</span><span class="o">.</span><span class="n">dcd</span>       \
+  <span class="o">-</span><span class="n">sel0</span>     <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">20</span> \
+  <span class="o">-</span><span class="n">outselid</span> <span class="mi">0</span> 
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2>共通オプション<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p><strong>anatra</strong>には多くの解析モードが存在するが，解析モード間で多くの共有オプションが存在する．
+まず，それらを一覧として以下に示しておく．
+その後に，各オプションの内容について解説する．</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><strong>オプション名</strong></p></th>
+<th class="head text-center"><p><strong>機能</strong></p></th>
+<th class="head text-right"><p><strong>例</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>-stype</p></td>
+<td class="text-center"><p>構造ファイルの種類を指定</p></td>
+<td class="text-right"><p>-sfile parm7</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>-sfile</p></td>
+<td class="text-center"><p>構造ファイル名を指定</p></td>
+<td class="text-right"><p>-stype A.prmtop</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>-tintype</p></td>
+<td class="text-center"><p>入力トラジェクトリの種類を指定</p></td>
+<td class="text-right"><p>-tintype dcd</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>-tin</p></td>
+<td class="text-center"><p>入力トラジェクトリ名を指定</p></td>
+<td class="text-right"><p>-tin in.dcd</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>-flist_traj</p></td>
+<td class="text-center"><p>入力トラジェクトリ一覧を記載したファイルを指定</p></td>
+<td class="text-right"><p>-flist_traj list.txt</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>-totype</p></td>
+<td class="text-center"><p>出力トラジェクトリの種類を指定</p></td>
+<td class="text-right"><p>-totype dcd</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>-to</p></td>
+<td class="text-center"><p>出力トラジェクトリ名を指定</p></td>
+<td class="text-right"><p>-to out.dcd</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>-sel<span class="math notranslate nohighlight">\(x\)</span> (<span class="math notranslate nohighlight">\(x=0, 1, ...\)</span>)</p></td>
+<td class="text-center"><p>選択する部位を指定(<span class="math notranslate nohighlight">\(x\)</span>をselidと呼ぶ)</p></td>
+<td class="text-right"><p>-sel0 resid 1 to 20</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>-mode or -mode<span class="math notranslate nohighlight">\(x\)</span> (<span class="math notranslate nohighlight">\(x=0, 1, ...\)</span>)</p></td>
+<td class="text-center"><p>選択した部位をどのように分割するかを指定</p></td>
+<td class="text-right"><p>-mode residue</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>-fhead</p></td>
+<td class="text-center"><p>解析結果の出力ファイル名のヘッダー</p></td>
+<td class="text-right"><p>-fhead out</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>-prep_only</p></td>
+<td class="text-center"><p>解析の前処理のみを行うか指定</p></td>
+<td class="text-right"><p>-prep_only true</p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<ul>
+<li><p><strong>-stype &lt;構造ファイルの種類&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-stype</span> <span class="pre">parm7</span></code></p></li>
+</ul>
+<p>構造ファイル(structure file)を指定する．構造ファイルは原子種情報(や原子間の結合情報)を格納しているファイルのことを指す．
+多くのタイプのトラジェクトリファイル(<code class="docutils literal notranslate"><span class="pre">dcd</span></code>や<code class="docutils literal notranslate"><span class="pre">xtc</span></code>など)では原子の座標情報のみが格納されており，
+解析を進めるためには構造ファイルが必要となる．対応している構造ファイルは，
+おおよそVMDがサポートしている全ての構造ファイルの種類を指定することが可能である．
+代表的なものを以下に示す．</p>
+<ul class="simple">
+<li><p><strong>pdb</strong>: PDBファイル</p></li>
+<li><p><strong>gro</strong>: GROファイル</p></li>
+<li><p><strong>psf</strong>: CHARMM PSFファイル</p></li>
+<li><p><strong>parm7</strong>: Amberパラメータファイル(多くの場合拡張子は<code class="docutils literal notranslate"><span class="pre">.prmtop</span></code>)</p></li>
+</ul>
+<p>最も完全な情報を含んでいるのは，CHARMMの場合には<code class="docutils literal notranslate"><span class="pre">psf</span></code>，Amberの場合には<code class="docutils literal notranslate"><span class="pre">parm7</span></code>なので，
+できる限り，これらのファイルを指定しておくと良い．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-sfile &lt;構造ファイル&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-sfile</span> <span class="pre">complex.prmtop</span></code></p></li>
+</ul>
+<p>構造ファイルの名前を指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-tintype &lt;入力トラジェクトリファイルの種類&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">dcd</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-tintype</span> <span class="pre">dcd</span></code></p></li>
+</ul>
+<p>入力トラジェクトリファイルの種類を指定する．
+現在，<code class="docutils literal notranslate"><span class="pre">trjconv</span></code>を除いて，指定できるのは<code class="docutils literal notranslate"><span class="pre">dcd</span></code>と<code class="docutils literal notranslate"><span class="pre">xtc</span></code>と<code class="docutils literal notranslate"><span class="pre">netcdf</span></code>に限定されている．
+<code class="docutils literal notranslate"><span class="pre">trjconv</span></code>では，VMDがサポートする全ての種類のトラジェクトリが指定可能である．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-tin &lt;入力トラジェクトリファイル&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-tin</span> <span class="pre">INP.dcd</span></code></p></li>
+</ul>
+<p>入力トラジェクトリのファイル名を指定する．
+複数のトラジェクトリファイルを読み込ませる場合は，“<code class="docutils literal notranslate"><span class="pre">-tin</span> <span class="pre">run1.dcd</span> <span class="pre">run2.dcd</span></code>&quot;のように並べて書く．
+またワイルドカード(*)を用いることも可能であり，”<code class="docutils literal notranslate"><span class="pre">-tin</span> <span class="pre">run*.dcd</span></code>&quot;のように書く．
+次に示す<code class="docutils literal notranslate"><span class="pre">-flist_traj</span></code>を用いて入力のトラジェクトリを指定することも可能である．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-flist_traj &lt;テキストファイル&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-flist_traj</span> <span class="pre">trajlist.txt</span></code></p></li>
+</ul>
+<p>入力トラジェクトリの一覧を記したテキストファイルを指定する．<code class="docutils literal notranslate"><span class="pre">-tin</span></code>と<code class="docutils literal notranslate"><span class="pre">-flist_traj</span></code>の両方が指定された場合には，<code class="docutils literal notranslate"><span class="pre">-flist_traj</span></code>が優先される．
+入力テキストファイルのフォーマットについては，次に示すように，入力のトラジェクトリ名が一行ずつ記されている必要がある．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">traj1</span><span class="o">.</span><span class="n">dcd</span>
+<span class="n">traj2</span><span class="o">.</span><span class="n">dcd</span>
+<span class="n">traj3</span><span class="o">.</span><span class="n">dcd</span>
+</pre></div>
+</div>
+</li>
+<hr class="docutils" />
+<li><p><strong>-totype &lt;出力トラジェクトリファイルの種類&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">dcd</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-totype</span> <span class="pre">dcd</span></code></p></li>
+</ul>
+<p>出力トラジェクトリファイルの種類を指定する．
+現在，<code class="docutils literal notranslate"><span class="pre">trjconv</span></code>を除いて，指定できるのは<code class="docutils literal notranslate"><span class="pre">dcd</span></code>と<code class="docutils literal notranslate"><span class="pre">xtc</span></code>に限定されている．
+<code class="docutils literal notranslate"><span class="pre">trjconv</span></code>では，VMDがサポートする全ての種類のトラジェクトリが指定可能である．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-to &lt;出力トラジェクトリファイル&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-to</span> <span class="pre">OUT.dcd</span></code></p></li>
+</ul>
+<p>出力トラジェクトリのファイル名を指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-sel<span class="math notranslate nohighlight">\(x\)</span> &lt;部位選択&gt;</strong> (<span class="math notranslate nohighlight">\(x=0,1,\cdots\)</span>)</p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-sel0</span> <span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">20</span> <span class="pre">and</span> <span class="pre">name</span> <span class="pre">CA</span></code></p></li>
+</ul>
+<p>選択する部位をVMDのAtomselectionの文法に従って指定する．
+<code class="docutils literal notranslate"><span class="pre">-sel</span></code><span class="math notranslate nohighlight">\(x\)</span>の<span class="math notranslate nohighlight">\(x\)</span>のことをselidと呼ぶ．
+多くの解析モードでは，<code class="docutils literal notranslate"><span class="pre">-sel</span></code><span class="math notranslate nohighlight">\(x\)</span>で指定された部位の解析を行う．
+また，解析モードによっては，どのselidを解析に使うかを明示的に指定することも多い．
+(例えば，<code class="docutils literal notranslate"><span class="pre">trjconv</span></code>の<code class="docutils literal notranslate"><span class="pre">-outselid</span></code>など)</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-mode<span class="math notranslate nohighlight">\(x\)</span> &lt;residue or whole or atom&gt;</strong> (<span class="math notranslate nohighlight">\(x=0,1,\cdots\)</span>)</p>
+<ul class="simple">
+<li><p>Default: 解析モードに依存</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-mode0</span> <span class="pre">residue</span></code></p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">-sel</span></code><span class="math notranslate nohighlight">\(x\)</span>で指定した部位をどのように分割して分子を定義するかを指定する(<a class="reference internal" href="combined.html#figuremode"><span class="std std-numref">図 1</span></a>)．
+解析によっては，<code class="docutils literal notranslate"><span class="pre">-sel0</span></code>の1つしか必要がない場合もあり，その解析では<code class="docutils literal notranslate"><span class="pre">-mode</span></code>で指定し，
+複数の部位選択が必要な場合には，<code class="docutils literal notranslate"><span class="pre">-mode0</span></code>，<code class="docutils literal notranslate"><span class="pre">-mode1</span></code>のようにそれぞれで対応する分割スキームを指定する．
+どちらのオプションで指定するかは各解析モードでの解説にて述べる．</p>
+<ul class="simple">
+<li><p><strong>residue</strong>: 選択部位を残基ごとに分割して分子と定義する．</p></li>
+<li><p><strong>whole</strong>: 選択部位全体を一つの分子と定義する．</p></li>
+<li><p><strong>atom</strong>: 選択部位の構成分子一つ一つを分子と定義する．</p></li>
+</ul>
+<p>例えば，<code class="docutils literal notranslate"><span class="pre">-sel0</span> <span class="pre">resname</span> <span class="pre">LIG</span></code>で複数のリガンド分子が選択されたとして，それぞれのリガンドの重心を知りたい
+場合には，<code class="docutils literal notranslate"><span class="pre">-mode</span> <span class="pre">residue</span></code>と設定する必要がある．
+逆に，<code class="docutils literal notranslate"><span class="pre">-sel0</span> <span class="pre">protein</span></code>と選択して，タンパク質一つを丸ごと解析対象としたい
+場合(タンパク質の重心の時間変化など)，&quot;<code class="docutils literal notranslate"><span class="pre">-mode</span> <span class="pre">whole</span></code>&quot;とする必要がある．</p>
+</li>
+</ul>
+<figure class="align-default" id="figuremode">
+<img alt="../_images/mode.eps" src="../_images/mode.eps" />
+<figcaption>
+<p><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">-mode</span></code>の使い分け．<code class="docutils literal notranslate"><span class="pre">residue</span></code>では，選択した部位を残基ごとに分割して分子と定義する．
+<code class="docutils literal notranslate"><span class="pre">whole</span></code>では，選択した部位をひとかたまりの分子として定義する．
+<code class="docutils literal notranslate"><span class="pre">atom</span></code>では，選択した部位を構成原子ごとに分割して分子と定義する．</span><a class="headerlink" href="#figuremode" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<hr class="docutils" />
+<ul>
+<li><p><strong>-fhead &lt;出力ファイル名のヘッダー&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: 解析モードに依存</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-fhead</span> <span class="pre">out</span></code></p></li>
+</ul>
+<p>解析の出力結果を格納するファイル名のヘッダーを指定する．
+例えば，<code class="docutils literal notranslate"><span class="pre">-fhead</span> <span class="pre">out</span></code>と指定すると，<code class="docutils literal notranslate"><span class="pre">out.XXX</span></code>，<code class="docutils literal notranslate"><span class="pre">out.YYY</span></code>などのファイルが出力される．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-prep_only <true or false></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-prep_only</span> <span class="pre">true</span></code></p></li>
+</ul>
+<p>実際の解析まで行わず，それに必要な前処理（パラメータファイルの作成）までで止めるかを指定する．</p>
+</li>
+</ul>
+<!---
+  これは計算機上での並列処理を実現する**anatra_wo_vmd**コマンドへの接続を前提としたオプションである．
+例えば，``-prep_only true``と指定すると，``*.molinfo``などのファイルが出力される．
+--->
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

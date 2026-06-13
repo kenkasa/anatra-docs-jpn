@@ -1,0 +1,1718 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fanatraの使い方 &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="Integral-Equation formalism of Population DYNamics (IEPDYN)" href="../06_iepdyn/combined.html" />
+    <link rel="prev" title="anatraの使い方" href="../03_anatra_usage/combined.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">fanatraの使い方</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">はじめに</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">共通パラメータ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#input-param">&amp;input_param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">時系列データのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">統計重みデータのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#output-param">&amp;output_param</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#histogram-hist">ヒストグラム(histogram, hist)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#option-param">&amp;option_param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#potential-of-mean-force-pmf">平均力ポテンシャル(potential_of_mean_force, pmf)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">理論背景</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">&amp;option_param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#matplotlib-param">&amp;matplotlib_param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id12">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#restricted-radial-rrpmf">制限つき動径平均力ポテンシャル(restricted_radial, rrpmf)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id13">理論背景</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">入力ファイル(時系列データ)のフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id16"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bootopt-param"><code class="docutils literal notranslate"><span class="pre">&amp;bootopt_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#extract-frame-extf">フレーム抽出(extract_frame, extf)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id19">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id21">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id22">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#random-frame-randf">フレームのランダム抽出(random_frame, randf)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id23">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id24"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id25">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id26">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#moving-average-movave">移動平均(moving_average, movave)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id27">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id28"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id29">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id30">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#average-function-avef">関数の平均(average_function, avef)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id31">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id32"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id33"><code class="docutils literal notranslate"><span class="pre">&amp;bootopt_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id34">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id35">解析例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">fanatraの使い方</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/05_fanatra_usage/combined.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="fanatra">
+<h1>fanatraの使い方<a class="headerlink" href="#fanatra" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2>はじめに<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p><strong>fanatra</strong>は&quot;Fortran ANATRA&quot;の略であり，その名の通りFortranを用いて解析を行うプログラムである．この章では<strong>fanatra</strong>の使い方を解説する．<strong>fanatra</strong>はVMDを通さずに解析を行うプログラム群であるため，計算ノード上でのVMDの利用が難しい計算機システムでも
+利用が可能となる．<code class="docutils literal notranslate"><span class="pre">fanatra</span> <span class="pre">-h</span></code>を実行することでその種類の一覧が表示される．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ fanatra -h
+Available analysis in Fortran ANATRA
+histogram               (hist)   : Histogram Analysis
+potential_of_mean_force (pmf)    : Free-energy Profile Analysis
+restricted_radial       (rrpmf)  : Restricted Radial Analysis
+extract_frame           (extf)   : Extract Frames Using CV
+random_frame            (randf)  : Randomly Extract Frames
+state_define            (sdef)   : Define States From Time-series Data
+moving_average          (movave) : Moving Average Analysis
+average_function        (avef)   : Function Average Analysis
+bootstrap_prepper       (boot)   : Bootstrap Sample Generator
+return_prob             (rp)     : Returning Probability Analysis
+rprate                  (rprate) : Rate Constant Analysis based on RP theory
+iepdyn                  (iepdyn) : Integral-equation Formalism of Population Dynamics
+</pre></div>
+</div>
+<p>上記のうち，<code class="docutils literal notranslate"><span class="pre">histogram</span></code>などが解析モードであり，
+省略して<code class="docutils literal notranslate"><span class="pre">hist</span></code>として入力することも可能である．
+<strong>anatra</strong>がコマンドライン上でパラメータを指定して解析可能だったのに対して，
+<strong>fanatra</strong>ではパラメータファイルを別に用意して読み込ませる形で実行する．例えば，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ fanatra hist コントロールファイル
+</pre></div>
+</div>
+<p>のように実行する．読み込ませるパラメータファイルはFortranのnamelist形式である．
+また，各解析モードでのパラメータファイルの形式やその内容は<code class="docutils literal notranslate"><span class="pre">&quot;fanatra</span> <span class="pre">&lt;解析モード&gt;　-h&quot;</span></code>
+で簡単な説明とサンプルが表示されるため大体の使い方はそれで理解ができる．<code class="docutils literal notranslate"><span class="pre">histogram</span></code>を例を以下に示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ fanatra histogram -h
+
+==================================================
+
+              Histogram Analysis
+
+==================================================
+&amp;input_param
+ fcv      = &quot;cvdata1&quot; &quot;cvdata2&quot; ! Time-series CV data
+ flist_cv = &quot;list&quot; ! CV-file list (Either fcv or flist_cv should be specified)
+/
+&amp;output_param
+ fhead = &quot;run&quot; ! header of output filename
+/
+&amp;option_param
+  dx       = 0.1d0  ! grid spacing
+  xsta     = 0.0d0  ! minimum value of the coordinate
+  nx       = 100    ! number of grids
+  ncol     = 1      ! number of data column
+/
+
+
+::: format of time-series data :::
+1st column: time (arbitrary), Nth column (N&gt;1): data
+example)
+
+0.00   0.02120
+0.01   0.03140
+0.02   0.22310
+....   .......
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2>共通パラメータ<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p><strong>fanatra</strong>におけるパラメータファイルのほとんどはFortranのnamelist形式に依拠しており，
+<strong>input_param</strong>セクション，<strong>output_param</strong>セクション，<strong>option_param</strong>セクションに分けてパラメータを指定する．
+全ての解析モードで共通している<strong>input_param</strong>と<strong>output_param</strong>について，ここで示しておく．</p>
+<section id="input-param">
+<h3>&amp;input_param<a class="headerlink" href="#input-param" title="Link to this heading"></a></h3>
+<p>このnamelistでは，入力ファイルに関するパラメータを指定する．</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><strong>パラメータ名</strong></p></th>
+<th class="head text-center"><p><strong>機能</strong></p></th>
+<th class="head text-center"><p><strong>例</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>ftraj</p></td>
+<td class="text-center"><p>入力トラジェクトリ名を指定(複数指定可)</p></td>
+<td class="text-center"><p>ftraj      = “inp1.dcd”, “inp2.dcd”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>fcv</p></td>
+<td class="text-center"><p>入力時系列データ名を指定(複数指定可)</p></td>
+<td class="text-center"><p>fcv        = “cv1.txt”, “cv2.txt”</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>fweight</p></td>
+<td class="text-center"><p>入力時系列データに対応する各ステップでの統計重みを指定(複数指定可)</p></td>
+<td class="text-center"><p>fweight        = “weight1.txt”, “weight2.txt”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>flist_traj<span class="math notranslate nohighlight">\(^{1}\)</span></p></td>
+<td class="text-center"><p>入力トラジェクトリの一覧を格納したファイルを指定</p></td>
+<td class="text-center"><p>flist_traj = “list.txt”</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>flist_cv<span class="math notranslate nohighlight">\(^{2}\)</span></p></td>
+<td class="text-center"><p>入力時系列データの一覧を格納したファイルを指定</p></td>
+<td class="text-center"><p>flist_cv   = “list.txt”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>flist_weight<span class="math notranslate nohighlight">\(^{3}\)</span></p></td>
+<td class="text-center"><p>統計重みファイルの一覧を格納したファイルを指定</p></td>
+<td class="text-center"><p>flist_weight   = “list.txt”</p></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math notranslate nohighlight">\(^{1}\)</span> <code class="docutils literal notranslate"><span class="pre">ftraj</span></code>と<code class="docutils literal notranslate"><span class="pre">flist_traj</span></code>の両方を指定した場合，<code class="docutils literal notranslate"><span class="pre">flist_traj</span></code>の内容が優先される．<br />
+<span class="math notranslate nohighlight">\(^{2}\)</span> <code class="docutils literal notranslate"><span class="pre">fcv</span></code>と<code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>の両方を指定した場合，<code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>の内容が優先される．<br />
+<span class="math notranslate nohighlight">\(^{3}\)</span> <code class="docutils literal notranslate"><span class="pre">fweight</span></code>と<code class="docutils literal notranslate"><span class="pre">flist_weight</span></code>の両方を指定した場合，<code class="docutils literal notranslate"><span class="pre">flist_weight</span></code>の内容が優先される．</p>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ftraj</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ftraj</span> <span class="pre">=</span> <span class="pre">&quot;inp1.dcd&quot;,</span> <span class="pre">&quot;inp2.dcd&quot;</span></code></p></li>
+</ul>
+<p>入力のトラジェクトリファイルを指定する．例に示す通り，複数のファイルを指定することも可能である．
+ファイル数が膨大な場合は，<code class="docutils literal notranslate"><span class="pre">flist_traj</span></code>で指定することも可能である．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">fcv</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fcv</span> <span class="pre">=</span> <span class="pre">&quot;cv1.txt&quot;,</span> <span class="pre">&quot;cv2.txt&quot;</span></code></p></li>
+</ul>
+<p>入力の時系列データファイルを指定する．例に示す通り，複数のファイルを指定することも可能である．
+ファイル数が膨大な場合は，<code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>で指定することも可能である．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">fweight</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fweight</span> <span class="pre">=</span> <span class="pre">&quot;cv1.txt&quot;,</span> <span class="pre">&quot;cv2.txt&quot;</span></code></p></li>
+</ul>
+<p>入力の統計重みファイルを指定する．
+統計重みファイルでは，時系列データの各ステップでの統計的重みを与えることができる．統計的重みとしてエンハンスドサンプリング法やMultistate Bennett Acceptance Ratio (MBAR)法によって得られたものを入力することが可能である．統計重みの総和値はプログラム内で自動的に1に規格化される．
+例に示す通り，複数のファイルを指定することも可能である．
+ファイル数が膨大な場合は，<code class="docutils literal notranslate"><span class="pre">flist_weight</span></code>で指定することも可能である．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">flist_traj</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">flist_traj</span> <span class="pre">=</span> <span class="pre">&quot;list.txt&quot;</span></code></p></li>
+</ul>
+<p>入力のトラジェクトファイルのリストを格納したファイルを指定する．<code class="docutils literal notranslate"><span class="pre">flist_traj</span></code>で指定された内容が，<code class="docutils literal notranslate"><span class="pre">ftraj</span></code>で指定した内容よりも優先される．
+リストファイルには，下記の例の通り，入力のトラジェクトリファイルが1行ごとに記されている必要がある．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inp1</span><span class="o">.</span><span class="n">dcd</span>
+<span class="n">inp2</span><span class="o">.</span><span class="n">dcd</span>
+<span class="n">inp3</span><span class="o">.</span><span class="n">dcd</span>
+<span class="n">inp4</span><span class="o">.</span><span class="n">dcd</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">flist_cv</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">flist_cv</span> <span class="pre">=</span> <span class="pre">&quot;list.txt&quot;</span></code></p></li>
+</ul>
+<p>入力の時系列データファイルのリストを格納したファイルを指定する．<code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>で指定された内容が，<code class="docutils literal notranslate"><span class="pre">fcv</span></code>で指定した内容よりも優先される．
+リストファイルには，下記の例の通り，入力の時系列データファイルが1行ごとに記されている必要がある．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inp1</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp2</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp3</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp4</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">flist_weight</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">flist_weight</span> <span class="pre">=</span> <span class="pre">&quot;list.txt&quot;</span></code></p></li>
+</ul>
+<p>入力の統計重みデータファイルのリストを格納したファイルを指定する．<code class="docutils literal notranslate"><span class="pre">flist_weight</span></code>で指定された内容が，<code class="docutils literal notranslate"><span class="pre">fweight</span></code>で指定した内容よりも優先される．
+リストファイルには，下記の例の通り，入力の統計重みファイルが1行ごとに記されている必要がある．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inp1</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp2</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp3</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp4</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h3>時系列データのフォーマット<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>時系列データのフォーマットは下記である．</p>
+<ul class="simple">
+<li><p>1列目: 時間軸</p></li>
+<li><p>2列目: 1つめの時系列データ</p></li>
+<li><p>3列目: 2つめの時系列データ</p></li>
+</ul>
+<p>1列目は，全ての解析モードにおいて読み込まれず，2列目から1つめのデータ列としてカウントされる．</p>
+</section>
+<section id="id4">
+<h3>統計重みデータのフォーマット<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>統計重みデータのフォーマットは下記である．</p>
+<ul class="simple">
+<li><p>1列目: 時間軸</p></li>
+<li><p>2列目: 統計重み値</p></li>
+</ul>
+<p>1列目は，全ての解析モードにおいて読み込まれず，2列目のみ利用される．
+統計重みデータの行数は対応する時系列データの行数と一致している必要がある．</p>
+</section>
+<section id="output-param">
+<h3>&amp;output_param<a class="headerlink" href="#output-param" title="Link to this heading"></a></h3>
+<p>このnamelistでは，出力に関するパラメータを指定する．</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><strong>パラメータ名</strong></p></th>
+<th class="head text-center"><p><strong>機能</strong></p></th>
+<th class="head text-center"><p><strong>例</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>fhead</p></td>
+<td class="text-center"><p>出力ファイル名の拡張子以外の部分を指定</p></td>
+<td class="text-center"><p>fhead          = “run”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>file_extension<span class="math notranslate nohighlight">\(^{1}\)</span></p></td>
+<td class="text-center"><p>出力ファイル名の拡張子を指定</p></td>
+<td class="text-center"><p>file_extension = “dat”</p></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math notranslate nohighlight">\(^{1}\)</span> このパラメータが有効化される解析モードは多くない．</p>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">fhead</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">run</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fhead</span> <span class="pre">=</span> <span class="pre">&quot;run&quot;</span></code></p></li>
+</ul>
+<p>出力するファイル名の拡張子を除いた部分(basename)を指定する．
+例えば，<code class="docutils literal notranslate"><span class="pre">fhead</span> <span class="pre">=</span> <span class="pre">run</span></code>と指定した場合，次に述べる解析モード<code class="docutils literal notranslate"><span class="pre">histogram</span></code>は，
+デフォルトでは<code class="docutils literal notranslate"><span class="pre">run.dat</span></code>というファイルを出力する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">file_extension</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">dat</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">file_extension</span> <span class="pre">=</span> <span class="pre">&quot;dat&quot;</span></code></p></li>
+</ul>
+<p>出力するファイル名の拡張子を指定する．ただし，このパラメータが有効化される解析モードは，<code class="docutils literal notranslate"><span class="pre">histogram</span></code>などごく一部である．</p>
+</li>
+</ul>
+<!---
+ **セクション名**                      |**オプション名**                  | **機能**                                 | **例**             
+:----------------------------------|:----------------------------------|:----------------------------------------:|---------------:
+``&input_param``                       | ``flist``                             | 解析対象のデータファイル名を記述した入力ファイルを指定          | ``flist = "input_list.txt"``    
+``&output_param``                      | ``fhead``                             | 解析結果の出力ファイル名のヘッダーを指定        | ``fhead = "out" ``
+
+上記のflistで指定する入力ファイルの例を以下に示しておく．
+このように**fanatra**では"解析対象のファイル名を記述した"ファイルを入力として渡す．これは複数のデータを一挙に解析するためである．
+```
+$cat input_list.txt
+
+../../../06_2d/02_2dene/03_atr/combined_0001.dat
+../../../06_2d/02_2dene/03_atr/combined_0002.dat
+../../../06_2d/02_2dene/03_atr/combined_0003.dat
+../../../06_2d/02_2dene/03_atr/combined_0004.dat
+../../../06_2d/02_2dene/03_atr/combined_0005.dat
+../../../06_2d/02_2dene/03_atr/combined_0006.dat
+../../../06_2d/02_2dene/03_atr/combined_0007.dat
+../../../06_2d/02_2dene/03_atr/combined_0008.dat
+../../../06_2d/02_2dene/03_atr/combined_0009.dat
+../../../06_2d/02_2dene/03_atr/combined_0010.dat
+../../../06_2d/02_2dene/03_atr/combined_0011.dat
+../../../06_2d/02_2dene/03_atr/combined_0012.dat
+../../../06_2d/02_2dene/03_atr/combined_0013.dat
+../../../06_2d/02_2dene/03_atr/combined_0014.dat
+../../../06_2d/02_2dene/03_atr/combined_0015.dat
+../../../06_2d/02_2dene/03_atr/combined_0016.dat
+```
+
+## 解析対象ファイルのフォーマット
+
+``flist``内で指定した解析対象ファイルのフォーマットは，**anatra**にて出力されるファイル形式と同様であり，
+* 一列目: 時系列データ
+* 二列目: 解析対象データ  
+
+という構造である必要がある．
+--->
+</section>
+</section>
+<section id="histogram-hist">
+<h2>ヒストグラム(histogram, hist)<a class="headerlink" href="#histogram-hist" title="Link to this heading"></a></h2>
+<p>この解析モードでは，何らかの時系列データ<span class="math notranslate nohighlight">\(\xi\left(t\right)\)</span>から分布関数<span class="math notranslate nohighlight">\(P\left(x\right)\)</span>を計算する．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-de296057-07b6-4df0-9ce9-12290070812e">
+<span class="eqno">(49)<a class="headerlink" href="#equation-de296057-07b6-4df0-9ce9-12290070812e" title="Permalink to this equation"></a></span>\[\begin{align}
+P\left(x\right) =  \dfrac{1}{N}\Braket{\delta\left(x - \xi\right)} 
+\end{align}\]</div>
+<p>ここで，<span class="math notranslate nohighlight">\(N\)</span>はデータ点の数であり，上式は規格化条件</p>
+<div class="amsmath math notranslate nohighlight" id="equation-76eeaefd-0ea6-49d9-896b-496ef71e628b">
+<span class="eqno">(50)<a class="headerlink" href="#equation-76eeaefd-0ea6-49d9-896b-496ef71e628b" title="Permalink to this equation"></a></span>\[\begin{align}
+\int_{-\infty}^{\infty} dx P\left(x\right) = 1
+\end{align}\]</div>
+<p>を満たす．</p>
+<section id="id5">
+<h3>パラメータ一覧<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+</section>
+<section id="option-param">
+<h3>&amp;option_param<a class="headerlink" href="#option-param" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dx</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: 0.1</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">=</span> <span class="pre">0.1</span></code></p></li>
+</ul>
+<p>分布関数を計算する際のグリッド幅<span class="math notranslate nohighlight">\(\Delta x\)</span>を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">xsta</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: 0.0</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">xsta</span> <span class="pre">=</span> <span class="pre">0.0</span></code></p></li>
+</ul>
+<p>グリッドを張るスタート位置<span class="math notranslate nohighlight">\(x_{0}\)</span>を指定する．<span class="math notranslate nohighlight">\(i\)</span>番目のグリッドの位置を<span class="math notranslate nohighlight">\(x_{i}\)</span>とすると，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-5d3854cf-0d64-4054-83aa-160810d72d8f">
+<span class="eqno">(51)<a class="headerlink" href="#equation-5d3854cf-0d64-4054-83aa-160810d72d8f" title="Permalink to this equation"></a></span>\[\begin{align}
+x_{i} = x_{0} + \left(i - 1 \right) \Delta x
+\end{align}\]</div>
+<p>である．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ncol</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: 1</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ncol</span> <span class="pre">=</span> <span class="pre">10</span></code></p></li>
+</ul>
+<p>1つの時系列データファイルあたりに含まれるデータ列数を指定する．</p>
+</li>
+</ul>
+</section>
+<section id="id6">
+<h3>出力ファイルのフォーマット<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*.dat</span></code> (拡張子は<code class="docutils literal notranslate"><span class="pre">file_extension</span></code>によって変更可)</p>
+<ul>
+<li><p>1列目: <span class="math notranslate nohighlight">\(x\)</span>座標</p></li>
+<li><p>2列目: 分布関数<span class="math notranslate nohighlight">\(P\left(x\right)\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id7">
+<h3>解析例<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>3つのデータ列を持つ時系列データ<code class="docutils literal notranslate"><span class="pre">inp.ts</span></code>から，<span class="math notranslate nohighlight">\(5\leq x \leq 10\)</span>の範囲で分布関数<span class="math notranslate nohighlight">\(P\left(x\right)\)</span>を計算する例を以下に示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+<span class="n">fcv</span> <span class="o">=</span> <span class="s2">&quot;inp.ts&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+<span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;run&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+<span class="n">dx</span>   <span class="o">=</span> <span class="mf">0.1</span><span class="n">d0</span>
+<span class="n">xsta</span> <span class="o">=</span> <span class="mf">5.0</span><span class="n">d0</span>
+<span class="n">nx</span>   <span class="o">=</span> <span class="mi">50</span>
+<span class="n">ncol</span> <span class="o">=</span> <span class="mi">3</span> 
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">hist</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+
+</pre></div>
+</div>
+</section>
+</section>
+<section id="potential-of-mean-force-pmf">
+<h2>平均力ポテンシャル(potential_of_mean_force, pmf)<a class="headerlink" href="#potential-of-mean-force-pmf" title="Link to this heading"></a></h2>
+<p>この解析モードでは，
+反応座標に対する時系列データ<span class="math notranslate nohighlight">\(\boldsymbol{\xi}\left(t\right)\)</span>から，
+反応座標<span class="math notranslate nohighlight">\(\boldsymbol{\zeta}\)</span>に沿った自由エネルギープロファイル<span class="math notranslate nohighlight">\(W\left(\boldsymbol{\zeta}\right)\)</span>を計算する．
+<span class="math notranslate nohighlight">\(W\left(\boldsymbol{\zeta}\right)\)</span>は平均力ポテンシャルとも呼ばれる．</p>
+<section id="id8">
+<h3>理論背景<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>系の配置を<span class="math notranslate nohighlight">\({\bf X}\)</span>，そしてポテンシャルを<span class="math notranslate nohighlight">\(U\left({\bf X}\right)\)</span>とする．
+このとき，配置積分<span class="math notranslate nohighlight">\(Z\)</span>は逆温度を<span class="math notranslate nohighlight">\(\beta\)</span>として</p>
+<div class="amsmath math notranslate nohighlight" id="equation-f58552a6-ea60-4447-bd79-f5932706db58">
+<span class="eqno">(52)<a class="headerlink" href="#equation-f58552a6-ea60-4447-bd79-f5932706db58" title="Permalink to this equation"></a></span>\[\begin{align}
+Z &amp; =\int d{\bf X}\,\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}\]</div>
+<p>で与えられる．
+同様に，系が反応座標空間(<span class="math notranslate nohighlight">\(\boldsymbol{\zeta}\left({\bf X}\right)\)</span>)上の
+微小区間<span class="math notranslate nohighlight">\(\boldsymbol{\zeta} - \boldsymbol{\zeta}+\Delta \boldsymbol{\zeta}\)</span>にトラップされている状態に対応する分配関数は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-40b9b25a-d736-406d-9abe-0ca6bbf12194">
+<span class="eqno">(53)<a class="headerlink" href="#equation-40b9b25a-d736-406d-9abe-0ca6bbf12194" title="Permalink to this equation"></a></span>\[\begin{align}
+Z\left(\boldsymbol{\zeta}\right) &amp; =\Delta\boldsymbol{\zeta}\int d{\bf X}\,\delta\left(\boldsymbol{\zeta}-\boldsymbol{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}\]</div>
+<p>である．<span class="math notranslate nohighlight">\(\boldsymbol{\zeta}\)</span>に対する確率密度を</p>
+<div class="amsmath math notranslate nohighlight" id="equation-681e8be6-6770-4da9-af74-c3857db8d4e4">
+<span class="eqno">(54)<a class="headerlink" href="#equation-681e8be6-6770-4da9-af74-c3857db8d4e4" title="Permalink to this equation"></a></span>\[\begin{align}
+\rho\left(\boldsymbol{\zeta}\right) &amp; = \Braket{\delta\left(\boldsymbol{\zeta} - \boldsymbol{\xi}\left({\bf X}\right)\right)} = \dfrac{1}{Z}\int d{\bf X}\,\delta\left(\boldsymbol{\zeta}-\boldsymbol{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}\]</div>
+<p>と定義すると，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-934e2e38-f5d6-407b-8afd-fd0bb7132fbf">
+<span class="eqno">(55)<a class="headerlink" href="#equation-934e2e38-f5d6-407b-8afd-fd0bb7132fbf" title="Permalink to this equation"></a></span>\[\begin{align}
+\dfrac{Z\left(\boldsymbol{\zeta}\right)}{Z} &amp; =\rho\left(\boldsymbol{\zeta}\right)\Delta\boldsymbol{\zeta}
+\end{align}\]</div>
+<p>が成り立つ．したがって，系が領域<span class="math notranslate nohighlight">\(\boldsymbol{\zeta}-\boldsymbol{\zeta} + \Delta \boldsymbol{\zeta}\)</span>に制限されている状態と制限されていない状態の自由エネルギー差<span class="math notranslate nohighlight">\(\Delta F\left(\boldsymbol{\zeta}\right)\)</span>は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-ee941d0a-83a5-488d-92ce-0b9cf02fbcbd">
+<span class="eqno">(56)<a class="headerlink" href="#equation-ee941d0a-83a5-488d-92ce-0b9cf02fbcbd" title="Permalink to this equation"></a></span>\[\begin{align}
+\Delta F\left(\boldsymbol{\zeta}\right) &amp; =-\dfrac{1}{\beta}\log\dfrac{Z\left(\boldsymbol{\zeta}\right)}{Z} 
+ = -\dfrac{1}{\beta}\log \left(\rho\left(\boldsymbol{\zeta}\right)\Delta \boldsymbol{\zeta}\right)
+\end{align}\]</div>
+<p>と表せる．<span class="math notranslate nohighlight">\(\boldsymbol{\zeta}_{0}\)</span>を基準にとった自由エネルギーは</p>
+<div class="amsmath math notranslate nohighlight" id="equation-77ea679c-9400-45b7-983d-db6d67441ffb">
+<span class="eqno">(57)<a class="headerlink" href="#equation-77ea679c-9400-45b7-983d-db6d67441ffb" title="Permalink to this equation"></a></span>\[\begin{align}
+W\left(\boldsymbol{\zeta}\right) &amp; =\Delta F\left(\boldsymbol{\zeta}\right)-\Delta F\left(\boldsymbol{\zeta}_{0}\right)\notag\\
+ &amp; =-\dfrac{1}{\beta}\log\dfrac{\rho\left(\boldsymbol{\zeta}\right)}{\rho\left(\boldsymbol{\zeta}_{0}\right)}
+ \label{pmf:pmf}
+\end{align}\]</div>
+<p>である．この<span class="math notranslate nohighlight">\(W\)</span>のことを平均力ポテンシャルと呼ぶ．<span class="math notranslate nohighlight">\(\boldsymbol{\zeta}_{0}\)</span>の設定は任意であるが，
+多くの場合，<span class="math notranslate nohighlight">\(W\left(\boldsymbol{\zeta}\right)\)</span>の最小値が0となるようにとる．
+<span class="math notranslate nohighlight">\(W\left(\boldsymbol{\zeta}\right)\)</span>を計算することで，<span class="math notranslate nohighlight">\(\boldsymbol{\zeta}\)</span>に応じた熱力学的な安定性の変化を
+議論することが可能となる．式\eqref{pmf:pmf}は，<span class="math notranslate nohighlight">\(\boldsymbol{\zeta}\)</span>に依存する部分と定数<span class="math notranslate nohighlight">\(C\)</span>に分けて</p>
+<div class="amsmath math notranslate nohighlight" id="equation-e9bd63b3-118a-42e7-855f-fdf87ce9773e">
+<span class="eqno">(58)<a class="headerlink" href="#equation-e9bd63b3-118a-42e7-855f-fdf87ce9773e" title="Permalink to this equation"></a></span>\[\begin{align}
+W\left(\boldsymbol{\zeta}\right) &amp; =-\dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\boldsymbol{\zeta}-\boldsymbol{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)+C
+\label{pmf:pmf2}
+\end{align}\]</div>
+<p>と書き直すこともできる．ただし，<span class="math notranslate nohighlight">\(C\)</span>は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-5dd37b8e-130d-4b65-96c3-4241d8248b7d">
+<span class="eqno">(59)<a class="headerlink" href="#equation-5dd37b8e-130d-4b65-96c3-4241d8248b7d" title="Permalink to this equation"></a></span>\[\begin{align}
+C &amp; = \dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\boldsymbol{\zeta}_{0}-\boldsymbol{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}\]</div>
+<p>で与えられる．</p>
+</section>
+<section id="id9">
+<h3>パラメータ一覧<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+</section>
+<section id="id10">
+<h3>&amp;option_param<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ndim</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">2</span></code></p></li>
+</ul>
+<p>Collective Variable (CV) の次元数を指定する．
+例えば <code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">2</span></code> の場合は2次元PMF，<code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">3</span></code> の場合は3次元PMFを計算する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">xyzcol</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">xyzcol</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">2</span></code></p></li>
+</ul>
+<p>CVデータファイル中で，各CVに対応する列番号を指定する．
+先頭列は時刻やステップ数として扱われるため無視される．</p>
+<p>例えば</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">time</span>  <span class="n">cv1</span>  <span class="n">cv2</span>  <span class="n">cv3</span>
+</pre></div>
+</div>
+<p>の形式でデータが格納されている場合，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xyzcol</span> <span class="o">=</span> <span class="mi">1</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>とすると，<code class="docutils literal notranslate"><span class="pre">cv1</span></code> と <code class="docutils literal notranslate"><span class="pre">cv2</span></code> を用いて2次元PMFを計算する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ng3</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">1</span> <span class="pre">1</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ng3</span> <span class="pre">=</span> <span class="pre">10</span> <span class="pre">20</span></code></p></li>
+</ul>
+<p>各CV方向のグリッド数を指定する．</p>
+<p><code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">N</span></code> の場合，<code class="docutils literal notranslate"><span class="pre">ng3</span></code> には各次元に対するグリッド数を順番に与える．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">del</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1.0</span> <span class="pre">1.0</span> <span class="pre">1.0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">del</span> <span class="pre">=</span> <span class="pre">0.1d0</span> <span class="pre">0.2d0</span></code></p></li>
+</ul>
+<p>各CV方向のグリッド間隔を指定する．</p>
+<p><span class="math notranslate nohighlight">\(i\)</span>番目のCVについて，グリッド間隔を<span class="math notranslate nohighlight">\(\Delta_i\)</span>とすると，隣接するグリッド点の距離は<span class="math notranslate nohighlight">\(\Delta_i\)</span>となる．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">origin</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">0.0</span> <span class="pre">0.0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">origin</span> <span class="pre">=</span> <span class="pre">0.0d0</span> <span class="pre">1.0d0</span></code></p></li>
+</ul>
+<p>各CV方向のグリッドの原点を指定する．</p>
+<p><span class="math notranslate nohighlight">\(k\)</span>番目のCVについて，原点を<span class="math notranslate nohighlight">\(x_k^{(0)}\)</span>，グリッド間隔を<span class="math notranslate nohighlight">\(\Delta_k\)</span>とすると，<span class="math notranslate nohighlight">\(i\)</span>番目のグリッド位置は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-9afafd48-9340-43d3-892a-42e099c9cde3">
+<span class="eqno">(60)<a class="headerlink" href="#equation-9afafd48-9340-43d3-892a-42e099c9cde3" title="Permalink to this equation"></a></span>\[\begin{align}
+x_k^{(i)} = x_k^{(0)} + (i-1)\Delta_k
+\end{align}\]</div>
+<p>で与えられる．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">temperature</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">300.0d0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">temperature</span> <span class="pre">=</span> <span class="pre">298.0d0</span></code></p></li>
+</ul>
+<p>PMF計算で用いる温度 <span class="math notranslate nohighlight">\(T\)</span> [K] を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">use_radial</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">use_radial</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>CVが動径成分であるかどうかを指定する．
+<code class="docutils literal notranslate"><span class="pre">.true.</span></code>の場合には，次の<code class="docutils literal notranslate"><span class="pre">radcol</span></code>で指定したCV成分<span class="math notranslate nohighlight">\(x_k\)</span>について，ビンあたりの体積を
+<span class="math notranslate nohighlight">\(4\pi x_{k}^{2} \Delta_{k}^{2}\)</span>として分布関数を計算する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">radcol</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">radcol</span> <span class="pre">=</span> <span class="pre">1</span></code></p></li>
+</ul>
+<p>何番目のCVが動径成分であるかを指定する．
+<code class="docutils literal notranslate"><span class="pre">use_radial</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合のみ有効となる．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">box_system</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">0.0</span> <span class="pre">0.0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">box_system</span> <span class="pre">=</span> <span class="pre">50.0d0</span> <span class="pre">50.0d0</span> <span class="pre">50.0d0</span></code></p></li>
+</ul>
+<p>系のボックスサイズを指定する．</p>
+<p>このパラメータは <code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">3</span></code> の場合に使用される．
+各方向のボックス長を順番に与える．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">use_spline</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">use_spline</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>PMF計算後にスプライン補間を行うかどうかを指定する．</p>
+<p><code class="docutils literal notranslate"><span class="pre">.true.</span></code> の場合はスプライン補間を実施し，<code class="docutils literal notranslate"><span class="pre">.false.</span></code> の場合は元のグリッドをそのまま使用する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">spline_resolution</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">4</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">spline_resolution</span> <span class="pre">=</span> <span class="pre">8</span></code></p></li>
+</ul>
+<p>スプライン補間時の分解能を指定する．</p>
+<p>大きな値を指定するほど細かい補間グリッドが生成される．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">gen_script_mpl2d</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">gen_script_mpl2d</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>2次元PMFを可視化するための Python スクリプトを生成するかどうかを指定する．</p>
+<p>現在は <code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">2</span></code> の場合のみサポートされている．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">skip_calc</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">skip_calc</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>PMF計算をスキップするかどうかを指定する．</p>
+<p><code class="docutils literal notranslate"><span class="pre">.true.</span></code> の場合はPMF計算を行わず，補助ファイルの生成などのみを実行する．
+<code class="docutils literal notranslate"><span class="pre">.false.</span></code> の場合は通常通りPMF計算を実行する．
+このオプションは，Matplotlib (Python)スクリプトを設定変した上で再作成したい場合に便利である．</p>
+</li>
+</ul>
+</section>
+<section id="matplotlib-param">
+<h3>&amp;matplotlib_param<a class="headerlink" href="#matplotlib-param" title="Link to this heading"></a></h3>
+<p>Python (Matplotlib)で2次元PMFを可視化するためのスクリプト作成するためのオプション．
+<code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code>内で<code class="docutils literal notranslate"><span class="pre">gen_script_mpl2d</span> <span class="pre">=</span> <span class="pre">.true.</span></code>とした場合に有効となる．</p>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">fpdf</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fpdf</span> <span class="pre">=</span> <span class="pre">&quot;pmf.pdf&quot;</span></code></p></li>
+</ul>
+<p>出力するPDFファイル名を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">labels</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">labels</span> <span class="pre">=</span> <span class="pre">&quot;$x$&quot;</span> <span class="pre">&quot;$y$&quot;</span> <span class="pre">&quot;PMF&quot;</span></code></p></li>
+</ul>
+<p>プロットに表示する軸ラベルを指定する．</p>
+<p><code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">2</span></code> の場合は，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">labels</span> <span class="o">=</span> <span class="s2">&quot;xlabel&quot;</span> <span class="s2">&quot;ylabel&quot;</span> <span class="s2">&quot;zlabel&quot;</span>
+</pre></div>
+</div>
+<p>の順に，<span class="math notranslate nohighlight">\(x\)</span>軸，<span class="math notranslate nohighlight">\(y\)</span>軸，およびPMF値に対応するカラーバーのラベルを指定する．</p>
+<p>LaTeX形式の数式表記を利用できる．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ranges</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ranges</span> <span class="pre">=</span> <span class="pre">-10.0</span> <span class="pre">10.0</span> <span class="pre">-5.0</span> <span class="pre">5.0</span> <span class="pre">0.0</span> <span class="pre">10.0</span></code></p></li>
+</ul>
+<p>描画範囲を指定する．</p>
+<p><code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">2</span></code> の場合は，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ranges</span> <span class="o">=</span> <span class="n">xmin</span> <span class="n">xmax</span> <span class="n">ymin</span> <span class="n">ymax</span> <span class="n">zmin</span> <span class="n">zmax</span>
+</pre></div>
+</div>
+<p>の順に指定する．</p>
+<p>ここで，</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">xmin</span></code>, <code class="docutils literal notranslate"><span class="pre">xmax</span></code> : <span class="math notranslate nohighlight">\(x\)</span>軸の表示範囲</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ymin</span></code>, <code class="docutils literal notranslate"><span class="pre">ymax</span></code> : <span class="math notranslate nohighlight">\(y\)</span>軸の表示範囲</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zmin</span></code>, <code class="docutils literal notranslate"><span class="pre">zmax</span></code> : PMF値の表示範囲</p></li>
+</ul>
+<p>を表す．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">tics</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">tics</span> <span class="pre">=</span> <span class="pre">1.0</span> <span class="pre">1.0</span> <span class="pre">0.5</span></code></p></li>
+</ul>
+<p>軸目盛りの間隔を指定する．</p>
+<p><code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">2</span></code> の場合は，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tics</span> <span class="o">=</span> <span class="n">xtic</span> <span class="n">ytic</span> <span class="n">ztic</span>
+</pre></div>
+</div>
+<p>の順に指定する．</p>
+<p>ここで，</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">xtic</span></code> : <span class="math notranslate nohighlight">\(x\)</span>軸の目盛り間隔</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ytic</span></code> : <span class="math notranslate nohighlight">\(y\)</span>軸の目盛り間隔</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ztic</span></code> : PMF値に対応するカラーバーの目盛り間隔</p></li>
+</ul>
+<p>を表す．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">scales</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1.0</span> <span class="pre">1.0</span> <span class="pre">1.0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">scales</span> <span class="pre">=</span> <span class="pre">10.0</span> <span class="pre">10.0</span> <span class="pre">0.239006</span></code></p></li>
+</ul>
+<p>軸の単位変換係数を指定する．</p>
+<p><code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">2</span></code> の場合は，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scales</span> <span class="o">=</span> <span class="n">xscale</span> <span class="n">yscale</span> <span class="n">zscale</span>
+</pre></div>
+</div>
+<p>の順に指定する．</p>
+<p>読み込まれたデータ値は描画時に各係数倍される．</p>
+<p>例えば，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scales</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="mf">10.0</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+<p>とすると，<span class="math notranslate nohighlight">\(x\)</span>軸および<span class="math notranslate nohighlight">\(y\)</span>軸の値は10倍された状態で表示される．</p>
+</li>
+</ul>
+</section>
+<section id="id11">
+<h3>出力ファイルのフォーマット<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">*_original.gnplt</span></code></p>
+<p>このファイルにPMF (<span class="math notranslate nohighlight">\(W(\boldsymbol{\zeta})\)</span>)が出力される．</p>
+<ul class="simple">
+<li><p>1列目: 座標</p></li>
+<li><p>2列目: PMF</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">*_g_original.gnplt</span></code></p>
+<p>このファイルに分布関数(<span class="math notranslate nohighlight">\(\rho\left(\boldsymbol{\zeta}\right)/\rho_{0}\left(\boldsymbol{\zeta}_{0}\right)\)</span>)が出力される．</p>
+<ul class="simple">
+<li><p>1列目: 座標</p></li>
+<li><p>2列目: 分布関数</p></li>
+</ul>
+</li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">use_spline</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合には，スプライン後のPMFと
+分布関数がそれぞれ<code class="docutils literal notranslate"><span class="pre">*_spline.gnplt</span></code>, <code class="docutils literal notranslate"><span class="pre">*_g_spline.gnplt</span></code>という名前で出力される．</p>
+</section>
+<section id="id12">
+<h3>解析例<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p>1つのデータ列を持つ時系列データ<code class="docutils literal notranslate"><span class="pre">inp.ts</span></code>から，<span class="math notranslate nohighlight">\(5\leq x \leq 10\)</span>の範囲について
+<span class="math notranslate nohighlight">\(\Delta x = 0.1\)</span>の間隔でPMF (<span class="math notranslate nohighlight">\(W\left(x\right)\)</span>)を計算する例を以下に示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">fcv</span>     <span class="o">=</span> <span class="s2">&quot;inp.ts&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+  <span class="n">ndim</span>        <span class="o">=</span> <span class="mi">1</span>
+  <span class="n">xyzcol</span>      <span class="o">=</span> <span class="mi">1</span>
+  <span class="n">ng3</span>         <span class="o">=</span> <span class="mi">50</span> 
+  <span class="k">del</span>         <span class="o">=</span> <span class="mf">0.1</span>
+  <span class="n">origin</span>      <span class="o">=</span> <span class="mf">5.0</span> 
+  <span class="n">temperature</span> <span class="o">=</span> <span class="mf">300.0</span><span class="n">d0</span>
+  <span class="n">use_spline</span>  <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+  <span class="n">use_radial</span>  <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">potential_of_mean_force</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+
+</pre></div>
+</div>
+</section>
+</section>
+<section id="restricted-radial-rrpmf">
+<h2>制限つき動径平均力ポテンシャル(restricted_radial, rrpmf)<a class="headerlink" href="#restricted-radial-rrpmf" title="Link to this heading"></a></h2>
+<p>この解析モードでは，何らかの反応座標(集団座標)によって
+条件づけられた状態の動径方向に対する自由エネルギープロファイルを計算できる．
+また，このプロファイルから，ホスト分子とゲスト分子の結合に伴う自由エネルギー変化
+(結合自由エネルギー)の計算が可能である．</p>
+<section id="id13">
+<h3>理論背景<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<p>系が配置<span class="math notranslate nohighlight">\({\bf X}\)</span>をとるときの
+ホスト–ゲスト分子間の距離，結合状態を規定する反応座標の値をそれぞれ<span class="math notranslate nohighlight">\(d\left({\bf X}\right)\)</span>, <span class="math notranslate nohighlight">\(\boldsymbol{\xi}\left({\bf X}\right)\)</span>とする．
+距離に対する平均力ポテンシャルを</p>
+<div class="amsmath math notranslate nohighlight" id="equation-233485e2-db45-4982-8c81-abe54851e414">
+<span class="eqno">(61)<a class="headerlink" href="#equation-233485e2-db45-4982-8c81-abe54851e414" title="Permalink to this equation"></a></span>\[\begin{align}
+w\left(r\right) &amp; =-\dfrac{1}{\beta}\log\left[\int d{\bf X}\,\dfrac{\delta\left(r-d\left({\bf X}\right)\right)}{4\pi r^{2}}\exp\left(-\beta U\left({\bf X}\right)\right)\right]+C
+\end{align}\]</div>
+<p>と定義する．
+さらに，反応座標空間上の結合状態に対応する領域を<span class="math notranslate nohighlight">\(\boldsymbol{\Upsilon}\)</span>とし，次式に示す特性関数<span class="math notranslate nohighlight">\(\Theta\left(\boldsymbol{\xi}\right)\)</span>を導入する．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-9d2e7fce-2d29-40e4-8fa2-989c86f478b8">
+<span class="eqno">(62)<a class="headerlink" href="#equation-9d2e7fce-2d29-40e4-8fa2-989c86f478b8" title="Permalink to this equation"></a></span>\[\begin{align}
+\Theta_{\mathrm{B}}\left(\boldsymbol{\xi}\right) &amp; =\begin{cases}
+1 &amp; \boldsymbol{\xi}\in\boldsymbol{\Upsilon}\\
+0 &amp; \boldsymbol{\xi}\notin\boldsymbol{\Upsilon}
+\end{cases}
+\end{align}\]</div>
+<p>この<span class="math notranslate nohighlight">\(\Theta\left(\boldsymbol{\xi}\right)\)</span>を用いれば，結合状態に属する配置に対する平均力ポテンシャルは</p>
+<div class="amsmath math notranslate nohighlight" id="equation-960e3152-338d-46b9-9530-cd8fb5d679b5">
+<span class="eqno">(63)<a class="headerlink" href="#equation-960e3152-338d-46b9-9530-cd8fb5d679b5" title="Permalink to this equation"></a></span>\[\begin{align}
+w_{\mathrm{B}}\left(r\right) &amp; =-\dfrac{1}{\beta}\log\left[\int d{\bf X}\,\dfrac{\delta\left(r-d\left({\bf X}\right)\right)}{4\pi r^{2}}\Theta_{\mathrm{B}}\left(\boldsymbol{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)\right]+C
+\end{align}\]</div>
+<p>と表せる．<span class="math notranslate nohighlight">\(w\left(r\right)\)</span>と<span class="math notranslate nohighlight">\(w_{\mathrm{B}}\left(r\right)\)</span>に含まれる定数<span class="math notranslate nohighlight">\(C\)</span>は同一の値とし，
+<span class="math notranslate nohighlight">\(w_{\mathrm{B}}\left(r\right)\)</span>が最小値がゼロとなるように設定する．
+<span class="math notranslate nohighlight">\(w\left(r\right)\)</span>は<span class="math notranslate nohighlight">\(r\)</span>が十分に大きいときに定数となるので，
+その定数を<span class="math notranslate nohighlight">\(\Delta w\)</span>とし，<span class="math notranslate nohighlight">\(w\left(r\right) = \Delta w\)</span>を満たす領域Uを<span class="math notranslate nohighlight">\(r_{0}\leq r\leq r_{1}\)</span>と定める．
+<span class="math notranslate nohighlight">\(r_{0}, r_{1}\)</span>の設定は，<span class="math notranslate nohighlight">\(w\left(r\right) = \Delta w\)</span>を満たしてさえいれば，任意に決めて良い．このことについては後で述べる．
+2分子が<span class="math notranslate nohighlight">\(r_{0}\leq r \leq r_{1}\)</span>の距離範囲に存在する状態Uと結合状態Bの
+存在確率比は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-8bfd5c7a-f464-4cce-8c80-20713bdd5bbe">
+<span class="eqno">(64)<a class="headerlink" href="#equation-8bfd5c7a-f464-4cce-8c80-20713bdd5bbe" title="Permalink to this equation"></a></span>\[\begin{align}
+\dfrac{{\displaystyle \int_{\boldsymbol{\Upsilon}}dr\,\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)}}{{\displaystyle \int_{r_{0}}^{r_{1}}dr\,\exp\left(-\beta w\left(r\right)\right)}}
+\end{align}\]</div>
+<p>であることから，UからBの変化に伴う自由エネルギー変化<span class="math notranslate nohighlight">\(\Delta G_{\mathrm{PMF}}\)</span>は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-4c36c1fd-aaeb-4140-9bad-60338753c9c0">
+<span class="eqno">(65)<a class="headerlink" href="#equation-4c36c1fd-aaeb-4140-9bad-60338753c9c0" title="Permalink to this equation"></a></span>\[\begin{align}
+\Delta G_{\mathrm{PMF}} &amp; =-\dfrac{1}{\beta}\log\dfrac{{\displaystyle \int_{\boldsymbol{\Upsilon}}dr\,4\pi r^{2}\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)}}{{\displaystyle \int_{r_{0}}^{r_{1}}dr\,4\pi r^{2}\exp\left(-\beta w\left(r\right)\right)}}
+\end{align}\]</div>
+<p>と表せる．
+分母に含まれる<span class="math notranslate nohighlight">\(w\left(r\right)\)</span>は<span class="math notranslate nohighlight">\(r_{0}\leq r\leq r_{1}\)</span>の範囲で<span class="math notranslate nohighlight">\(\Delta w\)</span>なので，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-012d3f74-305d-43ae-856f-a524455852c7">
+<span class="eqno">(66)<a class="headerlink" href="#equation-012d3f74-305d-43ae-856f-a524455852c7" title="Permalink to this equation"></a></span>\[\begin{align}
+\Delta G_{\mathrm{PMF}} &amp; =-\Delta w-\dfrac{1}{\beta}\log\dfrac{V_{\mathrm{B}}}{V_{\mathrm{U}}}
+\label{pmf:dGpmf}
+\end{align}\]</div>
+<p>と書き直せる．ただし，<span class="math notranslate nohighlight">\(V_{\mathrm{B}}\)</span>, <span class="math notranslate nohighlight">\(V_{\mathrm{U}}\)</span>は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-b2dda8bb-9074-4f06-84fa-06cb3783ac87">
+<span class="eqno">(67)<a class="headerlink" href="#equation-b2dda8bb-9074-4f06-84fa-06cb3783ac87" title="Permalink to this equation"></a></span>\[\begin{align}
+V_{\mathrm{B}} &amp; =\int_{\boldsymbol{\Upsilon}}dr\,4\pi r^{2}\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)\\
+V_{\mathrm{U}} &amp; =\int_{r_{0}}^{r_{1}}dr\,4\pi r^{2}
+\end{align}\]</div>
+<p>で定義される．式\eqref{pmf:dGpmf}の第2項は，ゲスト分子が濃度<span class="math notranslate nohighlight">\(1/V_{\mathrm{U}}\)</span>の状態から濃度<span class="math notranslate nohighlight">\(1/V_{\mathrm{B}}\)</span>の
+状態への移行に伴う自由エネルギー変化である．実験での結合自由エネルギーは標準状態濃度(典型的には<span class="math notranslate nohighlight">\(c^{\circ} = 1~\mathrm{mol~L^{-1}}\)</span>)
+のゲスト分子がホスト分子に結合するのに伴う自由エネルギー変化(<span class="math notranslate nohighlight">\(\Delta G^{\circ}\)</span>)であり，<span class="math notranslate nohighlight">\(\Delta G_{\mathrm{PMF}}\)</span>とは異なる．
+ゲスト分子1つで濃度<span class="math notranslate nohighlight">\(c^{\circ}\)</span>となるときの体積を<span class="math notranslate nohighlight">\(V^{\circ}\)</span>とするとこれは<span class="math notranslate nohighlight">\(V^{\circ} = 1661\)</span> Angstrom<span class="math notranslate nohighlight">\(^{3}\)</span>である．
+ゲスト分子が濃度<span class="math notranslate nohighlight">\(c^{\circ} = 1/V^{\circ} \)</span>の状態から濃度が<span class="math notranslate nohighlight">\(1/V_{\mathrm{U}}\)</span>の状態への移行に対する自由エネルギー変化<span class="math notranslate nohighlight">\(\Delta G^{\circ}_{\mathrm{corr}}\)</span>は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-73b4cc0d-d4a7-47e4-bde3-b3b2a16298d0">
+<span class="eqno">(68)<a class="headerlink" href="#equation-73b4cc0d-d4a7-47e4-bde3-b3b2a16298d0" title="Permalink to this equation"></a></span>\[\begin{align}
+\Delta G^{\circ}_{\mathrm{corr}} = - \dfrac{1}{\beta} \log \dfrac{V_{\mathrm{U}}}{V^{\circ}}
+\label{pmf:dGcorr}
+\end{align}\]</div>
+<p>である．つまり，<span class="math notranslate nohighlight">\(1/V^{\circ} \to 1/V_{\mathrm{B}}\)</span>の変化を<span class="math notranslate nohighlight">\(1/V^{\circ} \to 1/V_{\mathrm{U}}\)</span>と<span class="math notranslate nohighlight">\(1/V_{\mathrm{U}} 
+\to 1/V_{\mathrm{B}}\)</span>の2段階に分けることで，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-79cb8145-d9cd-4d3a-8a6e-e9b8e39fd3d7">
+<span class="eqno">(69)<a class="headerlink" href="#equation-79cb8145-d9cd-4d3a-8a6e-e9b8e39fd3d7" title="Permalink to this equation"></a></span>\[\begin{align}
+\Delta G^{\circ} = \Delta G_{\mathrm{PMF}} + \Delta G_{\mathrm{corr}}^{\circ}
+\end{align}\]</div>
+<p>と表すことができる．式\eqref{pmf:dGpmf}, \eqref{pmf:dGcorr}を上式に代入することで，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-cbed0bdb-0536-4c25-9960-ceb2915c2faa">
+<span class="eqno">(70)<a class="headerlink" href="#equation-cbed0bdb-0536-4c25-9960-ceb2915c2faa" title="Permalink to this equation"></a></span>\[\begin{align}
+\Delta G^{\circ} = - \Delta w - \dfrac{1}{\beta} \log \dfrac{V_{\mathrm{B}}}{V^{\circ}}
+\end{align}\]</div>
+<p>を得る．この式には<span class="math notranslate nohighlight">\(V_{\mathrm{U}}\)</span>が含まれていないことから，<span class="math notranslate nohighlight">\(\Delta G^{\circ}\)</span>の値は<span class="math notranslate nohighlight">\(r_{0},r_{1}\)</span>の選択に依存しない．</p>
+</section>
+<section id="id14">
+<h3>パラメータ一覧<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+</section>
+<section id="id15">
+<h3>入力ファイル(時系列データ)のフォーマット<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>1列目：時間軸</p></li>
+<li><p>2列目〜<span class="math notranslate nohighlight">\((N+1)\)</span>列目：CV値</p></li>
+<li><p>最終列：分子間距離</p></li>
+</ul>
+<p>1 列目は読み込まれず，2 列目から1 つめのデータ列としてカウントされる．
+分子間距離のみがCVの場合，つまり</p>
+<ul class="simple">
+<li><p>1列目：時間軸</p></li>
+<li><p>2列目：分子間距離</p></li>
+</ul>
+<p>の場合には，<code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code>内で<code class="docutils literal notranslate"><span class="pre">only_r</span> <span class="pre">=</span> <span class="pre">.true.</span></code>を指定すれば良い．</p>
+</section>
+<section id="id16">
+<h3><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code><a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">calcfe</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.true.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">calcfe</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>標準結合自由エネルギーを計算するかどうかを指定する．
+<code class="docutils literal notranslate"><span class="pre">.true.</span></code> の場合は標準結合自由エネルギーを計算し，<code class="docutils literal notranslate"><span class="pre">.false.</span></code> の場合はPMFのみを出力する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ndim</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">1</span></code></p></li>
+</ul>
+<p>CVの次元数を指定する．
+現在は1次元および多次元PMFに対応している．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">only_r</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">only_r</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></li>
+</ul>
+<p>分子間距離がCVであり，それ以外のCVが存在しない場合に<code class="docutils literal notranslate"><span class="pre">.true.</span></code>を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">temperature</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">298.0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">temperature</span> <span class="pre">=</span> <span class="pre">300.0</span></code></p></li>
+</ul>
+<p>自由エネルギー計算に用いる温度 <span class="math notranslate nohighlight">\(T\)</span> [K] を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dr</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">dr</span> <span class="pre">=</span> <span class="pre">0.1d0</span></code></p></li>
+</ul>
+<p>距離方向のグリッド間隔を指定する．
+グリッド点間の間隔 <span class="math notranslate nohighlight">\(\Delta r\)</span> として用いられる．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ngrid</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ngrid</span> <span class="pre">=</span> <span class="pre">1000</span></code></p></li>
+</ul>
+<p>距離方向のグリッド数を指定する．
+PMFは <code class="docutils literal notranslate"><span class="pre">ngrid</span></code> 個のグリッド上で評価される．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nsta</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nsta</span> <span class="pre">=</span> <span class="pre">100</span></code></p></li>
+</ul>
+<p>解析を開始するフレーム番号を指定する．
+<code class="docutils literal notranslate"><span class="pre">nsta</span></code> より前のフレームは解析から除外される．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">use_bootstrap</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">use_bootstrap</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>ブートストラップ法による誤差評価を実施するかどうかを指定する．
+<code class="docutils literal notranslate"><span class="pre">.true.</span></code> の場合は <code class="docutils literal notranslate"><span class="pre">&amp;bootopt_param</span></code> の設定に従ってブートストラップ解析を行う．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">vol0</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1661.0d0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">vol0</span> <span class="pre">=</span> <span class="pre">1661.0d0</span></code></p></li>
+</ul>
+<p>標準状態体積 <span class="math notranslate nohighlight">\(V^\circ\)</span>を指定する．
+デフォルト値はAngstrom単位で1 mol/Lに対応する体積(1661 Angstrom<span class="math notranslate nohighlight">\(^3\)</span>)である．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">urange</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">urange</span> <span class="pre">=</span> <span class="pre">25.0</span> <span class="pre">30.0</span></code></p></li>
+</ul>
+<p>非結合状態（unbound state）とみなす距離範囲を指定する．
+1つ目の値が下限，2つ目の値が上限を表す．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">bound_range</span></code></strong></p>
+<ul>
+<li><p>Default: None</p></li>
+<li><p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">react_range</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="mf">10.0</span>
+              <span class="mf">5.0</span> <span class="mf">20.0</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>結合状態（bound state）のCV範囲を指定する．
+各行について，1つ目の値が下限，2つ目の値が上限を表す．
+<code class="docutils literal notranslate"><span class="pre">ndim</span></code> 個の範囲を指定することで，多次元結合領域を定義できる．</p>
+</li>
+</ul>
+</section>
+<section id="bootopt-param">
+<h3><code class="docutils literal notranslate"><span class="pre">&amp;bootopt_param</span></code><a class="headerlink" href="#bootopt-param" title="Link to this heading"></a></h3>
+<p>ここでは，ブートストラップ法による誤差解析の設定を行う．
+<code class="docutils literal notranslate"><span class="pre">use_bootstrap</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合に有効となる．</p>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">iseed</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: 自動生成</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">iseed</span> <span class="pre">=</span> <span class="pre">3141592</span></code></p></li>
+</ul>
+<p>ブートストラップ解析で使用する乱数シードを指定する．
+<code class="docutils literal notranslate"><span class="pre">iseed</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code> の場合はプログラムが自動的にシードを生成する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nsample</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nsample</span> <span class="pre">=</span> <span class="pre">1000</span></code></p></li>
+</ul>
+<p>各ブートストラップ試行で抽出するサンプル数を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">duplicate</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.true.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">duplicate</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></li>
+</ul>
+<p>ブートストラップサンプリング時に重複抽出を許可するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ntrial</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ntrial</span> <span class="pre">=</span> <span class="pre">100</span></code></p></li>
+</ul>
+<p>ブートストラップ試行回数を指定する．
+試行回数を増やすことで統計誤差の推定精度が向上するが，計算コストも増加する．</p>
+</li>
+</ul>
+</section>
+<section id="id17">
+<h3>出力ファイルのフォーマット<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*.rd</span></code></p>
+<ul>
+<li><p>1列目: 分子間距離<span class="math notranslate nohighlight">\(r\)</span></p></li>
+<li><p>2列目: <span class="math notranslate nohighlight">\(r\)</span>に沿った通常のPMF</p></li>
+<li><p>3列目: 結合状態に対応するPMF</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id18">
+<h3>解析例<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<p>CV数が1，最終列に分子間距離を格納した時系列データ<code class="docutils literal notranslate"><span class="pre">inp.ts</span></code>から，<span class="math notranslate nohighlight">\(18\leq r/\)</span>Angstrom<span class="math notranslate nohighlight">\(\leq 20\)</span>の範囲を解離状態，結合状態に対応するCV (<span class="math notranslate nohighlight">\(\zeta\)</span>)の値域が<span class="math notranslate nohighlight">\(5.0\leq \zeta \leq 10.0\)</span>の範囲のときの結合自由エネルギーの値を計算する例を下記に記す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">fcv</span>      <span class="o">=</span> <span class="s2">&quot;inp.ts&quot;</span> 
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span>         <span class="o">=</span> <span class="s2">&quot;out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">calcfe</span>        <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">only_r</span>        <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">ndim</span>          <span class="o">=</span>  <span class="mi">1</span>       
+ <span class="n">temperature</span>   <span class="o">=</span>  <span class="mf">300.0</span>   
+ <span class="n">dr</span>            <span class="o">=</span>  <span class="mf">0.1</span><span class="n">d0</span>   
+ <span class="n">ngrid</span>         <span class="o">=</span>  <span class="mi">1000</span>    
+ <span class="n">nsta</span>          <span class="o">=</span>  <span class="mi">1</span>       
+ <span class="n">use_bootstrap</span> <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>  
+ <span class="n">vol0</span>          <span class="o">=</span> <span class="mf">1661.0</span><span class="n">d0</span>
+ <span class="n">urange</span>        <span class="o">=</span>  <span class="mf">18.0</span>  <span class="mf">20.0</span>
+ <span class="n">bound_range</span>   <span class="o">=</span>  <span class="mf">5.0</span>  <span class="mf">10.0</span> 
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">restricted_radial</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+</pre></div>
+</div>
+<p>これを実行すると，ログファイルの後半に結果が出力される．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span> <span class="n">Thermodynamic</span> <span class="n">analysis</span> <span class="o">...</span>
+<span class="n">vb</span>      <span class="p">(</span><span class="n">A</span><span class="o">^</span><span class="mi">3</span><span class="p">)</span>      <span class="o">=</span>      <span class="mf">21.5444908</span>
+<span class="n">wu</span>      <span class="p">(</span><span class="n">kcal</span><span class="o">/</span><span class="n">mol</span><span class="p">)</span> <span class="o">=</span>      <span class="o">-</span><span class="mf">1.3486059</span>
+<span class="n">wb</span>      <span class="p">(</span><span class="n">kcal</span><span class="o">/</span><span class="n">mol</span><span class="p">)</span> <span class="o">=</span>       <span class="mf">0.0000000</span>
+<span class="n">dw</span>      <span class="p">(</span><span class="n">kcal</span><span class="o">/</span><span class="n">mol</span><span class="p">)</span> <span class="o">=</span>      <span class="o">-</span><span class="mf">1.3486059</span>
+<span class="n">dGv</span>     <span class="p">(</span><span class="n">kcal</span><span class="o">/</span><span class="n">mol</span><span class="p">)</span> <span class="o">=</span>       <span class="mf">2.5903536</span>
+<span class="n">dGzero</span>  <span class="p">(</span><span class="n">kcal</span><span class="o">/</span><span class="n">mol</span><span class="p">)</span> <span class="o">=</span>       <span class="mf">3.9389595</span>
+<span class="n">Keq</span>     <span class="p">(</span><span class="n">M</span><span class="o">^-</span><span class="mi">1</span><span class="p">)</span>     <span class="o">=</span>   <span class="mf">1.3506025E-03</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="extract-frame-extf">
+<h2>フレーム抽出(extract_frame, extf)<a class="headerlink" href="#extract-frame-extf" title="Link to this heading"></a></h2>
+<p>この解析モードでは，CVの値域指定により，特定の条件を満たすスナップショット(フレーム)を抽出する．</p>
+<section id="id19">
+<h3>パラメータ一覧<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+</section>
+<section id="id20">
+<h3><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code><a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ndim</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">2</span></code></p></li>
+</ul>
+<p>時系列CVデータの次元数を指定する．</p>
+<p><code class="docutils literal notranslate"><span class="pre">extract_range</span></code> には，この次元数に対応した範囲を指定する必要がある．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">extract_range</span></code></strong></p>
+<ul>
+<li><p>Default: None</p></li>
+<li><p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">extract_range</span> <span class="o">=</span> <span class="o">-</span><span class="mf">5.0</span><span class="n">d0</span> <span class="mf">5.0</span><span class="n">d0</span>
+                 <span class="mf">1.0</span><span class="n">d0</span> <span class="mf">0.0</span><span class="n">d0</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>フレームを抽出するCV領域を指定する．</p>
+<p>各CVについて，下限値と上限値を1組として与える．</p>
+<p>上記の例では，</p>
+<ul class="simple">
+<li><p>CV1: <span class="math notranslate nohighlight">\(-5.0 \leq \mathrm{CV}_1 \leq 5.0\)</span></p></li>
+<li><p>CV2: <span class="math notranslate nohighlight">\(0.0 \leq \mathrm{CV}_2 \leq 1.0\)</span></p></li>
+</ul>
+<p>を満たすフレームが抽出される．</p>
+<p><code class="docutils literal notranslate"><span class="pre">ndim</span></code> 個の範囲を指定することで，多次元の抽出条件を設定できる．</p>
+</li>
+</ul>
+</section>
+<section id="id21">
+<h3>出力ファイルのフォーマット<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<p>出力ファイル(トラジェクトリ)のフォーマットは，
+入力のトラジェクトリのフォーマット(dcd or xtc or nc (netcdf))と同じものとなる．</p>
+</section>
+<section id="id22">
+<h3>解析例<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<p>CV数が1，CV (<span class="math notranslate nohighlight">\(\zeta\)</span>)の時系列データ<code class="docutils literal notranslate"><span class="pre">inp.ts</span></code>をもとに，<span class="math notranslate nohighlight">\(5\leq \zeta \leq 10\)</span>の条件を満たす
+フレームを入力トラジェクトリから抽出する場合の解析例を示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">ftraj</span>    <span class="o">=</span> <span class="s2">&quot;input.dcd&quot;</span> 
+ <span class="n">fcv</span>      <span class="o">=</span> <span class="s2">&quot;inp.ts&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span>         <span class="o">=</span> <span class="s2">&quot;out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">ndim</span>          <span class="o">=</span>  <span class="mi">1</span>       
+ <span class="n">extract_range</span> <span class="o">=</span>  <span class="mf">5.0</span>  <span class="mf">10.0</span> 
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">extract_frame</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+</pre></div>
+</div>
+<p>これを実行すると，<code class="docutils literal notranslate"><span class="pre">out.dcd</span></code>が出力される．</p>
+</section>
+</section>
+<section id="random-frame-randf">
+<h2>フレームのランダム抽出(random_frame, randf)<a class="headerlink" href="#random-frame-randf" title="Link to this heading"></a></h2>
+<p>この解析モードでは，ランダムにスナップショット(フレーム)を抽出する．</p>
+<section id="id23">
+<h3>パラメータ一覧<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
+</section>
+<section id="id24">
+<h3><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code><a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nsample</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">100</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nsample</span> <span class="pre">=</span> <span class="pre">100</span></code></p></li>
+</ul>
+<p>ランダムに抽出するフレーム数を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">iseed</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">-1</span></code> (自動生成)</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">iseed</span> <span class="pre">=</span> <span class="pre">3141592</span></code></p></li>
+</ul>
+<p>ランダム抽出に使用する乱数シードを指定する．</p>
+<p><code class="docutils literal notranslate"><span class="pre">iseed</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code> の場合はプログラムが自動的にシードを生成する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">output_trajtype</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">dcd</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">output_trajtype</span> <span class="pre">=</span> <span class="pre">&quot;dcd&quot;</span></code></p></li>
+</ul>
+<p>出力するトラジェクトリ形式を指定する．</p>
+<p>現在は</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dcd</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">xtc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">netcdf</span></code></p></li>
+</ul>
+<p>を指定できる．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">duplicate</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">duplicate</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>同じフレームを複数回抽出することを許可するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">out_rst7</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">out_rst7</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>抽出した各フレームをAMBER rst7形式でも出力するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">shuffle</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">shuffle</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>フレームをシャッフルして出力するかどうかを指定する．
+<code class="docutils literal notranslate"><span class="pre">.true.</span></code> の場合は全フレームをランダムな順序に並べ替えて出力する．</p>
+</li>
+</ul>
+</section>
+<section id="id25">
+<h3>出力ファイルのフォーマット<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<p>出力ファイル(トラジェクトリ)のフォーマットは，
+入力のトラジェクトリのフォーマット(dcd or xtc or nc (netcdf))と同じものとなる．</p>
+</section>
+<section id="id26">
+<h3>解析例<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
+<p>トラジェクトリファイルとして，<code class="docutils literal notranslate"><span class="pre">input.dcd</span></code>を指定し，ランダムに100フレームを抽出する場合の例を以下に示す．また，トラジェクトリと合わせて<code class="docutils literal notranslate"><span class="pre">rst7</span></code>形式(<code class="docutils literal notranslate"><span class="pre">inpcrd</span></code>)で各フレームでの構造を出力する．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">ftraj</span>    <span class="o">=</span> <span class="s2">&quot;input.dcd&quot;</span> 
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span>         <span class="o">=</span> <span class="s2">&quot;out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">nsample</span> <span class="o">=</span> <span class="mi">100</span>
+ <span class="n">output_trajtype</span> <span class="o">=</span> <span class="s2">&quot;dcd&quot;</span>
+ <span class="n">duplicate</span>       <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">out_rst7</span>        <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span> 
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">random_frame</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+</pre></div>
+</div>
+<p>これを実行すると，<code class="docutils literal notranslate"><span class="pre">out.dcd</span></code>と<code class="docutils literal notranslate"><span class="pre">outXXXXX.inpcrd</span></code> (<code class="docutils literal notranslate"><span class="pre">XXXXX=00001,</span> <span class="pre">...,</span> <span class="pre">00100</span></code>)が出力される．</p>
+</section>
+</section>
+<section id="moving-average-movave">
+<h2>移動平均(moving_average, movave)<a class="headerlink" href="#moving-average-movave" title="Link to this heading"></a></h2>
+<p>この解析モードでは，与えられた1次元データ(分布関数など)の移動平均による平滑化を行う．</p>
+<section id="id27">
+<h3>パラメータ一覧<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
+</section>
+<section id="id28">
+<h3><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code><a class="headerlink" href="#id28" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dx</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">=</span> <span class="pre">0.1d0</span></code></p></li>
+</ul>
+<p>関数データのグリッド間隔を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">xsta</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0.0d0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">xsta</span> <span class="pre">=</span> <span class="pre">0.0d0</span></code></p></li>
+</ul>
+<p>グリッドの開始位置を指定する．</p>
+<p><span class="math notranslate nohighlight">\(i\)</span>番目のグリッド位置を<span class="math notranslate nohighlight">\(x_i\)</span>とすると，</p>
+<div class="math notranslate nohighlight">
+\[
+    x_i = x_0 + (i-1)\Delta x
+    \]</div>
+<p>で与えられる．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nregion</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nregion</span> <span class="pre">=</span> <span class="pre">2</span></code></p></li>
+</ul>
+<p>異なる移動平均条件を適用する領域数を指定する．
+<code class="docutils literal notranslate"><span class="pre">npoint</span></code> には，この領域数に対応した個数の値を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">xsep</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0.0d0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">xsep</span> <span class="pre">=</span> <span class="pre">1.0d0</span></code></p></li>
+</ul>
+<p>異なる移動平均幅を適用する領域の境界を指定する．
+<code class="docutils literal notranslate"><span class="pre">nregion</span> <span class="pre">=</span> <span class="pre">1</span></code> の場合は使用されず，<code class="docutils literal notranslate"><span class="pre">xsep</span> <span class="pre">=</span> <span class="pre">0.0d0</span></code> を指定すればよい．
+例えば，<span class="math notranslate nohighlight">\(N\)</span>領域に分ける場合には，境界値を<span class="math notranslate nohighlight">\(N-1\)</span>個指定する必要がある．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">npoint</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">npoint</span> <span class="pre">=</span> <span class="pre">3</span> <span class="pre">5</span></code></p></li>
+</ul>
+<p>各領域で移動平均に用いるデータ点数を指定する．
+奇数を指定する必要がある．
+上記の例では，</p>
+<ul class="simple">
+<li><p>第1領域：3点移動平均</p></li>
+<li><p>第2領域：5点移動平均</p></li>
+</ul>
+<p>を適用する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">include_zero</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.true.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">include_zero</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></li>
+</ul>
+<p>移動平均後に原点での値を保持するかどうかを指定する．
+<code class="docutils literal notranslate"><span class="pre">.true.</span></code> の場合は，原点での値は入力値のまま固定される．</p>
+</li>
+</ul>
+</section>
+<section id="id29">
+<h3>出力ファイルのフォーマット<a class="headerlink" href="#id29" title="Link to this heading"></a></h3>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">*XXXX.dat</span></code></p>
+<ul class="simple">
+<li><p>1列目：<span class="math notranslate nohighlight">\(x\)</span>軸</p></li>
+<li><p>2列目: 関数値</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>などで入力したファイルごとに平滑化されたファイルが出力される．</p>
+</li>
+</ul>
+</section>
+<section id="id30">
+<h3>解析例<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
+<p>1次元の関数<span class="math notranslate nohighlight">\(f\left(x\right)\)</span>を格納した
+ファイル<code class="docutils literal notranslate"><span class="pre">input.dat</span></code> (軸の始点<code class="docutils literal notranslate"><span class="pre">0</span></code>, グリッド間隔<code class="docutils literal notranslate"><span class="pre">0.1</span></code>)を
+<span class="math notranslate nohighlight">\(x\leq 1.0\)</span>, <span class="math notranslate nohighlight">\(x&gt; 1.0\)</span>の2つの領域に分割して，それぞれの領域について3点平均，
+5点平均する場合のインプットを下記に示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">fcv</span>      <span class="o">=</span> <span class="s2">&quot;input.dat&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span> <span class="o">=</span> <span class="s2">&quot;out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+  <span class="n">dx</span>          <span class="o">=</span> <span class="mf">0.1</span><span class="n">d0</span>  
+  <span class="n">xsta</span>        <span class="o">=</span> <span class="mf">0.0</span><span class="n">d0</span>  
+  <span class="n">xsep</span>        <span class="o">=</span> <span class="mf">1.0</span><span class="n">d0</span>  
+  <span class="n">nregion</span>      <span class="o">=</span> <span class="mi">2</span>     
+  <span class="n">npoint</span>       <span class="o">=</span> <span class="mi">3</span> <span class="mi">5</span>   
+  <span class="n">include_zero</span> <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">moving_average</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+</pre></div>
+</div>
+<p>これを実行すると，平滑化された関数データを格納した<code class="docutils literal notranslate"><span class="pre">out0001.dat</span></code>が出力される．</p>
+</section>
+</section>
+<section id="average-function-avef">
+<h2>関数の平均(average_function, avef)<a class="headerlink" href="#average-function-avef" title="Link to this heading"></a></h2>
+<p>この解析モードでは，複数の入力ファイルに格納されている1次元関数を平均する．
+例えば，<span class="math notranslate nohighlight">\(i\)</span>番目のファイルに格納されている関数を<span class="math notranslate nohighlight">\(f_{i}\left(x\right)\)</span>，ファイル数を<span class="math notranslate nohighlight">\(N\)</span>とすると，平均後の関数<span class="math notranslate nohighlight">\(f_{\mathrm{ave}}\left(x\right)\)</span>は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-b7fb9e52-e1d2-4827-80b6-059c8fe4c18b">
+<span class="eqno">(71)<a class="headerlink" href="#equation-b7fb9e52-e1d2-4827-80b6-059c8fe4c18b" title="Permalink to this equation"></a></span>\[\begin{align}
+f_{\mathrm{ave}}\left(x\right) = \dfrac{1}{N}\sum_{i=1}^{N}f_{i}\left(x\right),
+\end{align}\]</div>
+<p>で表される．</p>
+<section id="id31">
+<h3>パラメータ一覧<a class="headerlink" href="#id31" title="Link to this heading"></a></h3>
+</section>
+<section id="id32">
+<h3><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code><a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">use_bootstrap</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">use_bootstrap</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>ブートストラップ法による誤差評価を実施するかどうかを指定する．
+<code class="docutils literal notranslate"><span class="pre">.true.</span></code> の場合は，<code class="docutils literal notranslate"><span class="pre">&amp;bootopt_param</span></code> の設定に従ってブートストラップ解析を行う．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">xsta</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0.0d0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">xsta</span> <span class="pre">=</span> <span class="pre">0.0d0</span></code></p></li>
+</ul>
+<p>グリッドの開始位置を指定する．</p>
+<p><span class="math notranslate nohighlight">\(i\)</span>番目のグリッド位置を<span class="math notranslate nohighlight">\(x_i\)</span>とすると，</p>
+<div class="math notranslate nohighlight">
+\[
+    x_i = x_0 + (i-1)\Delta x
+    \]</div>
+<p>で与えられる．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dx</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0.1d0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">=</span> <span class="pre">0.1d0</span></code></p></li>
+</ul>
+<p>関数データのグリッド間隔を指定する．</p>
+</li>
+</ul>
+</section>
+<section id="id33">
+<h3><code class="docutils literal notranslate"><span class="pre">&amp;bootopt_param</span></code><a class="headerlink" href="#id33" title="Link to this heading"></a></h3>
+<p>ここでは，ブートストラップ法による誤差解析の設定を行う．
+<code class="docutils literal notranslate"><span class="pre">use_bootstrap</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合に有効となる．</p>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">iseed</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: 自動生成</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">iseed</span> <span class="pre">=</span> <span class="pre">3141592</span></code></p></li>
+</ul>
+<p>ブートストラップ解析で使用する乱数シードを指定する．
+<code class="docutils literal notranslate"><span class="pre">iseed</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code> の場合はプログラムが自動的にシードを生成する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nsample</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nsample</span> <span class="pre">=</span> <span class="pre">1000</span></code></p></li>
+</ul>
+<p>各ブートストラップ試行で抽出するサンプル数を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">duplicate</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.true.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">duplicate</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></li>
+</ul>
+<p>ブートストラップサンプリング時に重複抽出を許可するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ntrial</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ntrial</span> <span class="pre">=</span> <span class="pre">100</span></code></p></li>
+</ul>
+<p>ブートストラップ試行回数を指定する．
+試行回数を増やすことで統計誤差の推定精度が向上するが，計算コストも増加する．</p>
+</li>
+</ul>
+</section>
+<section id="id34">
+<h3>出力ファイルのフォーマット<a class="headerlink" href="#id34" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*.ave</span></code></p>
+<ul>
+<li><p>1列目：<span class="math notranslate nohighlight">\(x\)</span>軸</p></li>
+<li><p>2列目：関数値</p></li>
+<li><p>3列目：標準誤差(<code class="docutils literal notranslate"><span class="pre">use_bootstrap</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id35">
+<h3>解析例<a class="headerlink" href="#id35" title="Link to this heading"></a></h3>
+<p>1次元の関数<span class="math notranslate nohighlight">\(f\left(x\right)\)</span> (軸の始点<code class="docutils literal notranslate"><span class="pre">0</span></code>, グリッド間隔<code class="docutils literal notranslate"><span class="pre">0.1</span></code>)がファイルごとに格納されていて，そのファイルリストが<code class="docutils literal notranslate"><span class="pre">list</span></code>にまとめられているとして，その平均と標準誤差をブートストラップ法で計算する例を示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">flist_cv</span> <span class="o">=</span> <span class="s2">&quot;list&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span>         <span class="o">=</span> <span class="s2">&quot;out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">use_bootstrap</span> <span class="o">=</span>  <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">xsta</span>          <span class="o">=</span>  <span class="mf">0.0</span><span class="n">d0</span>  
+ <span class="n">dx</span>            <span class="o">=</span>  <span class="mf">0.1</span><span class="n">d0</span>  
+<span class="o">/</span>
+
+<span class="o">&amp;</span><span class="n">bootopt_param</span>
+ <span class="n">duplicate</span>     <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>   
+ <span class="n">iseed</span>         <span class="o">=</span>  <span class="mi">3141592</span> 
+ <span class="n">nsample</span>       <span class="o">=</span>  <span class="mi">1000</span>    
+ <span class="n">ntrial</span>        <span class="o">=</span>  <span class="mi">100</span>     
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">average_function</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+</pre></div>
+</div>
+<p>これを実行すると，平均化された関数データを格納した<code class="docutils literal notranslate"><span class="pre">out.ave</span></code>が出力される．</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../03_anatra_usage/combined.html" class="btn btn-neutral float-left" title="anatraの使い方" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../06_iepdyn/combined.html" class="btn btn-neutral float-right" title="Integral-Equation formalism of Population DYNamics (IEPDYN)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

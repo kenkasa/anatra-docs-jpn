@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>自由体積プロファイル(free_volume) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">自由体積プロファイル(free_volume)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/03_anatra_usage/13_free_volume.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="free-volume">
+<h1>自由体積プロファイル(free_volume)<a class="headerlink" href="#free-volume" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">free_volume</span></code>は，ユーザーが指定した座標軸に沿って，自由体積(free volume)の存在割合のプロファイルを計算する．
+自由体積とは，<code class="docutils literal notranslate"><span class="pre">target_selid</span></code>で指定した原子が存在しない領域として定義される．
+原子のサイズはLennard-Jonesパラメータを用いて見積もられ，
+各座標位置に対してランダムに粒子を挿入し，挿入した粒子がどの原子とも重ならない割合を自由体積率として評価する．</p>
+<p>現時点では，座標軸として<span class="math notranslate nohighlight">\(z\)</span>方向(<code class="docutils literal notranslate"><span class="pre">-coord_type</span> <span class="pre">z</span></code>)のみをサポートしている．
+また，解析前に<code class="docutils literal notranslate"><span class="pre">center_selid</span></code>で指定した分子群を基準として系の中心位置を合わせた後，
+各<span class="math notranslate nohighlight">\(z\)</span>座標における自由体積率が計算される．</p>
+<section id="id1">
+<h2>オプション一覧<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p><strong>オプション</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+<th class="head text-center"><p><strong>オプション</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-stype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sfile</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tintype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tin</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-flist_traj</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-fhead</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-fprmtop</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-xsta</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-dx</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-ngrid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-nins</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel0</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel1</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-target_selid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-center_selid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-coord_type</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-prep_only</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p>–</p></td>
+<td class="text-center"><p>–</p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<ul>
+<li><p><strong>-fprmtop &lt;Amber parm7ファイル&gt;</strong></p>
+<ul class="simple">
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-fprmtop</span> <span class="pre">system.parm7</span></code></p></li>
+</ul>
+<p>Lennard-Jonesパラメータを取得するためのAmber parm7ファイルを指定する．
+現在の実装では，parm7形式のみ利用可能である．</p>
+</li>
+<li><p><strong>-xsta &lt;初期座標(ANGSTROM)&gt;</strong></p>
+<ul class="simple">
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-xsta</span> <span class="pre">-30.0</span></code></p></li>
+</ul>
+<p>プロファイルを計算する座標範囲の開始位置を指定する．</p>
+</li>
+<li><p><strong>-dx &lt;グリッド間隔(ANGSTROM)&gt;</strong></p>
+<ul class="simple">
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-dx</span> <span class="pre">1.0</span></code></p></li>
+</ul>
+<p>自由体積率を評価するグリッドの間隔を指定する．</p>
+</li>
+<li><p><strong>-ngrid &lt;グリッド数&gt;</strong></p>
+<ul class="simple">
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-ngrid</span> <span class="pre">60</span></code></p></li>
+</ul>
+<p>計算するグリッド数を指定する．</p>
+</li>
+<li><p><strong>-nins &lt;粒子挿入回数&gt;</strong></p>
+<ul class="simple">
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-nins</span> <span class="pre">1000</span></code></p></li>
+</ul>
+<p>各グリッドに対して実行するランダム粒子挿入の回数を指定する．
+この値を大きくすると統計精度は向上するが，計算時間も増加する．</p>
+</li>
+<li><p><strong>-target_selid &lt;対象原子のselection ID&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-target_selid</span> <span class="pre">0</span></code></p></li>
+</ul>
+<p>自由体積を定義する対象原子群のselection IDを指定する．
+この原子群と重ならない空間が自由体積として扱われる．</p>
+</li>
+<li><p><strong>-center_selid &lt;中心合わせに用いるselection ID&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-center_selid</span> <span class="pre">1</span></code></p></li>
+</ul>
+<p>系の中心位置を決定するためのselection IDを指定する．
+各フレームについて，この分子群を基準に座標をシフトした後に解析を行う．</p>
+</li>
+<li><p><strong>-coord_type &lt;座標軸&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">z</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-coord_type</span> <span class="pre">z</span></code></p></li>
+</ul>
+<p>自由体積プロファイルを計算する座標軸を指定する．
+現在の実装では<code class="docutils literal notranslate"><span class="pre">z</span></code>のみ利用可能である．</p>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h2>出力ファイルのフォーマット<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.fvz</span></code></p>
+<p>指定した座標軸に沿った自由体積率のプロファイルが出力される．</p>
+<ul class="simple">
+<li><p>1列目: 座標値</p></li>
+<li><p>2列目: 自由体積率</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h2>解析例<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<section id="id4">
+<h3>脂質膜系における自由体積プロファイル<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+anatra<span class="w"> </span>free_volume<span class="w">                </span><span class="se">\</span>
+<span class="w">  </span>-stype<span class="w">          </span>psf<span class="w">             </span><span class="se">\</span>
+<span class="w">  </span>-sfile<span class="w">          </span>complex.psf<span class="w">     </span><span class="se">\</span>
+<span class="w">  </span>-tintype<span class="w">        </span>netcdf<span class="w">          </span><span class="se">\</span>
+<span class="w">  </span>-flist_traj<span class="w">     </span>flist<span class="w">           </span><span class="se">\</span>
+<span class="w">  </span>-fhead<span class="w">          </span>out<span class="w">             </span><span class="se">\</span>
+<span class="w">  </span>-fprmtop<span class="w">        </span>complex.prmtop<span class="w">  </span><span class="se">\</span>
+<span class="w">  </span>-xsta<span class="w">           </span><span class="m">0</span>.0<span class="w">             </span><span class="se">\</span>
+<span class="w">  </span>-dx<span class="w">             </span><span class="m">1</span>.0<span class="w">             </span><span class="se">\</span>
+<span class="w">  </span>-ngrid<span class="w">          </span><span class="m">60</span><span class="w">              </span><span class="se">\</span>
+<span class="w">  </span>-nins<span class="w">           </span><span class="m">1000</span><span class="w">            </span><span class="se">\</span>
+<span class="w">  </span>-sel0<span class="w">           </span>all<span class="w">             </span><span class="se">\</span>
+<span class="w">  </span>-sel1<span class="w">           </span>resname<span class="w"> </span>POPC<span class="w">    </span><span class="se">\</span>
+<span class="w">  </span>-target_selid<span class="w">   </span><span class="m">0</span><span class="w">               </span><span class="se">\</span>
+<span class="w">  </span>-center_selid<span class="w">   </span><span class="m">1</span><span class="w">               </span><span class="se">\</span>
+<span class="w">  </span>-coord_type<span class="w">     </span>z<span class="w">               </span><span class="se">\</span>
+<span class="w">  </span>-prep_only<span class="w">      </span><span class="nb">false</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

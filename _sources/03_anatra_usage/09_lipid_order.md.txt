@@ -1,0 +1,74 @@
+## 脂質膜秩序(lipid_order, scd)
+
+```{figure} ./figures/scd.eps
+:name: figure_scd.eps
+:scale: 60
+:align: right 
+$z$軸と特定の炭素原子と水素原子を結ぶベクトルのなす角を$\theta$と定義する．$\theta$は脂質の局所的な配向を表す．
+```
+
+``lipid_order`` (``scd``)ではリン脂質のアシル鎖に関する配向秩序パラメータ$S_{\mathrm{CD}}$の計算が可能である．
+脂質膜の法線方向を$z$として，特定の炭素原子と隣接する水素原子のなす角を$\theta$と定義する．
+$S_{\mathrm{CD}}$は$\theta$を用いて式で定義される．
+
+\begin{align}
+S_{\mathrm{CD}} & =\dfrac{1}{2}\braket{3\cos^{2}\theta-1}.
+\end{align}
+
+$S_{\mathrm{CD}}$の値域は$0\leq S_{\mathrm{CD}} \leq 1$であり，
+その値が大きいほど秩序性が高く，0は無秩序であることを意味する．
+$S_{\mathrm{CD}}$は炭素ごとに定義されるので，炭素原子の位置に応じた膜秩序の解析が可能である．
+
+### オプション一覧
+
+**オプション**         | **備考**         | **オプション**   | **備考** 
+:---------------------:|:----------------:|:----------------:|:----------------:
+``-stype``             | Common           | ``-sfile``       | Common
+``-tintype``           | Common           | ``-tin``         | Common
+``-flist_traj``        | Common           | ``-fhead``       | Common           
+``-selX``              | Common           | ``-mode``        | Common           
+``-cindex``            | Mode specific    | ``-prep_only``   | Common
+
+---
+* **-selX <部位選択>**
+    * Default: N/A
+    * Sample: ``-sel0 name C32  H2X H2Y``
+
+    炭素原子および隣接する水素原子を指定する．$S_{\mathrm{CD}}$を計算したい炭素原子ごとに``-selX``で指定する．
+
+---
+* **-cindex < Carbon index >**
+    * Decault: N/A
+    * Sample: ``-cindex 1 2 3 4 5``
+
+    ``-sel0``, ``-sel1``, ...で指定した炭素原子が，アシル鎖の付け根から数えて何番目か(Carbon index)をこのオプションで指定する．したがって，``-selX``で定義したselidの数分だけ番号を並べる必要がある．
+このオプションで指定したCarbon indexは，出力ファイル``*.scd``の$x$軸(1列目)として用いられる．
+
+### 出力ファイルのフォーマット
+
+* ``*.scd``  
+    $S_{\mathrm{CD}}$を``-sel0``, ``-sel1``, ...の順番で指定した炭素原子の順番で出力する．
+
+    * 1列目: Carbon index (``-cindex``で指定)
+    * 2列目: $S_{\mathrm{CD}}$ 
+
+### 解析例
+
+#### DPPC脂質膜の$S_{\mathrm{CD}}$計算
+
+```
+anatra lipid_order                            \
+  -stype      psf                             \
+  -sfile      complex.psf                     \
+  -tintype    netcdf                          \
+  -flist_traj flist                           \
+  -fhead      run_nc                          \
+  -dt         0.1                             \
+  -cindex     1 2 3 4 5                       \
+  -sel0       name C23 H3R H3S and segid MEMB \
+  -sel1       name C24 H4R H4S and segid MEMB \
+  -sel2       name C25 H5X H5Y and segid MEMB \
+  -sel3       name C26 H6X H6Y and segid MEMB \
+  -sel4       name C27 H7X H7Y and segid MEMB \
+  -prep_only  false
+```

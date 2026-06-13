@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>平均力ポテンシャル解析(pm) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="検索" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">平均力ポテンシャル解析(pm)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/05_fanatra_usage/temp/03_pm.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pm">
+<h1>平均力ポテンシャル解析(pm)<a class="headerlink" href="#pm" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">pm</span></code>は平均力ポテンシャル（Potential of Mean Force, PMF）を計算し，gnuplotやmatplotlibにて
+図を作成するためのスクリプトを生成するプログラムである．</p>
+<section id="id1">
+<h2>理論<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>簡単に平均力ポテンシャルと分布関数（確率）の関係について説明しておく．</p>
+<p>統計力学の基本法則から，位相空間
+<span class="math notranslate nohighlight">\(q^{N}\)</span>
+での積分として得られる，
+絶対温度<span class="math notranslate nohighlight">\(T\)</span>の熱浴と接する等温等積アンサンブルの分配関数<span class="math notranslate nohighlight">\(Z\)</span>により，ヘルムホルツの自由エネルギー<span class="math notranslate nohighlight">\(F\)</span>は次式で記述される．</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+Z&amp;=\dfrac{1}{\Lambda^{3N} N!}\int d\mbox{\boldmath $q$}^{N} \exp \left[-\beta V_{N}\right]\\
+F&amp;=-\dfrac{1}{\beta}\ln Z=\dfrac{1}{\beta}\ln \left[\Lambda^{3N}N!\right]
+-\dfrac{1}{\beta}\ln \left[\int d\mbox{\boldmath $q$}^{N} \exp \left[-\beta V_{N}\right]\right]
+\end{split}\]</div>
+<p>ここで，上のヘルムホルツ自由エネルギー<span class="math notranslate nohighlight">\(F\)</span>式に関して，第二項は理想気体(<span class="math notranslate nohighlight">\(V_{N}=0\)</span>)からのズレ（過剰項）
+に該当する．従ってこの項を，配置積分部分を<span class="math notranslate nohighlight">\(Z_{N}\)</span>と表記することで以下のように書くすることとする．</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+F^{\mathrm{ex}}&amp;=-\dfrac{1}{\beta}\ln \left[\int d\mbox{\boldmath $q$}^{N} \exp \left
+[-\beta V_{N}\right]\right]=-\dfrac{1}{\beta}\ln\left[Z_{N}\right]\\
+Z_{N}&amp;=\int d\mbox{\boldmath $q$}^{N} \exp \left[-\beta V_{N}\right]\end{split}\]</div>
+<p>一方で，<span class="math notranslate nohighlight">\(\lambda\)</span>を何らかの反応座標（タンパク質－リガンド間距離，相互作用… 何でも良い）とする．<br />
+この際，<span class="math notranslate nohighlight">\(F(\lambda ')\)</span>を<span class="math notranslate nohighlight">\(\lambda=\lambda '\)</span>に固定した条件の下での自由エネルギーとする．
+同様に分配関数<span class="math notranslate nohighlight">\(Q_{N}(\lambda ')\)</span>と配置積分<span class="math notranslate nohighlight">\(Z_{N}(\lambda ')\)</span>も定義すると，</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+Z_{N}(\lambda ')=\int d\mbox{\boldmath $q$}^{N} \delta(\lambda '
+-\lambda(\mbox{\boldmath $q$}))\exp \left[-\beta V_{N}\right]=
+\int d\mbox{\boldmath $q$}^{N} \exp \left[-\beta V_{N}(\lambda ')\right]\\ 
+F^{\mathrm{ex}}(\lambda ')= -\dfrac{1}{\beta}\ln \left[Z_{N}(\lambda ')\right]
+\end{split}\]</div>
+<p>となる．また，反応座標<span class="math notranslate nohighlight">\(\lambda\)</span>を引数とする分布関数(反応座標上で<span class="math notranslate nohighlight">\(\lambda = \lambda\)</span>となる確率と同義)<span class="math notranslate nohighlight">\(\rho(\lambda)\)</span>は以下で書ける．</p>
+<div class="math notranslate nohighlight">
+\[
+\rho(\lambda)=\dfrac{\int d\mbox{\boldmath $q$}^{N} \delta(\lambda 
+-\lambda(\mbox{\boldmath $q$}))\exp \left[-\beta V_{N}\right]}{Z_{N}}
+=\dfrac{Z_{N}(\lambda)}{Z_{N}}
+\]</div>
+<p>上式において，熱的ドブロイ波長などの係数は分子分母で打ち消し合うため明示的に書いていない．また上式の分子部分<span class="math notranslate nohighlight">\(Z_{N}(\lambda)\)</span>は系が取り得る全ての状態のうち，<span class="math notranslate nohighlight">\(\lambda = \lambda\)</span>を満たす状態の数密度に対応している
+．<br />
+さて一般に，<span class="math notranslate nohighlight">\(\lambda\)</span>の変化による自由エネルギー変化は</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\Delta F^{\mathrm{ex}}(\lambda_{i}\rightarrow \lambda_{f})
+&amp;= \int_{\lambda_{i}}^{\lambda_{f}} d\lambda \dfrac{dF^{\mathrm{ex}(\lambda)}}{d\lambda}\\
+&amp;= -\dfrac{1}{\beta}\int_{\lambda_{i}}^{\lambda_{f}}d\lambda \dfrac{1}{Z_{N}(\lambda)}
+\dfrac{dZ_{N}(\lambda)}{d\lambda}
+\end{split}\]</div>
+<p>でかける．ここで上で導入した分布関数の対数をとって<span class="math notranslate nohighlight">\(\lambda\)</span>で微分すれば，</p>
+<div class="math notranslate nohighlight">
+\[
+\dfrac{\partial \ln\left[\rho (\lambda)\right]}{\partial \lambda}&amp;=
+\dfrac{1}{Z_{N}(\lambda)}\dfrac{dZ_{N}(\lambda)}{d\lambda}
+\]</div>
+<p>であるため，</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta F^{\mathrm{ex}}(\lambda_{i}\rightarrow \lambda_{f})&amp;=
+-\dfrac{1}{\beta}\int_{\lambda_{i}}^{\lambda_{f}}d\lambda
+\dfrac{\partial \ln\left[\rho (\lambda)\right]}{\partial \lambda}
+\]</div>
+<p>で書ける．<br />
+ここで平均力ポテンシャル(PMF)なる量<span class="math notranslate nohighlight">\(W(\lambda)\)</span>を以下で定義してやる．</p>
+<div class="math notranslate nohighlight">
+\[
+W(\lambda) \equiv -\dfrac{1}{\beta}\ln\left[\rho(\lambda)\right]
+\]</div>
+<p>これにより，</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta F^{\mathrm{ex}}(\lambda_{i}\rightarrow \lambda_{f})=
+\int_{\lambda_{i}}^{\lambda_{f}}d\lambda \dfrac{\partial W(\lambda)}{\partial \lambda}=
+W(\lambda_{f})-W(\lambda_{f})
+\]</div>
+<p>と表すことができる．これから，平均力ポテンシャルが(ある反応座標<span class="math notranslate nohighlight">\(\lambda\)</span>という条件下での)
+自由エネルギーに対応しており，反応座標上の分布関数（規格化されたヒストグラム）を
+求めることで計算できる量であることがわかる．</p>
+<p>また，</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\dfrac{\partial W(\lambda)}{\partial \lambda}&amp;=
+-\dfrac{1}{\beta}\dfrac{1}{Z_{N}(\lambda)}\dfrac{\partial Z_{N}(\lambda)}{\partial \lambda}\\
+&amp;=-\dfrac{1}{\beta}\dfrac{1}{Z_{N}(\lambda)}\dfrac{\partial}{\partial \lambda}
+\int d\mbox{\boldmath $q$}^{N} \exp\left[-\beta V_{N}(\lambda)\right]\\
+&amp;=\dfrac{\int d\mbox{\boldmath $q$}^{N}\dfrac{\partial V_{N}(\lambda)}{\partial \lambda}
+\exp\left[-\beta V_{N}(\lambda)\right]}{Z_{N}(\lambda)}\\
+&amp;=\left&lt; \dfrac{\partial V_{N}(\lambda)}{\partial \lambda}\right&gt;_{\lambda}
+%&amp;= -\braket{F(\lambda)}_{\lambda}
+\end{split}\]</div>
+<p>と書ける．このうち，<span class="math notranslate nohighlight">\(\braket{\cdots}\)</span>は<span class="math notranslate nohighlight">\(\lambda = \lambda\)</span>に固定した上でのアンサンブル平均である．
+上式から平均力ポテンシャル<span class="math notranslate nohighlight">\(W(\lambda)\)</span>の勾配がポテンシャル<span class="math notranslate nohighlight">\(V_{N}(\lambda)\)</span>の勾配の平均値，
+すなわち&quot;反応座標<span class="math notranslate nohighlight">\(\lambda\)</span>&quot;上における力の平均値に対応していることがわかる．
+これが平均力ポテンシャルの名前の由来である．</p>
+</section>
+<section id="id2">
+<h2>オプション一覧<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p><strong>オプション名</strong></p></th>
+<th class="head text-center"><p><strong>セクション</strong></p></th>
+<th class="head text-center"><p><strong>オプション名</strong></p></th>
+<th class="head text-center"><p><strong>セクション</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">flist</span></code></p></td>
+<td class="text-center"><p>&amp;input_param</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">fhead</span></code></p></td>
+<td class="text-center"><p>&amp;output_param</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">ndim</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">xyzcol</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">ng3</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">del</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">origin</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">temperature</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">box_system</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">nstep_tot</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">use_spline</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">spline_resolution</span></code></p></td>
+<td class="text-center"><p>&amp;option_param</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">fpdf</span></code></p></td>
+<td class="text-center"><p>&amp;matplotlib_param</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">labels</span></code></p></td>
+<td class="text-center"><p>&amp;matplotlib_param</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">ranges</span></code></p></td>
+<td class="text-center"><p>&amp;matplotlib_param</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">tics</span></code></p></td>
+<td class="text-center"><p>&amp;matplotlib_param</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">scales</span></code></p></td>
+<td class="text-center"><p>&amp;matplotlib_param</p></td>
+<td class="text-center"><p>-</p></td>
+<td class="text-center"><p>-</p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<ul>
+<li><p><strong>fts = “&lt;解析対象ファイル&gt;”</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;input_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fts</span> <span class="pre">=</span> <span class="pre">&quot;cvdata&quot;</span></code></p></li>
+</ul>
+<p>ヒストグラムを作成したい解析対象ファイルの名前を指定する．[1]
+詳しい解析対象ファイルのフォーマットは以下を参照されたい．
+[1]: このように入力ファイル名を直接指定する形式は開発当初のものであるため今後変更される可能性が高い．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong>fdist = “&lt;出力ファイル&gt;”</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;output_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fts</span> <span class="pre">=</span> <span class="pre">&quot;distribution&quot;</span></code></p></li>
+</ul>
+<p>作成したヒストグラムのデータを出力するファイルの名前を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong>dx = &lt;ビン幅&gt;</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;option_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">dx</span> <span class="pre">=</span> <span class="pre">0.1</span></code></p></li>
+</ul>
+<p>作成するヒストグラムのビン幅を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong>xsta = &lt;ビンの最低値&gt;</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;option_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">xsta</span> <span class="pre">=</span> <span class="pre">0.0</span></code></p></li>
+</ul>
+<p>作成するヒストグラムの最低値（開始の値）を設定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong>nx = &lt;ビンの総数&gt;</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;option_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nx</span> <span class="pre">=</span> <span class="pre">100</span></code></p></li>
+</ul>
+<p>作成するヒストグラムのビンの総数を指定する．つまり，<code class="docutils literal notranslate"><span class="pre">xsta</span></code>から<code class="docutils literal notranslate"><span class="pre">dx</span></code><span class="math notranslate nohighlight">\(\times\)</span><code class="docutils literal notranslate"><span class="pre">nx</span></code>の領域でヒストグラムを作成することとなる．</p>
+</li>
+<li><p><strong>ncol = &lt;解析する列&gt;</strong></p>
+<ul class="simple">
+<li><p>Section: &amp;option_param</p></li>
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ncol</span> <span class="pre">=</span> <span class="pre">1</span></code></p></li>
+</ul>
+<p>解析対象のファイルの内，何列目のデータについてヒストグラム作成を行うのか指定する．</p>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h2>解析例<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>界面法線方向(\(z\))に沿った分布関数(z_profile, zprof) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">界面法線方向(<span class="math notranslate nohighlight">\(z\)</span>)に沿った分布関数(z_profile, zprof)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/03_anatra_usage/10_z_profile.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="z-z-profile-zprof">
+<h1>界面法線方向(<span class="math notranslate nohighlight">\(z\)</span>)に沿った分布関数(z_profile, zprof)<a class="headerlink" href="#z-z-profile-zprof" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">z_profile</span></code> (<code class="docutils literal notranslate"><span class="pre">zprof</span></code>)は，
+膜界面の法線方向(<span class="math notranslate nohighlight">\(z\)</span>)に沿った分布を計算する．
+分子<span class="math notranslate nohighlight">\(a\)</span>の<span class="math notranslate nohighlight">\(z\)</span>軸に沿った局所密度場を<span class="math notranslate nohighlight">\(\hat{\rho}_{a}\left(z\right)\)</span>と定義する．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-7fa0c7df-422c-4b1b-8eae-ccec78ebf084">
+<span class="eqno">()<a class="headerlink" href="#equation-7fa0c7df-422c-4b1b-8eae-ccec78ebf084" title="Permalink to this equation"></a></span>\[\begin{align}
+\hat{\rho}_{a}\left(z\right) &amp; =\dfrac{1}{A_{xy}}\sum_{i=1}^{N_{\mathrm{a}}}\delta\left(z-z_{i}\right).
+\end{align}\]</div>
+<p>ここで，<span class="math notranslate nohighlight">\(A_{xy}\)</span>はシミュレーションセルの<span class="math notranslate nohighlight">\(xy\)</span>面の面積，<span class="math notranslate nohighlight">\(z_{i}\)</span>は<span class="math notranslate nohighlight">\(i\)</span>番目の分子の<span class="math notranslate nohighlight">\(z\)</span>座標である．
+これの平均をとったものが，分布関数である．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-5ae1d086-52a9-4c81-a37e-ca3787e5862b">
+<span class="eqno">()<a class="headerlink" href="#equation-5ae1d086-52a9-4c81-a37e-ca3787e5862b" title="Permalink to this equation"></a></span>\[\begin{align}
+\rho_{a}\left(z\right) = \Braket{\hat{\rho}\left(z\right)}.
+\end{align}\]</div>
+<p>実験データと比較するために，電子密度分布<span class="math notranslate nohighlight">\(\rho^{e}_{a}\left(z\right)\)</span>を計算することも多い．その場合の局所密度場は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-08b5ce7c-4077-4359-ac30-07184ddaa299">
+<span class="eqno">()<a class="headerlink" href="#equation-08b5ce7c-4077-4359-ac30-07184ddaa299" title="Permalink to this equation"></a></span>\[\begin{align}
+\hat{\rho}^{e}_{a}\left(z\right) = \sum_{i=1}^{N_{a}}\sum_{\lambda=1}^{N_{\mathrm{s}}} q_{\lambda}\delta\left(z-z_{i,\lambda}\right),
+\end{align}\]</div>
+<p>で与えられる．ただし，<span class="math notranslate nohighlight">\(q_{\lambda}\)</span>は分子<span class="math notranslate nohighlight">\(a\)</span>内の<span class="math notranslate nohighlight">\(\lambda\)</span>番目の原子が持つ電子数，<span class="math notranslate nohighlight">\(z_{i,\lambda}\)</span>
+は<span class="math notranslate nohighlight">\(i\)</span>番目の分子<span class="math notranslate nohighlight">\(a\)</span>内にある<span class="math notranslate nohighlight">\(\lambda\)</span>番目の原子の<span class="math notranslate nohighlight">\(z\)</span>座標である．電子密度分布は<span class="math notranslate nohighlight">\(\rho_{a}^{e}\left(z\right) = \Braket{\rho_{a}^{e}\left(z\right)}\)</span>と定義される．</p>
+<section id="id1">
+<h2>オプション一覧<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p><strong>オプション</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+<th class="head text-center"><p><strong>オプション</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-stype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sfile</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tintype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tin</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-flist_traj</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-fhead</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel0</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel1</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-mode0</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-mode1</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-target_selid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-center_selid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-denstype</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-symmetrize</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-prep_only</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p>–</p></td>
+<td class="text-center"><p>–</p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<ul>
+<li><p><strong>-selid0 &lt;selid&gt;</strong></p></li>
+<li><p><strong>-selid1 &lt;selid&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-selid0</span> <span class="pre">resname</span> <span class="pre">ETOH</span> <span class="pre">-selid1</span> <span class="pre">segid</span> <span class="pre">MEMB</span></code></p></li>
+</ul>
+<p>分布関数を計算したい分子を選択する．
+また，<span class="math notranslate nohighlight">\(z=0\)</span>を膜中心に設定したい場合は，膜分子も追加で選択する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-target_selid &lt;selid&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-target_selid</span> <span class="pre">0</span></code></p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">-sel</span></code><span class="math notranslate nohighlight">\(x\)</span>のうち，分布関数を計算したい分子に対応するselidを指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-center_selid &lt;selid&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-target_selid</span> <span class="pre">1</span></code></p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">-sel</span></code><span class="math notranslate nohighlight">\(x\)</span>のうち，膜分子に対応するselidを指定する．このselidで指定された膜分子の重心が<span class="math notranslate nohighlight">\(z=0\)</span>に設定される．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-symmetrize &lt;true or false&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-symmetrize</span> <span class="pre">false</span></code></p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(z&lt;0\)</span>と<span class="math notranslate nohighlight">\(z&gt;0\)</span>の分布を平均して対称化するかどうかを指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-denstype &lt;number or electron&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">number</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-denstype</span> <span class="pre">number</span></code></p></li>
+</ul>
+<p>数密度分布(<code class="docutils literal notranslate"><span class="pre">number</span></code>)か電子密度分布(<code class="docutils literal notranslate"><span class="pre">electron</span></code>)のどちらを計算するかを指定する．</p>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h2>出力ファイルのフォーマット<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.zprof</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">-target_selid</span></code>で指定したselidの分子の分布関数が出力される．</p>
+<ul class="simple">
+<li><p>1列目: <span class="math notranslate nohighlight">\(z\)</span>座標</p></li>
+<li><p>2列目: 分布関数</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h2>解析例<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<section id="id4">
+<h3>脂質膜–水系における水分子の数密度分布<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">anatra</span> <span class="n">z_profile</span>                 \
+  <span class="o">-</span><span class="n">stype</span>      <span class="n">psf</span>                \
+  <span class="o">-</span><span class="n">sfile</span>      <span class="nb">complex</span><span class="o">.</span><span class="n">psf</span>        \
+  <span class="o">-</span><span class="n">tintype</span>    <span class="n">netcdf</span>             \
+  <span class="o">-</span><span class="n">flist_traj</span> <span class="n">flist</span>              \
+  <span class="o">-</span><span class="n">fhead</span>      <span class="n">run</span>                \
+  <span class="o">-</span><span class="n">sel0</span>       <span class="n">water</span>              \
+  <span class="o">-</span><span class="n">sel1</span>       <span class="n">segid</span> <span class="n">MEMB</span> <span class="ow">and</span> <span class="n">noh</span> \
+  <span class="o">-</span><span class="n">mode0</span>      <span class="n">residue</span>            \
+  <span class="o">-</span><span class="n">mode1</span>      <span class="n">whole</span>              \
+  <span class="o">-</span><span class="n">target_selid</span> <span class="mi">0</span>                \
+  <span class="o">-</span><span class="n">center_selid</span> <span class="mi">1</span>                \
+  <span class="o">-</span><span class="n">denstype</span>   <span class="n">number</span>             \
+  <span class="o">-</span><span class="n">prep_only</span>  <span class="n">false</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

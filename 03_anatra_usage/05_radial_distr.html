@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>動径分布関数(radial_distr, rdf) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">動径分布関数(radial_distr, rdf)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/03_anatra_usage/05_radial_distr.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="radial-distr-rdf">
+<h1>動径分布関数(radial_distr, rdf)<a class="headerlink" href="#radial-distr-rdf" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2>理論背景<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>ここでは，動径分布関数の定義について解説する．</p>
+<section id="id2">
+<h3>同種粒子間の動径分布関数<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>粒子<span class="math notranslate nohighlight">\(a\)</span>が<span class="math notranslate nohighlight">\(N_a\)</span>個存在している系(体積<span class="math notranslate nohighlight">\(V\)</span>，粒子<span class="math notranslate nohighlight">\(a\)</span>の平均(バルク)数密度<span class="math notranslate nohighlight">\(\rho_a = N_a/V\)</span>)を考え，
+局所密度場<span class="math notranslate nohighlight">\(\hat{\rho}_{a}\left({\bf r}\right)\)</span>を次式で定義する．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-215fe852-ecde-4229-8f87-3495c45cae49">
+<span class="eqno">()<a class="headerlink" href="#equation-215fe852-ecde-4229-8f87-3495c45cae49" title="Permalink to this equation"></a></span>\[\begin{align}
+\hat{\rho}_{a}\left({\bf r}\right) &amp; =\sum_{i=1}^{N_{a}}\delta\left({\bf r}-{\bf r}_{i}\right).
+\end{align}\]</div>
+<p>ここで，<span class="math notranslate nohighlight">\({\bf r}_{i}\)</span>は<span class="math notranslate nohighlight">\(i\)</span>番目の粒子<span class="math notranslate nohighlight">\(a\)</span>の位置である．
+もし，系に外場などが存在しない場合，局所密度場のアンサンブル平均は
+平均数密度<span class="math notranslate nohighlight">\(\rho_{a}\)</span>に等しくなる．つまり，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-2e16f3ea-192a-4351-9af8-e6713ad87b71">
+<span class="eqno">()<a class="headerlink" href="#equation-2e16f3ea-192a-4351-9af8-e6713ad87b71" title="Permalink to this equation"></a></span>\[\begin{align}
+\Braket{\hat{\rho}_{a}\left({\bf r}\right)} = \rho_{a},
+\end{align}\]</div>
+<p>である．次に，2体密度相関関数を次式で定義する．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-91a72898-7f8e-4a0e-91ff-8098f1c70013">
+<span class="eqno">()<a class="headerlink" href="#equation-91a72898-7f8e-4a0e-91ff-8098f1c70013" title="Permalink to this equation"></a></span>\[\begin{align}
+\chi\left({\bf r},{\bf r}^{\prime}\right) &amp; =\Braket{\hat{\rho}_{a}\left({\bf r}\right)\hat{\rho}_{a}\left({\bf r}^{\prime}\right)}\\
+ &amp; =\Braket{\sum_{i=1}^{N_{a}}\sum_{j=1}^{N_{a}}\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}.
+\end{align}\]</div>
+<p>上式において，<span class="math notranslate nohighlight">\(i=j\)</span>の項と<span class="math notranslate nohighlight">\(i\neq j\)</span>の分けて書くと，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-0f24df2c-2bba-4b6c-88ba-0de3794a1f0d">
+<span class="eqno">()<a class="headerlink" href="#equation-0f24df2c-2bba-4b6c-88ba-0de3794a1f0d" title="Permalink to this equation"></a></span>\[\begin{align}
+\chi\left({\bf r},{\bf r}^{\prime}\right) &amp; =\sum_{i=1}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{i}\right)}+\sum_{i=1}^{N_{a}}{\sum_{j\neq i}^{N_{a}}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)},
+\end{align}\]</div>
+<p>第1項目は同一粒子が<span class="math notranslate nohighlight">\({\bf r}\)</span>と<span class="math notranslate nohighlight">\({\bf r}^{\prime}\)</span>の位置に存在する確率を表しており，
+これは<span class="math notranslate nohighlight">\({\bf r}={\bf r}^{\prime}\)</span>のとき以外は明らかにゼロとなる．つまり，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-a125082c-d854-47f5-9ed7-015ef9b24d15">
+<span class="eqno">()<a class="headerlink" href="#equation-a125082c-d854-47f5-9ed7-015ef9b24d15" title="Permalink to this equation"></a></span>\[\begin{align}
+\sum_{i=1}^{N_{a}}\braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{i}\right)} &amp; =\rho_{a}\delta\left({\bf r}-{\bf r}^{\prime}\right),
+\end{align}\]</div>
+<p>である．
+次に，第2項は<span class="math notranslate nohighlight">\(i\)</span>番目の粒子が<span class="math notranslate nohighlight">\({\bf r}\)</span>の位置に存在し，<span class="math notranslate nohighlight">\(j\)</span>番目の粒子が<span class="math notranslate nohighlight">\({\bf r}^{\prime}\)</span>の位置に存在する確率を表している．この項は2体密度と呼ばれており，
+2粒子の相関関係を表している．2体密度を<span class="math notranslate nohighlight">\(\rho^{(2)}_{aa}\left({\bf r},{\bf r}^{\prime}\right)\)</span>と表しておくことにする．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-06be87da-17b0-495b-8b2a-77b2b158f764">
+<span class="eqno">()<a class="headerlink" href="#equation-06be87da-17b0-495b-8b2a-77b2b158f764" title="Permalink to this equation"></a></span>\[\begin{align}
+\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\sum_{i=1}^{N_{a}}\sum_{j\neq i}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}.
+\end{align}\]</div>
+<p>もし，<span class="math notranslate nohighlight">\({\bf r}と{\bf r}^{\prime}\)</span>の位置が互いに遠く離れている場合，
+そのような配置での2粒子間の相関は無視できる．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-a518bd47-3941-46c9-b8e7-8c0c6a1bf2fd">
+<span class="eqno">()<a class="headerlink" href="#equation-a518bd47-3941-46c9-b8e7-8c0c6a1bf2fd" title="Permalink to this equation"></a></span>\[\begin{align}
+\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; \approx\sum_{i=1}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)}\sum_{j\neq i}^{N_{b}}\Braket{\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}\\
+ &amp; =\rho_{a}^{2}\left(1-\dfrac{1}{N_{a}}\right).
+\end{align}\]</div>
+<p>無相関の状態を基準にとって，2体分布関数を次式で定義することにしておく．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-6a83b182-8089-4d10-82be-3be1a78a9599">
+<span class="eqno">()<a class="headerlink" href="#equation-6a83b182-8089-4d10-82be-3be1a78a9599" title="Permalink to this equation"></a></span>\[\begin{align}
+g_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\dfrac{1}{\rho_{a}^{2}\left(1-1/N_{a}\right)}\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right).
+\end{align}\]</div>
+<p>もし，粒子を十分に多く含んでいる系を取り扱っている場合は，<span class="math notranslate nohighlight">\(1/N_a \simeq 0\)</span>と考えて，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-f8b8f323-fbee-4f1a-b4fb-b8271707a48d">
+<span class="eqno">()<a class="headerlink" href="#equation-f8b8f323-fbee-4f1a-b4fb-b8271707a48d" title="Permalink to this equation"></a></span>\[\begin{align}
+g_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\dfrac{1}{\rho_{a}^{2}}\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right),
+\end{align}\]</div>
+<p>としても良い．</p>
+<p>系が均一の場合(外場が存在しない場合など)，2体分布関数(および2体密度)は2粒子の絶対的な位置<span class="math notranslate nohighlight">\({\bf r}\)</span>，<span class="math notranslate nohighlight">\({\bf r}^{\prime}\)</span>ではなく，2粒子の相対的な位置<span class="math notranslate nohighlight">\({\bf r}^{\prime} - {\bf r}\)</span>に依存する．つまり，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-9a4f1b84-6b91-485c-a01c-39eb8796fde4">
+<span class="eqno">()<a class="headerlink" href="#equation-9a4f1b84-6b91-485c-a01c-39eb8796fde4" title="Permalink to this equation"></a></span>\[\begin{align}
+g^{\left(2\right)}_{aa}\left({\bf r},{\bf r}^{\prime}\right) &amp; =g^{\left(2\right)}_{aa}\left({\bf 0},{\bf r}^{\prime}-{\bf r}\right),
+\end{align}\]</div>
+<p>のような関係が成り立つ．<span class="math notranslate nohighlight">\({\bf r}^{\prime}-{\bf r}\)</span>を改めて
+<span class="math notranslate nohighlight">\({\bf r}\)</span>とおき直しておき，空間分布関数(spatial distribution function, SDF)を次式で定義する．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-c05611a6-ed20-4c39-ba9c-8e440390b691">
+<span class="eqno">()<a class="headerlink" href="#equation-c05611a6-ed20-4c39-ba9c-8e440390b691" title="Permalink to this equation"></a></span>\[\begin{align}
+g_{aa}\left({\bf r}\right) &amp; =g^{\left(2\right)}_{aa}\left({\bf 0},{\bf r}\right).
+\end{align}\]</div>
+<p>これを角度方向に平均をとり，距離<span class="math notranslate nohighlight">\(r\)</span>の分布関数に変換したものを動径分布関数(radial distribution function, RDF)と呼ぶ．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-7076d355-d382-48e0-a94c-eba033f6f1df">
+<span class="eqno">()<a class="headerlink" href="#equation-7076d355-d382-48e0-a94c-eba033f6f1df" title="Permalink to this equation"></a></span>\[\begin{align}
+g_{aa}\left(r\right) &amp; =\dfrac{1}{4\pi r^{2}}\int d{\bf r}\,\delta\left(\left|{\bf r}\right|-r\right)g_{aa}\left({\bf r}\right).
+\end{align}\]</div>
+<p>もし，系が等方的である場合，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-2722a6b6-362e-4c85-96c2-248589040316">
+<span class="eqno">()<a class="headerlink" href="#equation-2722a6b6-362e-4c85-96c2-248589040316" title="Permalink to this equation"></a></span>\[\begin{align}
+g_{aa}\left(\left|{\bf r}\right|\right) &amp; =g_{aa}\left({\bf r}\right),
+\end{align}\]</div>
+<p>が成り立つ．
+SDFを計算することに意義が生じるのは，非等方系の場合や，一方の分子(形状を持つ粒子)を特定の配向に固定した座標系で他方の粒子の位置を分布を調べるときである．これについては次節で述べる．</p>
+<p>RDFは，一方の粒子から眺めて距離<span class="math notranslate nohighlight">\(r\)</span>での他粒子の存在確率がバルクよりも
+どの程度高いかを表す．つまり，<span class="math notranslate nohighlight">\(g_{aa}(r)&gt;0\)</span>であれば，その距離で他粒子の存在確率は
+バルクよりも高く，<span class="math notranslate nohighlight">\(g_{aa}(r)&lt;0\)</span>の場合はバルクよりも存在確率が低いことを意味する．</p>
+</section>
+<section id="id3">
+<h3>異種粒子間の動径分布関数<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>粒子<span class="math notranslate nohighlight">\(a\)</span>が<span class="math notranslate nohighlight">\(N_a\)</span>個，粒子<span class="math notranslate nohighlight">\(b\)</span>が<span class="math notranslate nohighlight">\(N_b\)</span>個存在している系(体積<span class="math notranslate nohighlight">\(V\)</span>，平均数密度はそれぞれの粒子で<span class="math notranslate nohighlight">\(\rho_a = N_a /V\)</span>, <span class="math notranslate nohighlight">\(\rho_b = N_b / V\)</span>)での，
+粒子<span class="math notranslate nohighlight">\(a\)</span>と粒子<span class="math notranslate nohighlight">\(b\)</span>の間のRDFを導入する．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-ce8010f5-d936-4b88-81c6-e82e003f495f">
+<span class="eqno">()<a class="headerlink" href="#equation-ce8010f5-d936-4b88-81c6-e82e003f495f" title="Permalink to this equation"></a></span>\[\begin{align}
+\rho_{ab}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\sum_{i=1}^{N_{a}}\sum_{j=1}^{N_{b}}\Braket{\delta\left({\bf r}-{\bf r}_{i}^{a}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}^{b}\right)}.
+\end{align}\]</div>
+<p>ここで，<span class="math notranslate nohighlight">\({\bf r}_{i}^{p}~(p=a, b)\)</span> は粒子<span class="math notranslate nohighlight">\(p\)</span>の<span class="math notranslate nohighlight">\(i\)</span>番目の粒子の位置である．
+同種粒子間の場合と異なるのは，<span class="math notranslate nohighlight">\(j=i\)</span>の場合を除外しなくても良い点である．
+これにより，無相関の場合は，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-a2158ec9-fa6b-40de-9034-bf3cfc844886">
+<span class="eqno">()<a class="headerlink" href="#equation-a2158ec9-fa6b-40de-9034-bf3cfc844886" title="Permalink to this equation"></a></span>\[\begin{align}
+\rho_{ab}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; \approx\rho_{a}\rho_{b},
+\end{align}\]</div>
+<p>となる．それ以外の点は全く同じなので，同様の手続きを踏んで動径分布関数を導入できる．
+まず，空間分布関数は，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-1d0c111b-c50c-4b2e-a716-0dff9310464c">
+<span class="eqno">()<a class="headerlink" href="#equation-1d0c111b-c50c-4b2e-a716-0dff9310464c" title="Permalink to this equation"></a></span>\[\begin{align}
+g_{ab}\left({\bf r}\right) &amp; =\dfrac{1}{\rho_{a}\rho_{b}}\rho_{ab}^{\left(2\right)}\left({\bf 0},{\bf r}\right),
+\end{align}\]</div>
+<p>であり，これを角度方向について平均化することにより，動径分布関数の表式を得る．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-4080881a-63a5-4d6b-a55f-7966c8a75d67">
+<span class="eqno">()<a class="headerlink" href="#equation-4080881a-63a5-4d6b-a55f-7966c8a75d67" title="Permalink to this equation"></a></span>\[\begin{align}
+g_{ab}\left(r\right) &amp; =\dfrac{1}{4\pi r^{2}}\int d{\bf r}\,\delta\left(\left|{\bf r}\right|-r\right)g_{ab}\left({\bf r}\right).
+\end{align}\]</div>
+</section>
+</section>
+<section id="id4">
+<h2>オプション一覧<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p><strong>オプション</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+<th class="head text-center"><p><strong>オプション</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-stype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sfile</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tintype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tin</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-flist_traj</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-fhead</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel0</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel1</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-mode0</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-mode1</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-dr</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-identical</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-normalize</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-separate_self</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<ul>
+<li><p><strong>-dr &lt;距離の刻み (ANGSTROM)&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0.1</span></code></p></li>
+</ul>
+<p>RDFを計算するときの距離の刻みを指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-identical &lt;true or false&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">-sel0</span></code>と<code class="docutils literal notranslate"><span class="pre">-sel1</span></code>が同一の場合に<code class="docutils literal notranslate"><span class="pre">true</span></code>を指定する．
+理論の解説で述べたように，RDFの計算は同種粒子間と異種粒子間で扱いが異なるので，
+ユーザー側でどちらの扱いにするかを指定する必要がある．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-normalize &lt;true or false&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+<p>RDF (<span class="math notranslate nohighlight">\(g_{12}(r)\)</span>)をそのまま出力するか(<code class="docutils literal notranslate"><span class="pre">true</span></code>)，<code class="docutils literal notranslate"><span class="pre">-sel2</span></code>側の部位の平均数密度<span class="math notranslate nohighlight">\(\rho_{2}\)</span>をかけたものを出力するか(<code class="docutils literal notranslate"><span class="pre">false</span></code>)を指定する．
+<code class="docutils literal notranslate"><span class="pre">true</span></code>の場合は，<span class="math notranslate nohighlight">\(\rho_{12}(r) = \rho_{2}g_{12}(r)\)</span>が出力される．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-separate_self &lt;true or false&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+</ul>
+<p>RDFを分子内と分子間の部分に分けるかどうかを指定する．
+このオプションが必要となるのは，同種分子の異なる部位間のRDFを計算するときである．
+例えば，水分子(原子ラベルを<code class="docutils literal notranslate"><span class="pre">HW1-OW-HW2</span></code>とする)のOW原子とHW1原子の間のRDFを計算するときに，
+“<code class="docutils literal notranslate"><span class="pre">-separate_self</span> <span class="pre">false</span></code>&quot;の条件で”<code class="docutils literal notranslate"><span class="pre">-sel0</span> <span class="pre">name</span> <span class="pre">OW</span></code>&quot;, &quot;<code class="docutils literal notranslate"><span class="pre">-sel1</span> <span class="pre">name</span> <span class="pre">HW1`&quot;と指定すると，RDFの中に同一分子内のOW-HW1の寄与も含まれてしまうが，</span> <span class="pre">&quot;</span></code>-separate_self true``&quot;と指定することで，同一分子内の寄与を分離することが可能である．</p>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>出力ファイルのフォーマット<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">*.rdf</span></code>ファイル</p>
+<p>このファイルには，RDFが出力される．
+出力内容は<code class="docutils literal notranslate"><span class="pre">-separate_self</span></code>によって異なる．</p>
+<ul class="simple">
+<li><p>&quot;<code class="docutils literal notranslate"><span class="pre">-separate_self</span> <span class="pre">false</span></code>&quot;の場合</p>
+<ul>
+<li><p>1列目: 距離</p></li>
+<li><p>2列目: RDF</p></li>
+</ul>
+</li>
+<li><p>&quot;<code class="docutils literal notranslate"><span class="pre">-separate_self</span> <span class="pre">true</span></code>&quot;の場合</p>
+<ul>
+<li><p>1列目: 距離</p></li>
+<li><p>2列目: 異なる分子間のRDF</p></li>
+<li><p>3列目: 同一分子内のRDF (自己相関関数と呼ばれる)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<!---
+* ``*.rdbin``ファイル
+
+  このファイルには，RDFの情報がバイナリ形式で出力される．
+  ``fanatra``の解析モード``rd_gather``では，
+  複数のトラジェクトリから個別で計算したRDFの平均をとることが可能だが，
+  その際にこの``.rdbin``ファイルを入力として与える必要がある．
+--->
+</section>
+<section id="id6">
+<h2>解析例<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<section id="rdf">
+<h3>水分子の酸素原子間のRDF<a class="headerlink" href="#rdf" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="n">anatra</span> <span class="n">rdf</span>                                        \
+  <span class="o">-</span><span class="n">stype</span>         <span class="n">parm7</span>                            \
+  <span class="o">-</span><span class="n">sfile</span>         <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>                   \
+  <span class="o">-</span><span class="n">tintype</span>       <span class="n">dcd</span>                              \
+  <span class="o">-</span><span class="n">tin</span>           <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>                          \
+  <span class="o">-</span><span class="n">fhead</span>         <span class="n">out</span>                              \
+  <span class="o">-</span><span class="n">sel0</span>          <span class="n">resname</span> <span class="n">WAT</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">O</span>           \
+  <span class="o">-</span><span class="n">sel1</span>          <span class="n">resname</span> <span class="n">WAT</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">O</span>           \
+  <span class="o">-</span><span class="n">mode0</span>         <span class="n">residue</span>                          \
+  <span class="o">-</span><span class="n">mode1</span>         <span class="n">residue</span>                          \
+  <span class="o">-</span><span class="n">dr</span>            <span class="mf">0.1</span>                              \
+  <span class="o">-</span><span class="n">identical</span>     <span class="n">true</span>                             \
+  <span class="o">-</span><span class="n">normalize</span>     <span class="n">true</span>                             \
+  <span class="o">-</span><span class="n">separate_self</span> <span class="n">false</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>水分子の酸素原子–水素原子間のRDF<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="n">anatra</span> <span class="n">rdf</span>                                        \
+  <span class="o">-</span><span class="n">stype</span>         <span class="n">parm7</span>                            \
+  <span class="o">-</span><span class="n">sfile</span>         <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>                   \
+  <span class="o">-</span><span class="n">tintype</span>       <span class="n">dcd</span>                              \
+  <span class="o">-</span><span class="n">tin</span>           <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>                          \
+  <span class="o">-</span><span class="n">fhead</span>         <span class="n">out</span>                              \
+  <span class="o">-</span><span class="n">sel0</span>          <span class="n">resname</span> <span class="n">WAT</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">O</span>           \
+  <span class="o">-</span><span class="n">sel1</span>          <span class="n">resname</span> <span class="n">WAT</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">H1</span>          \
+  <span class="o">-</span><span class="n">mode0</span>         <span class="n">residue</span>                          \
+  <span class="o">-</span><span class="n">mode1</span>         <span class="n">residue</span>                          \
+  <span class="o">-</span><span class="n">dr</span>            <span class="mf">0.1</span>                              \
+  <span class="o">-</span><span class="n">identical</span>     <span class="n">false</span>                            \
+  <span class="o">-</span><span class="n">normalize</span>     <span class="n">true</span>                             \
+  <span class="o">-</span><span class="n">separate_self</span> <span class="n">true</span> 
+</pre></div>
+</div>
+</section>
+</section>
+<section id="c-alphardf">
+<h2>タンパク質のC<span class="math notranslate nohighlight">\(\alpha\)</span>原子と水分子の酸素原子の間のRDF<a class="headerlink" href="#c-alphardf" title="Link to this heading"></a></h2>
+<p>タンパク質(<code class="docutils literal notranslate"><span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">192</span></code>)の各C<span class="math notranslate nohighlight">\(\alpha\)</span>原子と水分子の酸素原子の間のRDFを
+計算し，各RDFを平均化したものが出力される．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">anatra</span> <span class="n">rdf</span>                                        \
+  <span class="o">-</span><span class="n">stype</span>         <span class="n">parm7</span>                            \
+  <span class="o">-</span><span class="n">sfile</span>         <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>                   \
+  <span class="o">-</span><span class="n">tintype</span>       <span class="n">dcd</span>                              \
+  <span class="o">-</span><span class="n">tin</span>           <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>                          \
+  <span class="o">-</span><span class="n">fhead</span>         <span class="n">out</span>                              \
+  <span class="o">-</span><span class="n">sel0</span>          <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">192</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">CA</span>       \
+  <span class="o">-</span><span class="n">sel1</span>          <span class="n">resname</span> <span class="n">WAT</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">O</span>           \
+  <span class="o">-</span><span class="n">mode0</span>         <span class="n">atom</span>                             \
+  <span class="o">-</span><span class="n">mode1</span>         <span class="n">residue</span>                          \
+  <span class="o">-</span><span class="n">dr</span>            <span class="mf">0.1</span>                              \
+  <span class="o">-</span><span class="n">identical</span>     <span class="n">false</span>                            \
+  <span class="o">-</span><span class="n">normalize</span>     <span class="n">true</span>                             \
+  <span class="o">-</span><span class="n">separate_self</span> <span class="n">false</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

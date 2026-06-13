@@ -1,0 +1,172 @@
+## 平均力ポテンシャル解析(pm)
+
+`pm`は平均力ポテンシャル（Potential of Mean Force, PMF）を計算し，gnuplotやmatplotlibにて
+図を作成するためのスクリプトを生成するプログラムである．
+
+### 理論
+
+ 簡単に平均力ポテンシャルと分布関数（確率）の関係について説明しておく．  
+
+統計力学の基本法則から，位相空間
+$q^{N}$
+での積分として得られる，
+絶対温度$T$の熱浴と接する等温等積アンサンブルの分配関数$Z$により，ヘルムホルツの自由エネルギー$F$は次式で記述される．
+
+$$
+Z&=\dfrac{1}{\Lambda^{3N} N!}\int d\mbox{\boldmath $q$}^{N} \exp \left[-\beta V_{N}\right]\\
+F&=-\dfrac{1}{\beta}\ln Z=\dfrac{1}{\beta}\ln \left[\Lambda^{3N}N!\right]
+-\dfrac{1}{\beta}\ln \left[\int d\mbox{\boldmath $q$}^{N} \exp \left[-\beta V_{N}\right]\right]
+$$
+
+ここで，上のヘルムホルツ自由エネルギー$F$式に関して，第二項は理想気体($V_{N}=0$)からのズレ（過剰項）
+に該当する．従ってこの項を，配置積分部分を$Z_{N}$と表記することで以下のように書くすることとする．
+
+$$
+F^{\mathrm{ex}}&=-\dfrac{1}{\beta}\ln \left[\int d\mbox{\boldmath $q$}^{N} \exp \left
+[-\beta V_{N}\right]\right]=-\dfrac{1}{\beta}\ln\left[Z_{N}\right]\\
+Z_{N}&=\int d\mbox{\boldmath $q$}^{N} \exp \left[-\beta V_{N}\right]
+
+$$
+
+一方で，$\lambda$を何らかの反応座標（タンパク質－リガンド間距離，相互作用... 何でも良い）とする．  
+この際，$F(\lambda ')$を$\lambda=\lambda '$に固定した条件の下での自由エネルギーとする．
+同様に分配関数$Q_{N}(\lambda ')$と配置積分$Z_{N}(\lambda ')$も定義すると，
+
+$$
+Z_{N}(\lambda ')=\int d\mbox{\boldmath $q$}^{N} \delta(\lambda '
+-\lambda(\mbox{\boldmath $q$}))\exp \left[-\beta V_{N}\right]=
+\int d\mbox{\boldmath $q$}^{N} \exp \left[-\beta V_{N}(\lambda ')\right]\\ 
+F^{\mathrm{ex}}(\lambda ')= -\dfrac{1}{\beta}\ln \left[Z_{N}(\lambda ')\right]
+$$
+
+となる．また，反応座標$\lambda$を引数とする分布関数(反応座標上で$\lambda = \lambda$となる確率と同義)$\rho(\lambda)$は以下で書ける．
+
+$$
+\rho(\lambda)=\dfrac{\int d\mbox{\boldmath $q$}^{N} \delta(\lambda 
+-\lambda(\mbox{\boldmath $q$}))\exp \left[-\beta V_{N}\right]}{Z_{N}}
+=\dfrac{Z_{N}(\lambda)}{Z_{N}}
+$$
+
+上式において，熱的ドブロイ波長などの係数は分子分母で打ち消し合うため明示的に書いていない．また上式の分子部分$Z_{N}(\lambda)$は系が取り得る全ての状態のうち，$\lambda = \lambda$を満たす状態の数密度に対応している
+．  
+さて一般に，$\lambda$の変化による自由エネルギー変化は
+
+$$
+\Delta F^{\mathrm{ex}}(\lambda_{i}\rightarrow \lambda_{f})
+&= \int_{\lambda_{i}}^{\lambda_{f}} d\lambda \dfrac{dF^{\mathrm{ex}(\lambda)}}{d\lambda}\\
+&= -\dfrac{1}{\beta}\int_{\lambda_{i}}^{\lambda_{f}}d\lambda \dfrac{1}{Z_{N}(\lambda)}
+\dfrac{dZ_{N}(\lambda)}{d\lambda}
+$$
+
+でかける．ここで上で導入した分布関数の対数をとって$\lambda$で微分すれば，
+
+$$
+\dfrac{\partial \ln\left[\rho (\lambda)\right]}{\partial \lambda}&=
+\dfrac{1}{Z_{N}(\lambda)}\dfrac{dZ_{N}(\lambda)}{d\lambda}
+$$
+
+であるため，
+
+$$
+\Delta F^{\mathrm{ex}}(\lambda_{i}\rightarrow \lambda_{f})&=
+-\dfrac{1}{\beta}\int_{\lambda_{i}}^{\lambda_{f}}d\lambda
+\dfrac{\partial \ln\left[\rho (\lambda)\right]}{\partial \lambda}
+$$
+
+で書ける．  
+ここで平均力ポテンシャル(PMF)なる量$W(\lambda)$を以下で定義してやる．
+
+$$
+W(\lambda) \equiv -\dfrac{1}{\beta}\ln\left[\rho(\lambda)\right]
+$$
+
+これにより，
+
+$$
+\Delta F^{\mathrm{ex}}(\lambda_{i}\rightarrow \lambda_{f})=
+\int_{\lambda_{i}}^{\lambda_{f}}d\lambda \dfrac{\partial W(\lambda)}{\partial \lambda}=
+W(\lambda_{f})-W(\lambda_{f})
+$$
+
+と表すことができる．これから，平均力ポテンシャルが(ある反応座標$\lambda$という条件下での)
+自由エネルギーに対応しており，反応座標上の分布関数（規格化されたヒストグラム）を
+求めることで計算できる量であることがわかる．  
+
+また，
+
+$$
+\dfrac{\partial W(\lambda)}{\partial \lambda}&=
+-\dfrac{1}{\beta}\dfrac{1}{Z_{N}(\lambda)}\dfrac{\partial Z_{N}(\lambda)}{\partial \lambda}\\
+&=-\dfrac{1}{\beta}\dfrac{1}{Z_{N}(\lambda)}\dfrac{\partial}{\partial \lambda}
+\int d\mbox{\boldmath $q$}^{N} \exp\left[-\beta V_{N}(\lambda)\right]\\
+&=\dfrac{\int d\mbox{\boldmath $q$}^{N}\dfrac{\partial V_{N}(\lambda)}{\partial \lambda}
+\exp\left[-\beta V_{N}(\lambda)\right]}{Z_{N}(\lambda)}\\
+&=\left< \dfrac{\partial V_{N}(\lambda)}{\partial \lambda}\right>_{\lambda}
+%&= -\braket{F(\lambda)}_{\lambda}
+$$
+
+と書ける．このうち，$\braket{\cdots}$は$\lambda = \lambda$に固定した上でのアンサンブル平均である．
+上式から平均力ポテンシャル$W(\lambda)$の勾配がポテンシャル$V_{N}(\lambda)$の勾配の平均値，
+すなわち"反応座標$\lambda$"上における力の平均値に対応していることがわかる．
+これが平均力ポテンシャルの名前の由来である．
+
+### オプション一覧
+
+**オプション名**  | **セクション**         | **オプション名** | **セクション**
+:----------------:|:----------------:|:----------------:|:----------------:
+  ``flist``       |   &input_param   | ``fhead``        |   &output_param         
+  ``ndim``        |   &option_param  | ``xyzcol``       |   &option_param 
+  ``ng3``         |   &option_param  | ``del``          |   &option_param 
+  ``origin``      |   &option_param  | ``temperature``  |   &option_param 
+  ``box_system``  |   &option_param  | ``nstep_tot``    |   &option_param 
+  ``use_spline``  |   &option_param  | ``spline_resolution`` |   &option_param 
+  ``fpdf``        |   &matplotlib_param  | ``labels``    |   &matplotlib_param 
+  ``ranges``      |   &matplotlib_param  | ``tics``      |   &matplotlib_param 
+  ``scales``        |   &matplotlib_param  | -    |    -
+
+ ---
+* **fts = "\<解析対象ファイル\>"**
+  * Section: &input_param 
+  * Default: N/A
+  * Example: ``fts = "cvdata"``
+
+  ヒストグラムを作成したい解析対象ファイルの名前を指定する．\[1]
+  詳しい解析対象ファイルのフォーマットは以下を参照されたい．
+\[1]: このように入力ファイル名を直接指定する形式は開発当初のものであるため今後変更される可能性が高い．
+ ---
+* **fdist = "\<出力ファイル\>"**
+  * Section: &output_param 
+  * Default: N/A
+  * Example: ``fts = "distribution"``
+
+  作成したヒストグラムのデータを出力するファイルの名前を指定する．
+ ---
+* **dx = \<ビン幅\>**
+  * Section: &option_param 
+  * Default: N/A
+  * Example: ``dx = 0.1``
+
+  作成するヒストグラムのビン幅を指定する．
+ ---
+* **xsta = \<ビンの最低値\>**
+  * Section: &option_param 
+  * Default: N/A
+  * Example: ``xsta = 0.0``
+
+  作成するヒストグラムの最低値（開始の値）を設定する．
+ ---
+* **nx = \<ビンの総数\>**
+  * Section: &option_param 
+  * Default: N/A
+  * Example: ``nx = 100``
+
+  作成するヒストグラムのビンの総数を指定する．つまり，`xsta`から`dx`$\times$`nx`の領域でヒストグラムを作成することとなる．
+
+* **ncol = \<解析する列\>**
+  * Section: &option_param 
+  * Default: N/A
+  * Example: ``ncol = 1``
+
+  解析対象のファイルの内，何列目のデータについてヒストグラム作成を行うのか指定する．
+
+### 解析例

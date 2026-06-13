@@ -1,0 +1,115 @@
+## フレームのランダム抽出(random_frame, randf)
+
+この解析モードでは，ランダムにスナップショット(フレーム)を抽出する．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|ftraj|      & 入力トラジェクトリファイル名 \\
+                     & \verb|flist_traj| & トラジェクトリファイル一覧を格納したファイル名 \\
+\hline
+\verb|&output_param| & \verb|fhead|      & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|nsample|         & ランダム抽出するフレーム数 \\
+                     & \verb|iseed|           & 乱数シード \\
+                     & \verb|output_trajtype| & 出力トラジェクトリ形式 \\
+                     & \verb|duplicate|       & 重複抽出を許可するかどうか \\
+                     & \verb|out_rst7|        & AMBER rst7形式の出力有無 \\
+                     & \verb|shuffle|         & フレームをシャッフルするかどうか \\
+\hline
+\end{tabular}
+}
+```
+
+### ``&option_param``
+
+* **``nsample``**
+    * Default: ``100`` 
+    * Example: ``nsample = 100``
+
+    ランダムに抽出するフレーム数を指定する．
+
+----
+* **``iseed``**
+    * Default: ``-1`` (自動生成) 
+    * Example: ``iseed = 3141592``
+
+    ランダム抽出に使用する乱数シードを指定する．
+
+    ``iseed <= 0`` の場合はプログラムが自動的にシードを生成する．
+
+----
+* **``output_trajtype``**
+    * Default: ``dcd`` 
+    * Example: ``output_trajtype = "dcd"``
+
+    出力するトラジェクトリ形式を指定する．
+
+    現在は
+
+    * ``dcd``
+    * ``xtc``
+    * ``netcdf``
+
+    を指定できる．
+
+----
+* **``duplicate``**
+    * Default: ``.false.``
+    * Example: ``duplicate = .true.``
+
+    同じフレームを複数回抽出することを許可するかどうかを指定する．
+
+----
+* **``out_rst7``**
+    * Default: ``.false.``
+    * Example: ``out_rst7 = .true.``
+
+    抽出した各フレームをAMBER rst7形式でも出力するかどうかを指定する．
+
+----
+* **``shuffle``**
+    * Default: ``.false.``
+    * Example: ``shuffle = .true.``
+
+    フレームをシャッフルして出力するかどうかを指定する．
+    ``.true.`` の場合は全フレームをランダムな順序に並べ替えて出力する．
+
+### 出力ファイルのフォーマット
+
+出力ファイル(トラジェクトリ)のフォーマットは，
+入力のトラジェクトリのフォーマット(dcd or xtc or nc (netcdf))と同じものとなる．
+
+### 解析例
+
+トラジェクトリファイルとして，``input.dcd``を指定し，ランダムに100フレームを抽出する場合の例を以下に示す．また，トラジェクトリと合わせて``rst7``形式(``inpcrd``)で各フレームでの構造を出力する．
+
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ ftraj    = "input.dcd" 
+/
+&output_param
+ fhead         = "out"
+/
+&option_param
+ nsample = 100
+ output_trajtype = "dcd"
+ duplicate       = .false.
+ out_rst7        = .true. 
+/
+EOF
+
+fanatra random_frame run.inp 
+```
+これを実行すると，``out.dcd``と``outXXXXX.inpcrd`` (``XXXXX=00001, ..., 00100``)が出力される．

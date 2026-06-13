@@ -1,0 +1,213 @@
+## 空間分布関数(spatial_distr, sdf)
+
+### 理論背景
+
+粒子$a$が$N_{a}$個存在している系(体積$V$，数密度$\rho_{a}=N_{a}/V$)
+を考える．
+ただし，系の中心に分子が一つ配向も含めてピン止めされている状況を考える．
+この場合，ピン止めされた分子は外場の働きをする．
+このような状況は通常の溶液系のシミュレーションではありえないが，
+この節の最後で述べるようにトラジェクトリのフィッティングを行うことで，
+仮想的に同様の状況を作り出すことができる．
+
+動径分布関数の場合と同様に，粒子$a$の局所密度場を次式で定義する．
+
+\begin{align}
+\hat{\rho}_{a}\left({\bf r}\right) & =\sum_{i=1}^{N_{a}}\delta\left({\bf r}-{\bf r}_{i}\right).
+\end{align}
+
+これのアンサンブル平均は1体密度と呼ばれる．
+
+\begin{align}
+\rho_{a}\left({\bf r}\right) & =\braket{\hat{\rho}_{a}\left({\bf r}\right)}_{\mathrm{ext}}\\
+\end{align}
+
+ここで，$\braket{\cdots}_{\mathrm{ext}}$は外場存在下でのアンサンブル平均を表す．
+外場が存在しないとき$\rho_{a}({\bf r}) = \rho_a$となる．また，中心の分子(外場)から遠く離れているところでも，
+$\rho_{a}\left({\bf r}\right) = \rho_a$となる．
+空間分布関数(spatial distribution function, SDF)を次式で定義する．
+
+\begin{align}
+g_{a}\left({\bf r}\right) & =\dfrac{\rho_{a}\left({\bf r}\right)}{\rho_{a}}.
+\end{align}
+
+$g_{a}\left({\bf r}\right) > 0$はその位置での粒子$a$の存在確率がバルクよりも高く，
+$g_{a}\left({\bf r}\right) < 0$は存在確率がバルクよりも低いことを意味する．
+
+SDFを計算する際には，まずMDトラジェクトリ内に含まれている外場として扱う分子を参照構造に
+重なるように並進・回転させる(フィッティング)．また，アンラップされているトラジェクトリについては，
+あらかじめPBCラップを行っておく必要がある({numref}``figure_sdf_fitting``)．
+``spatial_distr``では，これら一連の操作を一括して行うことが可能である．
+変換を行った後は，注目している分子は特定の位置・配向に固定された状態になるため，
+固定された外場として扱うことができ，周囲の分子の位置からSDFの計算が可能である．
+しかし，外場として扱う分子が，特定の安定構造を持たない場合は，フィッティングが適切に行えないため，
+SDFの計算は困難となる．天然構造を持つタンパク質については，
+シミュレーションの間に大きな構造変化が起きていなければ，多くの場合SDF計算は可能である．
+
+
+```{figure} ./figures/fitting_for_sdf.eps
+:name: figure_sdf_fitting
+
+トラジェクトリ内の注目している分子を参照構造に重なるように系を並進・回転させることで(フィッティング)，
+特定の配向の分子周囲の他分子の3次元的な位置を調べることが可能である．
+``spatial_distr``では，これら一連の操作を一括して行うことが可能である．
+<!---空間分布関数を計算する際には，トラジェクトリのPBCラップおよびフィッティングをあらかじめ行っておく必要がある．
+--->
+```
+
+### オプション一覧
+
+**オプション**         | **備考**         | **オプション**   | **備考** 
+:---------------------:|:----------------:|:----------------:|:----------------:
+``-stype``             | Common           | ``-sfile``       | Common
+``-tintype``           | Common           | ``-tin``         | Common
+``-flist_traj``        | Common           | ``-fhead``       | Common           
+``-selX``              | Common           | ``-mode``        | Common           
+``-ng3``               | Mode specific    | ``-del``         | Mode specific 
+``-origin``            | Mode specific    | ``-fit``         | Mode specific
+``-refpdb``            | Mode specific    | ``-refselid``    | Mode specific
+``-fitselid``          | Mode specific    | ``-use_spline``  | Mode specific
+``-spline_resolution`` | Mode specific    | ``-prep_only``   | Common
+
+上記以外にも，条件付き空間分布など，より発展的な解析に対応したオプションも実装されているが，それらは次のアップデートの際に公式サポート予定である．
+
+  ---
+* **-ng3 \<$x,y,z$軸のグリッド数\>**  
+  * Default: ``50 50 50``  
+  * Example: ``-ng3 50 50 50``
+
+  $x,y,z$軸方向のグリッド数$n_x, n_y, n_z$を指定する．
+  従って，合計グリッド数は$n_x n_y n_z$である．
+
+  ---
+* **-del \<$x,y,z$軸のグリッド幅 (ANGSTROM)\>**  
+  * Default: ``0.5 0.5 0.5``  
+  * Example: ``-del 0.5 0.5 0.5``
+
+  $x,y,z$軸のグリッド幅$\Delta x, \Delta y, \Delta z$ (angstrom) を指定する．
+  従って，グリッド点一つの体積要素$\Delta V = \delta x \delta y \delta z$である．
+
+  ---
+* **-origin \<原点の$(x,y,z)$座標 (ANGSTROM)\>**  
+  * Default: ``0.0 0.0 0.0``  
+  * Example: ``-origin 0.0 0.0 0.0``
+
+  グリッドを張るときの原点を指定する．原点の座標を$(x_o, y_0, z_0)$とすると，グリッド点$i_x, i_y, i_z$の座標$(x_i, y_i, z_i)$は次式で与えられる．
+  \begin{align}
+  x_i &= x_0 + \Delta x \, (i_x - 1) \\
+  y_i &= y_0 + \Delta y \, (i_y - 1) \\
+  z_i &= z_0 + \Delta z \, (i_z - 1) 
+  \end{align}
+
+  ---
+* **-fit \<true or false\>**
+  * Default: ``false``
+  * Example: ``-fit true`` 
+
+  外場として扱う分子(溶質)周囲を中心として，PBCラップを行った後に，溶質分子が参照構造に重なるようにフィッティングする．``-fit true``の場合，次以降に示す``-refpdb``, ``-refselid``, ``-fitselid``を指定すると同時に，  
+        ``-sel0 <SDFを計算したい分子のselection>``  
+        ``-sel1 <参照構造内のフィッティングに使う部位>``  
+        ``-sel2 <トラジェクトリ内のフィッティングに使う部位>``  
+  のように3つのselectionを指定する必要がある．
+  **入力のトラジェクトリがフィッティング後の場合，必ず``-fit false``に設定しなければならない．** フィッティング後のトラジェクトリに対してPBCラップを行うと，不適切な分子配置になってしまうためである．
+
+  ---
+* **-refselid <selid>**
+    * Default: N/A
+    * Example: ``-refselid 1``
+
+    照構造内のフィッティングに使う部位のselidを指定する．
+    ``-fit``での例のように``-selX (x=0, 1, 2)``を指定した場合には，``-refselid 1``とする．
+
+  ---
+* **-fitselid <フィッティングに使うトラジェクトリ内の部位に対応するselid>**
+    * Default: N/A
+    * Example: ``-fitselid 2``
+
+    フィッティングに使うトラジェクトリ内の部位のselidを指定する．
+    ``-fit``での例のように``-selX (x=0, 1, 2)``を指定した場合には，``-fitselid 2``とする．
+
+  ---
+* **-use_spline \<true or false\>**  
+  * Default: ``false``
+  * Example: ``-use_spline true``
+  * Note: スプラインによるグリッド細分化度は``-spline_resolution``で指定する．
+
+  SDF計算の際，スプライン補間を行う．
+  このプログラムではAkima補間を用いる．
+
+  ---
+* **-spline_resolution \<スプラインによるグリッド細分化度\>**
+  * Default: ``4``
+  * Example: ``-spline_resolution 4``
+  * Note: "``-use_spline true``"のときに有効となる．
+
+  スプラインによるグリッド細分化の度合いを整数値で指定する．この値を$n_r$とし，スプライン実行前のSDFのグリッド刻みを$\Delta \alpha~(\alpha=x,y,z)$とすると，スプラインを施したSDFのグリッド刻みは
+ 
+  \begin{align}
+    \Delta \alpha^{\prime} = \Delta \alpha / n_r,
+  \end{align} 
+
+  となる．また，スプライン実行前の合計グリッド数を$N$，
+  実行後のグリッド数を$N^{\prime}$とすると，
+
+  \begin{align}
+    N^{\prime} = n_r^{3} N,
+  \end{align}
+
+  となる．
+
+  ---
+
+### 出力ファイルのフォーマット
+
+* ``*_out_g_original.dx``
+
+  SDFがdx形式で出力される．
+  このファイルに格納されているSDFはスプラインが施されていない．
+
+
+* ``*_out_g_spline.dx``
+  
+  SDFがdx形式で出力される．
+  このファイルに格納されているSDFはスプラインが施されている．
+  "``-use_spline true``"のときのみこのファイルが出力される．
+<!---
+* ``*.sdbin``
+
+  このファイルには，SDFの情報がバイナリ形式で出力される．
+  ``fanatra``の解析モード``sd_gather``では，
+  複数のトラジェクトリから個別で計算したSDFの平均を取ることが可能だが，
+  その際にこの``*.sdbin``ファイルを入力として与える必要がある．
+  スプラインの設定情報もこのファイルに格納されており，``sd_gather``が，
+  スプラインを施したSDFを計算する．
+---> 
+
+### 解析例
+
+#### タンパク質周りの水分子のSDF
+
+タンパク質(``resid 1 to 192``)周りの水分子(重心)のSDFを計算する．
+```
+#!/bin/bash
+
+anatra spatial_distr                         \
+  -stype             parm7                   \
+  -sfile             complex.prmtop          \
+  -tintype           dcd                     \
+  -tin               INP.dcd                 \
+  -fhead             out                     \
+  -sel0              water                   \
+  -sel1              resid 1 to 192 and noh  \
+  -sel2              resid 1 to 192 and noh  \
+  -mode              residue                 \
+  -ng3               50 50 50                \
+  -del               0.4 0.4 0.4             \
+  -origin            -10.0 -10.0 -10.0       \
+  -fit               true                    \
+  -refpdb            ref.pdb                 \
+  -refselid          1                       \
+  -fitselid          2                       \
+  -use_spline        true                    \
+  -spline_resolution 4
+```

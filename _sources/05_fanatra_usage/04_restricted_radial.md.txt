@@ -1,0 +1,320 @@
+## 制限つき動径平均力ポテンシャル(restricted_radial, rrpmf)
+
+この解析モードでは，何らかの反応座標(集団座標)によって
+条件づけられた状態の動径方向に対する自由エネルギープロファイルを計算できる．
+また，このプロファイルから，ホスト分子とゲスト分子の結合に伴う自由エネルギー変化
+(結合自由エネルギー)の計算が可能である．
+
+### 理論背景
+
+系が配置${\bf X}$をとるときの
+ホスト–ゲスト分子間の距離，結合状態を規定する反応座標の値をそれぞれ$d\left({\bf X}\right)$, $\bm{\xi}\left({\bf X}\right)$とする．
+距離に対する平均力ポテンシャルを
+
+\begin{align}
+w\left(r\right) & =-\dfrac{1}{\beta}\log\left[\int d{\bf X}\,\dfrac{\delta\left(r-d\left({\bf X}\right)\right)}{4\pi r^{2}}\exp\left(-\beta U\left({\bf X}\right)\right)\right]+C
+\end{align}
+
+と定義する．
+さらに，反応座標空間上の結合状態に対応する領域を$\bm{\Upsilon}$とし，次式に示す特性関数$\Theta\left(\bm{\xi}\right)$を導入する．
+
+\begin{align}
+\Theta_{\mathrm{B}}\left(\bm{\xi}\right) & =\begin{cases}
+1 & \bm{\xi}\in\bm{\Upsilon}\\
+0 & \bm{\xi}\notin\bm{\Upsilon}
+\end{cases}
+\end{align}
+
+この$\Theta\left(\bm{\xi}\right)$を用いれば，結合状態に属する配置に対する平均力ポテンシャルは
+
+\begin{align}
+w_{\mathrm{B}}\left(r\right) & =-\dfrac{1}{\beta}\log\left[\int d{\bf X}\,\dfrac{\delta\left(r-d\left({\bf X}\right)\right)}{4\pi r^{2}}\Theta_{\mathrm{B}}\left(\bm{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)\right]+C
+\end{align}
+
+と表せる．$w\left(r\right)$と$w_{\mathrm{B}}\left(r\right)$に含まれる定数$C$は同一の値とし，
+$w_{\mathrm{B}}\left(r\right)$が最小値がゼロとなるように設定する．
+$w\left(r\right)$は$r$が十分に大きいときに定数となるので，
+その定数を$\Delta w$とし，$w\left(r\right) = \Delta w$を満たす領域Uを$r_{0}\leq r\leq r_{1}$と定める．
+$r_{0}, r_{1}$の設定は，$w\left(r\right) = \Delta w$を満たしてさえいれば，任意に決めて良い．このことについては後で述べる．
+2分子が$r_{0}\leq r \leq r_{1}$の距離範囲に存在する状態Uと結合状態Bの
+存在確率比は
+
+\begin{align}
+\dfrac{{\displaystyle \int_{\bm{\Upsilon}}dr\,\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)}}{{\displaystyle \int_{r_{0}}^{r_{1}}dr\,\exp\left(-\beta w\left(r\right)\right)}}
+\end{align}
+
+であることから，UからBの変化に伴う自由エネルギー変化$\Delta G_{\mathrm{PMF}}$は
+
+\begin{align}
+\Delta G_{\mathrm{PMF}} & =-\dfrac{1}{\beta}\log\dfrac{{\displaystyle \int_{\bm{\Upsilon}}dr\,4\pi r^{2}\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)}}{{\displaystyle \int_{r_{0}}^{r_{1}}dr\,4\pi r^{2}\exp\left(-\beta w\left(r\right)\right)}}
+\end{align}
+
+と表せる．
+分母に含まれる$w\left(r\right)$は$r_{0}\leq r\leq r_{1}$の範囲で$\Delta w$なので，
+
+\begin{align}
+\Delta G_{\mathrm{PMF}} & =-\Delta w-\dfrac{1}{\beta}\log\dfrac{V_{\mathrm{B}}}{V_{\mathrm{U}}}
+\label{pmf:dGpmf}
+\end{align}
+
+と書き直せる．ただし，$V_{\mathrm{B}}$, $V_{\mathrm{U}}$は
+
+\begin{align}
+V_{\mathrm{B}} & =\int_{\bm{\Upsilon}}dr\,4\pi r^{2}\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)\\
+V_{\mathrm{U}} & =\int_{r_{0}}^{r_{1}}dr\,4\pi r^{2}
+\end{align}
+
+で定義される．式EQREF(pmf:dGpmfEQREF)の第2項は，ゲスト分子が濃度$1/V_{\mathrm{U}}$の状態から濃度$1/V_{\mathrm{B}}$の
+状態への移行に伴う自由エネルギー変化である．実験での結合自由エネルギーは標準状態濃度(典型的には$c^{\circ} = 1~\mathrm{mol~L^{-1}}$)
+のゲスト分子がホスト分子に結合するのに伴う自由エネルギー変化($\Delta G^{\circ}$)であり，$\Delta G_{\mathrm{PMF}}$とは異なる．
+ゲスト分子1つで濃度$c^{\circ}$となるときの体積を$V^{\circ}$とするとこれは$V^{\circ} = 1661$ ANGSTROM$^{3}$である．
+ゲスト分子が濃度$c^{\circ} = 1/V^{\circ} $の状態から濃度が$1/V_{\mathrm{U}}$の状態への移行に対する自由エネルギー変化$\Delta G^{\circ}_{\mathrm{corr}}$は
+
+\begin{align}
+\Delta G^{\circ}_{\mathrm{corr}} = - \dfrac{1}{\beta} \log \dfrac{V_{\mathrm{U}}}{V^{\circ}}
+\label{pmf:dGcorr}
+\end{align}
+
+である．つまり，$1/V^{\circ} \to 1/V_{\mathrm{B}}$の変化を$1/V^{\circ} \to 1/V_{\mathrm{U}}$と$1/V_{\mathrm{U}} 
+\to 1/V_{\mathrm{B}}$の2段階に分けることで，
+
+\begin{align}
+\Delta G^{\circ} = \Delta G_{\mathrm{PMF}} + \Delta G_{\mathrm{corr}}^{\circ}
+\end{align}
+
+と表すことができる．式EQREF(pmf:dGpmfEQREF), EQREF(pmf:dGcorrEQREF)を上式に代入することで，
+
+\begin{align}
+\Delta G^{\circ} = - \Delta w - \dfrac{1}{\beta} \log \dfrac{V_{\mathrm{B}}}{V^{\circ}}
+\end{align}
+
+を得る．この式には$V_{\mathrm{U}}$が含まれていないことから，$\Delta G^{\circ}$の値は$r_{0},r_{1}$の選択に依存しない．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|flist_cv|      & CVファイル一覧を格納したファイル名 \\
+                     & \verb|flist_weight|  & 重みファイル一覧を格納したファイル名（オプション） \\
+                     & \verb|fcv|           & CVファイル名 \\
+                     & \verb|fweight|       & 重みファイル名 \\
+\hline
+\verb|&output_param| & \verb|fhead|         & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|calcfe|        & 標準自由エネルギーを計算するかどうか \\
+                     & \verb|ndim|          & CVの次元数 \\
+                     & \verb|only_r|        & 分子間距離が唯一のCVの場合かどうか\\
+                     & \verb|temperature|   & 温度 [K] \\
+                     & \verb|dr|            & 距離グリッド間隔 \\
+                     & \verb|ngrid|         & 距離グリッド数 \\
+                     & \verb|nsta|          & 解析開始フレーム番号 \\
+                     & \verb|use_bootstrap| & ブートストラップ解析の有無 \\
+                     & \verb|vol0|          & 標準状態体積 \\
+                     & \verb|urange|        & 非結合状態の距離範囲 \\
+                     & \verb|bound_range|   & 結合状態の距離範囲 \\
+\hline
+\verb|&bootopt_param| & \verb|iseed|        & 乱数シード \\
+                      & \verb|nsample|      & 各試行で抽出するサンプル数 \\
+                      & \verb|duplicate|    & 重複抽出を許可するかどうか \\
+                      & \verb|ntrial|       & ブートストラップ試行回数 \\
+\hline
+\end{tabular}
+}
+```
+
+### 入力ファイル(時系列データ)のフォーマット
+
+* 1列目：時間軸
+* 2列目〜$(N+1)$列目：CV値
+* 最終列：分子間距離
+
+1 列目は読み込まれず，2 列目から1 つめのデータ列としてカウントされる．
+分子間距離のみがCVの場合，つまり
+
+* 1列目：時間軸
+* 2列目：分子間距離
+
+の場合には，``&option_param``内で``only_r = .true.``を指定すれば良い．
+
+### ``&option_param``
+
+* **``calcfe``**
+    * Default: ``.true.``
+    * Example: ``calcfe = .true.``
+
+    標準結合自由エネルギーを計算するかどうかを指定する．
+    ``.true.`` の場合は標準結合自由エネルギーを計算し，``.false.`` の場合はPMFのみを出力する．
+
+----
+* **``ndim``**
+    * Default: None
+    * Example: ``ndim = 1``
+
+    CVの次元数を指定する．
+    現在は1次元および多次元PMFに対応している．
+
+----
+* **``only_r``**
+    * Default: ``.false.`` 
+    * Example: ``only_r = .false.``
+
+    分子間距離がCVであり，それ以外のCVが存在しない場合に``.true.``を指定する．
+----
+* **``temperature``**
+    * Default: ``298.0``
+    * Example: ``temperature = 300.0``
+
+    自由エネルギー計算に用いる温度 $T$ [K] を指定する．
+
+----
+* **``dr``**
+    * Default: None
+    * Example: ``dr = 0.1d0``
+
+    距離方向のグリッド間隔を指定する．
+    グリッド点間の間隔 $\Delta r$ として用いられる．
+
+----
+* **``ngrid``**
+    * Default: None
+    * Example: ``ngrid = 1000``
+
+    距離方向のグリッド数を指定する．
+    PMFは ``ngrid`` 個のグリッド上で評価される．
+
+----
+* **``nsta``**
+    * Default: ``1``
+    * Example: ``nsta = 100``
+
+    解析を開始するフレーム番号を指定する．
+    ``nsta`` より前のフレームは解析から除外される．
+
+----
+* **``use_bootstrap``**
+    * Default: ``.false.``
+    * Example: ``use_bootstrap = .true.``
+
+    ブートストラップ法による誤差評価を実施するかどうかを指定する．
+    ``.true.`` の場合は ``&bootopt_param`` の設定に従ってブートストラップ解析を行う．
+
+----
+* **``vol0``**
+    * Default: ``1661.0d0``
+    * Example: ``vol0 = 1661.0d0``
+
+    標準状態体積 $V^\circ$を指定する．
+    デフォルト値はANGSTROM単位で1 mol/Lに対応する体積(1661 ANGSTROM$^3$)である．
+
+----
+* **``urange``**
+    * Default: None
+    * Example: ``urange = 25.0 30.0``
+
+    非結合状態（unbound state）とみなす距離範囲を指定する．
+    1つ目の値が下限，2つ目の値が上限を表す．
+
+----
+* **``bound_range``**
+    * Default: None
+    * Example:
+      ```
+      react_range = 0.0 10.0
+                    5.0 20.0
+      ```
+
+    結合状態（bound state）のCV範囲を指定する．
+    各行について，1つ目の値が下限，2つ目の値が上限を表す．
+    ``ndim`` 個の範囲を指定することで，多次元結合領域を定義できる．
+
+
+### ``&bootopt_param``
+
+ここでは，ブートストラップ法による誤差解析の設定を行う．
+``use_bootstrap = .true.``の場合に有効となる．
+
+* **``iseed``**
+    * Default: 自動生成
+    * Example: ``iseed = 3141592``
+
+    ブートストラップ解析で使用する乱数シードを指定する．
+    ``iseed <= 0`` の場合はプログラムが自動的にシードを生成する．
+
+----
+* **``nsample``**
+    * Default: None
+    * Example: ``nsample = 1000``
+
+    各ブートストラップ試行で抽出するサンプル数を指定する．
+
+----
+* **``duplicate``**
+    * Default: ``.true.``
+    * Example: ``duplicate = .false.``
+
+    ブートストラップサンプリング時に重複抽出を許可するかどうかを指定する．
+
+----
+* **``ntrial``**
+    * Default: None
+    * Example: ``ntrial = 100``
+
+    ブートストラップ試行回数を指定する．
+    試行回数を増やすことで統計誤差の推定精度が向上するが，計算コストも増加する．
+
+### 出力ファイルのフォーマット
+
+* ``*.rd`` 
+    * 1列目: 分子間距離$r$
+    * 2列目: $r$に沿った通常のPMF
+    * 3列目: 結合状態に対応するPMF  
+
+### 解析例
+
+CV数が1，最終列に分子間距離を格納した時系列データ``inp.ts``から，$18\leq r/$ANGSTROM$\leq 20$の範囲を解離状態，結合状態に対応するCV ($\zeta$)の値域が$5.0\leq \zeta \leq 10.0$の範囲のときの結合自由エネルギーの値を計算する例を下記に記す．
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ fcv      = "inp.ts" 
+/
+&output_param
+ fhead         = "out"
+/
+&option_param
+ calcfe        = .true.
+ only_r        = .false.
+ ndim          =  1       
+ temperature   =  300.0   
+ dr            =  0.1d0   
+ ngrid         =  1000    
+ nsta          =  1       
+ use_bootstrap = .false.  
+ vol0          = 1661.0d0
+ urange        =  18.0  20.0
+ bound_range   =  5.0  10.0 
+/
+EOF
+
+fanatra restricted_radial run.inp 
+```
+これを実行すると，ログファイルの後半に結果が出力される．
+```
+... Thermodynamic analysis ...
+vb      (A^3)      =      21.5444908
+wu      (kcal/mol) =      -1.3486059
+wb      (kcal/mol) =       0.0000000
+dw      (kcal/mol) =      -1.3486059
+dGv     (kcal/mol) =       2.5903536
+dGzero  (kcal/mol) =       3.9389595
+Keq     (M^-1)     =   1.3506025E-03
+```
+ 

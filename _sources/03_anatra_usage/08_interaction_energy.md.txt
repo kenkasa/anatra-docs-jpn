@@ -1,0 +1,250 @@
+## 相互作用エネルギー(interaction_energy, ene)
+
+``interaction_energy`` (``ene``)では選択した分子やその集団，もしくは特定部位等の間に働く相互作用エネルギーを計算できる．  
+現在**anatra**では以下の三種類の相互作用が計算可能である．  
+
+* **静電相互作用**  
+    分子Aと分子Bの間に働く静電相互作用$U_{\mathrm{elec}}$について，2通りのスキームを実装している．一つはBare相互作用であり，$i$と$j$はそれぞれ分子AとBの原子インデックス番号とするとA-B間の相互作用は
+
+    \begin{align}
+    U_{\mathrm{elec}}=\sum_{i \in \mathrm{A}}\sum_{j \in \mathrm{B}}\dfrac{q_{i}q_{j}}{r_{ij}}, \label{elec}
+    \end{align}
+
+    で表される．
+    もう一つは，Smooth particle mesh Ewald (SPME)法による静電相互作用の計算である．実際のMD計算は長距離的な静電相互作用を考慮するためにSPME法を用いるのが現在の標準であり，MD計算と正しく対応する静電相互作用の計算が必要な場合はSPME法を用いた計算が必要となる．
+
+* **Lennard-Jones (LJ)相互作用**  
+    van der Waals相互作用を表現するための経験的なモデルであるLennard-Jones相互作用は，以下の式で定義される．
+
+    \begin{align}
+    U_{\mathrm{LJ}}=\sum_{i \in \mathrm{A}}\sum_{i \in \mathrm{B}}4\epsilon_{ij} \left\{ \left(\dfrac{\sigma_{ij}}{r_{ij}}\right)^{12}-\left(\dfrac{\sigma_{ij}}{r_{ij}}\right)^{6}\right\}．\label{LJ}
+    \end{align}
+
+    この式中の$\epsilon_{ij}$と$\sigma_{ij}$は分子A中の原子$i$と分子B中の原子$j$との間のLJパラメータである．
+
+* **Attractive LJ 相互作用**
+    Attractive LJ相互作用は，以下で定義される．
+
+    \begin{align}
+    U_{\mathrm{attr}} & =\sum_{i \in \mathrm{A}}\sum_{i \in \mathrm{B}} u_{\mathrm{attr},ij} , \label{Uattr} \\
+    u_{\mathrm{attr}, i j} &= \begin{cases}4 \epsilon_{i j}\left\{\left(\frac{\sigma_{i j}}{r_{i j}}\right)^{12}-\left(\frac{\sigma_{i j}}{r_{i j}}\right)^6\right\} & r_{i j} \geq 2^{1 / 6} \sigma \\ -\epsilon_{i j} & r_{i j}<2^{1 / 6} \sigma .\end{cases}
+    \end{align}
+
+    これはLJ相互作用の極小部分を引き伸ばした形の関数であり(図3.3参照)，LJ相互作用の関数で生じていた，エネルギーに対する距離の多価性を取り除いたものである．分子会合過程等の化学過程についてPMF作成を行う際，Attractive LJ相互作用を反応座標として用いれば，LJ相互作用に比べて明確に解離や会合などの状態区別が可能となる．
+
+    以上の3種類の相互作用計算に加え，静電相互作用とLJ相互作用，もしくは静電相互作用とattractive LJ相互作用の和を計算することも可能である．
+
+### オプション一覧
+
+**オプション**     | **備考**      | **オプション**    | **備考**
+:-----------------:|:-------------:|:-----------------:|:--------------:
+``-stype``         | Common        | ``-sfile``        | Common
+``-tintype``       | Common        | ``-tin``          | Common
+``-flist_traj``    | Common        | ``-fhead``        | Common        
+``-sel0``          | Common        | ``-sel1``         | Common        
+``-mode0``         | Common        | ``-mode1``        | Common        
+``-parmformat``    | Mode specific | ``-fanaparm``     | Mode specific 
+``-pbc``           | Mode specific | ``-calc_vdw``     | Mode specific 
+``-calc_elec``     | Mode specific | ``-vdw_type``     | Mode specific
+``-elec_type``     | Mode specific | ``-dt``           | Mode specific
+``-rvdwcut``       | Mode specific | ``-relcut``       | Mode specific
+``-pme_alpha``     | Mode specific | ``-pme_grids``    | Mode specific
+``-pme_rigid``     | Mode specific | ``-pme_dual``     | Mode specific
+``-pme_fprm``      | Mode specific | ``-prep_only``    | Common
+
+ ---
+* **-parmformat \<prmtop or anaparm\>**  
+  * Default: ``prmtop``  
+  * Example: ``-parmformat anaparm``  
+  * Note   : ``anaparm``を指定した場合，``-fanaparm``の指定が必要となる．
+
+  電荷情報を参照するパラメータファイルを指定する．``prmtop``を指定する場合は``-sfile``にて指定したprmtopファイルを自動で参照する．
+
+  ---
+* **-fanaparm \<anaparmファイル名\>**  
+  * Default: N/A  
+  * Example: ``-fanaparm complex.anaparm``
+
+  LJパラメータや電荷情報を参照するanaparmファイル名を指定する．このオプションは``-parmformat anaparm``のときに必要となる．
+
+  ---
+
+* **-pbc \<true or false\>**  
+  * Default: ``false``  
+  * Example: ``-pbc true``
+
+  周期境界を考慮して相互作用計算を行うかを指定する．つまりboxの上下左右に同様のboxが存在するとしてその中のミラー分子からの寄与も計算するかを決定する．
+
+  ---
+
+* **-calc_vdw \<true or false\>**  
+  * Default: ``true``  
+  * Example: ``-calc_vdw false``
+
+  van der Waals（LJ）相互作用を計算するかを指定する．
+
+  ---
+
+* **-calc_ele \<true or false\>**  
+  * Default: ``false``  
+  * Example: ``-calc_ele true``
+
+  静電相互作用を計算するかどうかを指定する.
+
+  ---
+* **-vdw_type \<standard or attractive\>**  
+  * Default: ``standard``  
+  * Example: ``-vdw attractive``
+
+  計算するvan der Waals相互作用の関数を選択する．
+  ``standard``は通常のLJ相互作用(式EQREF(LJEQREF))を計算し，
+  ``attractive``は$U_{\mathrm{attr}}$ (式EQREF(UattrEQREF))を計算する
+
+  ---
+
+* **-elec_type \<bare or pme\>**  
+  * Default: ``bare``  
+  * Example: ``-elec bare``
+
+  静電相互作用の計算方法を指定する．``bare``の場合には，式EQREF(elecEQREF)に基づいて計算が行われる．
+  ``pme``を指定した場合，Smooth particle mesh Ewald（PME）法に基づいて計算が行われる．  
+
+  ---
+
+* **-dt \<時間刻み\>**  
+  * Default: ``0.1``  
+  * Example: ``-dt 1.0``
+
+  時系列データ出力の際の時間軸（第１列）の時間刻みを指定する．
+
+  ---
+
+* **-rvdwcut \<カットオフ距離（Å）\>**  
+  * Default: ``12.0``  
+  * Example: ``-rvdwcut 20.0``
+
+  vdW相互作用計算の際のカットオフ距離を指定する．
+
+  ---
+
+* **-relcut \<カットオフ距離（Å）\>**  
+  * Default: ``1.0e10``
+  * Example: ``-relcut 1.0e10``
+
+  静電相互作用計算の際のカットオフ距離を指定する．
+
+  ---
+
+* **-pme_alpha \<スクリーニングパラメータ（ANGSTROM$^{-1}$）\>**  
+  * Default: ``0.35e0``  
+  * Example: ``-pme_alpha 0.35e0``
+
+  PME法におけるスクリーニングパラメータの値を指定する．``-elec pme``の時のみ参照される値である．
+
+  ---
+
+* **-pme_grids \<$x,y,z$軸のグリッド数\>**  
+  * Default: ``64 64 64``  
+  * Example: ``-pme_grids 64 64 64``
+
+  $x,y,z$軸方向のグリッド数$n_x, n_y, n_z$を指定する．
+  従って，合計グリッド数は$n_x n_y n_z$である．
+  
+  ---
+
+* **-pme_rigid \<true or false\>**  
+  * Default: ``false``  
+  * Example: ``-pme_rigid false``
+
+  SPME計算を行う際，``-sel0``で指定した部位が空間上に固定されている場合に，``-pme_rigid true``と設定することで，
+計算負荷を削減することができる．
+<!---
+  ---
+* **-pme_fprm \<prmtopファイル名\>**  
+  * Default: N/A  
+  * Example: ``-pme_fprm solute_2.prmtop``
+
+  dual計算の際の追加の電荷情報を読み込むprmtopファイル名を指定する．``"-pme_dual true"``の際に必要となる．
+--->
+
+### 出力ファイルのフォーマット
+
+* ``*.uij``ファイル
+  
+  選択部位間の静電相互作用が出力される．``-mode 0, -mode1``の指定により，部位0,1がそれぞれ$n_{1}$個，$n_{2}$個の分子に分割されたとすると，合計で$n_{1}n_{2}$通りの相互作用が出力されることとなる．この時，各データは以下のように出力される．
+  
+  * 1列目: 時間軸
+  * 2列目: 分子対(1, 1)の相互作用
+  * 3列目: 分子対(1, 2)の相互作用
+    ...
+  * $n_2$列目: 分子対(1, $n_2$)の相互作用
+  * $n_2+1$列目: 分子対(2, 1)の相互作用
+  * $n_2+2$列目: 分子対(2, 2)の相互作用
+    ...
+
+### 解析例
+
+  ここではよく行う解析について最低限のオプションを使ったスクリプトの例を示しておく．
+
+#### 溶質間の静電相互作用とLJ相互作用の和
+
+  タンパク質(``resid 1 to 161``)とリガンド分子(``resname LIG``)の間の
+  静電相互作用+LJ相互作用の和を計算する場合を示す．ここでは，静電相互作用の計算にSPME法を用いる．
+
+  ```
+  #!/bin/bash
+   
+  anatra energy
+    -stype       parm7                            \
+    -sfile       complex.prmtop                   \
+    -tintype     dcd                              \
+    -tin         INP.dcd                          \
+    -fhead       out                              \
+    -parmformat  prmtop                           \
+    -pbc         true                             \
+    -calc_vdw    true                             \
+    -calc_elec   true                             \
+    -vdw_type    standard                         \
+    -elec_type   pme                              \
+    -mode0       whole                            \
+    -mode1       residue                          \
+    -dt          0.1                              \
+    -rvdwcut     12.0                             \
+    -relcut      12.0                             \
+    -pme_alpha   0.35                             \
+    -pme_grids   64 64 64                         \
+    -pme_rigid   false                            \
+    -sel0        resid 1 to 161                   \
+    -sel1        resname LIG                      \
+    -prep_only   false
+  ```
+
+#### 溶質間のLJ相互作用
+
+  タンパク質(``resid 1 to 161``)とリガンド分子(``resname LIG``)の間の
+  LJ相互作用を計算する場合を示す．
+
+  ```
+  #!/bin/bash
+   
+  anatra energy
+    -stype       parm7                            \
+    -sfile       complex.prmtop                   \
+    -tintype     dcd                              \
+    -tin         INP.dcd                          \
+    -fhead       out                              \
+    -parmformat  prmtop                           \
+    -pbc         true                             \
+    -calc_vdw    true                             \
+    -calc_elec   false                            \
+    -vdw_type    standard                         \
+    -mode0       whole                            \
+    -mode1       residue                          \
+    -dt          0.1                              \
+    -rvdwcut     12.0                             \
+    -relcut      1.0e10                           \
+    -sel0        resid 1 to 161                   \
+    -sel1        resname LIG                      \
+    -prep_only   false
+  ```
+

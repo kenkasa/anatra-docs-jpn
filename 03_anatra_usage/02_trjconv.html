@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>トラジェクトリ変換(trjconv) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">トラジェクトリ変換(trjconv)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/03_anatra_usage/02_trjconv.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="trjconv">
+<h1>トラジェクトリ変換(trjconv)<a class="headerlink" href="#trjconv" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">trjconv</span></code>はMD計算で得られたトラジェクトリに対して，種々の変換を行う解析モードである．
+主な用途として次のようなものが挙げられる．</p>
+<ul class="simple">
+<li><p>トラジェクトリのファイル形式を変更したい場合</p></li>
+<li><p>トラジェクトリ内の特定の部位のみを含むトラジェクトリを作成したい場合<br />
+(例．トラジェクトリ内の水を除いたトラジェクトリの作成)</p></li>
+<li><p>ラップされていないトラジェクトリを周期境界条件に基づいてラップしたい場合(PBCラップ)</p></li>
+<li><p>トラジェクトリの特定の部位を参照構造と重なるように系全体を並進回転させたい場合(フィッティング)</p></li>
+<li><p>トラジェクトリの特定の部位の位置が座標原点となるように系全体を並進させたい場合(センタリング)</p></li>
+</ul>
+<section id="id1">
+<h2>オプション一覧<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p><strong>オプション名</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+<th class="head text-center"><p><strong>オプション名</strong></p></th>
+<th class="head text-center"><p><strong>備考</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-stype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sfile</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tintype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-tin</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-totype</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-to</span></code></p></td>
+<td class="text-center"><p>Common</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-sel</span></code><span class="math notranslate nohighlight">\(x\)</span></p></td>
+<td class="text-center"><p>Common</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-beg</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-end</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-fit</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-centering</span> </code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-wrap</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-wrapcenter</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-wrapcomp</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-refpdb</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-outselid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-fitselid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+<td class="text-center"><p><code class="docutils literal notranslate"><span class="pre">-refselid</span></code></p></td>
+<td class="text-center"><p>Mode specific</p></td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<ul>
+<li><p><strong>-beg &lt;トラジェクトリの読み込み開始ステップ&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-beg</span> <span class="pre">10</span></code></p></li>
+</ul>
+<p>トラジェクトリの読み込み開始ステップを指定する．
+ただし，ステップ数は1始まりでカウントしていることに注意されたい．
+上記の例は，10ステップ目からトラジェクトリの読み込みを開始することを意味している．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-end &lt;トラジェクトリの読み込み終了ステップ&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">0</span></code> (トラジェクトリの最終ステップに対応)</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-end</span> <span class="pre">100</span></code></p></li>
+</ul>
+<p>トラジェクトリの読み込み終了ステップを指定する．
+ただし，ステップ数は1始まりでカウントしていることに注意されたい．
+上記の例は，100ステップ目までトラジェクトリを読み込むことを意味している．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-fit &lt;true or false&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-fit</span> <span class="pre">true</span></code></p></li>
+<li><p>Note: <code class="docutils literal notranslate"><span class="pre">true</span></code>の場合は，<code class="docutils literal notranslate"><span class="pre">-fitselid</span></code>, <code class="docutils literal notranslate"><span class="pre">-refpdb</span></code>, <code class="docutils literal notranslate"><span class="pre">-refselid</span></code>の指定が必要となる．</p></li>
+</ul>
+<p>フィッティングを行うかどうかを指定する．
+フィッティングとは，トラジェクトリの特定部位を参照構造に重なるように
+系全体の並進・回転を行う操作のことを意味する．
+利用する際，トラジェクトリ内のフィッティング部位に対応するselid (<code class="docutils literal notranslate"><span class="pre">-sel</span></code><span class="math notranslate nohighlight">\(x\)</span>の<span class="math notranslate nohighlight">\(x\)</span>のこと)
+を指定する<code class="docutils literal notranslate"><span class="pre">-fitselid</span></code>，参照構造のPDBファイルを指定する<code class="docutils literal notranslate"><span class="pre">-refpdb</span></code>，
+参照構造内のフィッティングに使う部位のselidを指定する<code class="docutils literal notranslate"><span class="pre">-refselid</span></code>が必要となる．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-wrap &lt;true or false&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-wrap</span> <span class="pre">true</span> <span class="pre">-wrapcomp</span> <span class="pre">fragment</span> <span class="pre">-wrapcenter</span> <span class="pre">origin</span></code></p></li>
+<li><p>Note: ラップを行うときの中心を座標原点から変更したいときには，<code class="docutils literal notranslate"><span class="pre">-wrapcenter</span></code>を利用する．
+どのようなユニットを1つの分子として扱ってラップするかは<code class="docutils literal notranslate"><span class="pre">-wrapcomp</span></code>で指定する．</p></li>
+</ul>
+<p>アンラップされた状態のトラジェクトリをラップするかどうかを指定する．
+ラップするときの中心は，デフォルトで座標原点<span class="math notranslate nohighlight">\((x,y,z) = (0, 0, 0)\)</span>に設定されているが，
+<code class="docutils literal notranslate"><span class="pre">-wrapcenter</span></code>オプションを利用することで特定部位の重心に変更することが可能である．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-centering &lt;true or false&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-centering</span> <span class="pre">true</span> <span class="pre">-sel1</span> <span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">200</span> <span class="pre">-fitselid</span> <span class="pre">1</span></code></p></li>
+<li><p>Note: 中心に並進移動させる部位のselidは<code class="docutils literal notranslate"><span class="pre">-fitselid</span></code>で指定する．</p></li>
+</ul>
+<p>センタリングを行うかどうかを指定する．
+センタリングとは，トラジェクトリの特定の部位(の重心)が座標原点に配置されるように系全体を
+並進移動させる操作のことを指す．
+どの部分を中心に移動させるかは<code class="docutils literal notranslate"><span class="pre">-fitselid</span></code>で指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-refpdb &lt;PDB file&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-refpdb</span> <span class="pre">A.pdb</span> <span class="pre">-sel2</span> <span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">200</span> <span class="pre">-refselid</span> <span class="pre">2</span></code></p></li>
+<li><p>Note: 参照構造内のフィッティングに使う部位のselidを<code class="docutils literal notranslate"><span class="pre">-refselid</span></code>で指定する．</p></li>
+</ul>
+<p>フィッティングを行う際の，参照構造のPDBファイル名を指定する．
+従って，このオプションは<code class="docutils literal notranslate"><span class="pre">-fit</span> <span class="pre">true</span></code>のときに必須となる．
+参照構造内のフィッティングに使う部位は<code class="docutils literal notranslate"><span class="pre">-refselid</span></code>で指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-outselid &lt;selid&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-sel0</span> <span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">200</span> <span class="pre">-outselid</span> <span class="pre">0</span></code></p></li>
+</ul>
+<p>トラジェクトリとして出力する部位に対応するselidを指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-fitselid &lt;selid&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-sel1</span> <span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">200</span> <span class="pre">-fitselid</span> <span class="pre">1</span></code></p></li>
+</ul>
+<p>フィッティングに使うトラジェクトリ内の部位に対応するselidを指定する．</p>
+</li>
+<hr class="docutils" />
+<li><p><strong>-wrapcenter &lt;origin or com&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">origin</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-wrapcenter</span> <span class="pre">origin</span></code></p></li>
+<li><p>Note: <code class="docutils literal notranslate"><span class="pre">com</span></code>の場合は中心に据える部位のselidを<code class="docutils literal notranslate"><span class="pre">-fitselid</span></code>で指定する．</p></li>
+</ul>
+<p>ラップする際の系の中心をどこに据えるかを指定する．</p>
+<ul class="simple">
+<li><p><strong>origin</strong>: 系の中心として座標原点を指定する．</p></li>
+<li><p><strong>com</strong>: 系の中心として特定の部位を指定する．中心に据える部位のselidを<code class="docutils literal notranslate"><span class="pre">-fitselid</span></code>で指定する．
+フィッティングまたはセンタリングを同時に行う場合，強制的に<code class="docutils literal notranslate"><span class="pre">com</span></code>が指定される．</p></li>
+</ul>
+</li>
+<hr class="docutils" />
+<li><p><strong>-wrapcomp &lt;fragment or residue or nocomp&gt;</strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">fragment</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">-wrapcomp</span> <span class="pre">fragment</span></code></p></li>
+</ul>
+<p>ラップを実行する際，どのようなユニットで分子を区切るかを指定する．
+例えば，シミュレーションボックスをはみ出した原子が存在する場合に
+その原子のみをPBCに基づいて反対側に移動させるようにするか，
+もしくは，分子全体がボックスからはみ出した場合にのみ反対側に移動させるかを指定する．
+その際，ユーザー側はどういう原子団(ユニット)を分子として定義するかを指定する必要がある．</p>
+<ul class="simple">
+<li><p><strong>fragment</strong>: 原子<span class="math notranslate nohighlight">\(i\)</span>と<span class="math notranslate nohighlight">\(j\)</span>が他の原子との結合を介して繋がっている場合，
+それらは同じユニットに属していると考える．
+このような原子のセットを一つの分子としてラップが実行される．</p></li>
+<li><p><strong>residue</strong>: 一つの残基番号に属する原子群を一つの分子としてラップが実行される．</p></li>
+<li><p><strong>nocomp</strong>: 原子1つ1つを分子として扱ってラップが実行される．</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h2>解析例<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>ここでは，よく行う解析について，最低限のオプションを使ったスクリプトの例を示しておく．
+従って，<code class="docutils literal notranslate"><span class="pre">-beg</span></code>，<code class="docutils literal notranslate"><span class="pre">-end</span></code>などのオプションは使用しない．</p>
+<section id="id3">
+<h3>トラジェクトリから水を除去<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="n">anatra</span> <span class="n">trjconv</span>                           \
+  <span class="o">-</span><span class="n">stype</span>      <span class="n">parm7</span>                      \
+  <span class="o">-</span><span class="n">sfile</span>      <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>             \
+  <span class="o">-</span><span class="n">tintype</span>    <span class="n">dcd</span>                        \
+  <span class="o">-</span><span class="n">tin</span>        <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>                    \
+  <span class="o">-</span><span class="n">totype</span>     <span class="n">dcd</span>                        \
+  <span class="o">-</span><span class="n">to</span>         <span class="n">OUT</span><span class="o">.</span><span class="n">dcd</span>                    \
+  <span class="o">-</span><span class="n">sel0</span>       <span class="ow">not</span> <span class="n">water</span>                  \
+  <span class="o">-</span><span class="n">outselid</span>   <span class="mi">0</span>
+</pre></div>
+</div>
+</section>
+<section id="pbc">
+<h3>PBCラップ<a class="headerlink" href="#pbc" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="n">anatra</span> <span class="n">trjconv</span>                           \
+  <span class="o">-</span><span class="n">stype</span>      <span class="n">parm7</span>                      \
+  <span class="o">-</span><span class="n">sfile</span>      <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>             \
+  <span class="o">-</span><span class="n">tintype</span>    <span class="n">dcd</span>                        \
+  <span class="o">-</span><span class="n">tin</span>        <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>                    \
+  <span class="o">-</span><span class="n">totype</span>     <span class="n">dcd</span>                        \
+  <span class="o">-</span><span class="n">to</span>         <span class="n">OUT</span><span class="o">.</span><span class="n">dcd</span>                    \
+  <span class="o">-</span><span class="n">sel0</span>       <span class="nb">all</span>                        \
+  <span class="o">-</span><span class="n">wrap</span>       <span class="n">true</span>                       \
+  <span class="o">-</span><span class="n">wrapcenter</span> <span class="n">origin</span>                     \
+  <span class="o">-</span><span class="n">wrapcomp</span>   <span class="n">fragment</span>                   \
+  <span class="o">-</span><span class="n">outselid</span>   <span class="mi">0</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>フィッティング<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>ここでは，水溶液中にタンパク質(<code class="docutils literal notranslate"><span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">192</span></code>とする)が一つ存在する系を考える．
+トラジェクトリ中のタンパク質のC<span class="math notranslate nohighlight">\(\alpha\)</span>原子を参照構造PDBのC<span class="math notranslate nohighlight">\(\alpha\)</span>原子にフィットさせる場合の例を示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">anatra</span> <span class="n">trjconv</span>                           \
+  <span class="o">-</span><span class="n">stype</span>      <span class="n">parm7</span>                      \
+  <span class="o">-</span><span class="n">sfile</span>      <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>             \
+  <span class="o">-</span><span class="n">tintype</span>    <span class="n">dcd</span>                        \
+  <span class="o">-</span><span class="n">tin</span>        <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>                    \
+  <span class="o">-</span><span class="n">totype</span>     <span class="n">dcd</span>                        \
+  <span class="o">-</span><span class="n">to</span>         <span class="n">OUT</span><span class="o">.</span><span class="n">dcd</span>                    \
+  <span class="o">-</span><span class="n">refpdb</span>     <span class="n">REF</span><span class="o">.</span><span class="n">pdb</span>                    \
+  <span class="o">-</span><span class="n">sel0</span>       <span class="nb">all</span>                        \
+  <span class="o">-</span><span class="n">sel1</span>       <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">192</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">CA</span> \
+  <span class="o">-</span><span class="n">sel2</span>       <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">192</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">CA</span> \
+  <span class="o">-</span><span class="n">fit</span>        <span class="n">true</span>                       \
+  <span class="o">-</span><span class="n">outselid</span>   <span class="mi">0</span>                          \
+  <span class="o">-</span><span class="n">fitselid</span>   <span class="mi">1</span>                          \
+  <span class="o">-</span><span class="n">refselid</span>   <span class="mi">2</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>センタリング<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>ここでは，水溶液中にタンパク質(<code class="docutils literal notranslate"><span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">192</span></code>とする)が一つ存在する系を考える．
+トラジェクトリ中のタンパク質の重心を座標原点に配置させるセンタリングを行う場合の例を示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">anatra</span> <span class="n">trjconv</span>                           \
+  <span class="o">-</span><span class="n">stype</span>      <span class="n">parm7</span>                      \
+  <span class="o">-</span><span class="n">sfile</span>      <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>             \
+  <span class="o">-</span><span class="n">tintype</span>    <span class="n">dcd</span>                        \
+  <span class="o">-</span><span class="n">tin</span>        <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>                    \
+  <span class="o">-</span><span class="n">totype</span>     <span class="n">dcd</span>                        \
+  <span class="o">-</span><span class="n">to</span>         <span class="n">OUT</span><span class="o">.</span><span class="n">dcd</span>                    \
+  <span class="o">-</span><span class="n">sel0</span>       <span class="nb">all</span>                        \
+  <span class="o">-</span><span class="n">sel1</span>       <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">192</span>             \
+  <span class="o">-</span><span class="n">centering</span>  <span class="n">true</span>                       \
+  <span class="o">-</span><span class="n">outselid</span>   <span class="mi">0</span>                          \
+  <span class="o">-</span><span class="n">fitselid</span>   <span class="mi">1</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>PBCラップ&amp;フィッティング<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>ここでは，水溶液中にタンパク質(<code class="docutils literal notranslate"><span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">192</span></code>とする)が一つ存在する系を考える．
+トラジェクトリ中のタンパク質のC<span class="math notranslate nohighlight">\(\alpha\)</span>原子を参照構造PDBのC<span class="math notranslate nohighlight">\(\alpha\)</span>原子にフィットさせるのと同時に，
+PBCラップを実行する例を示す．この際，ラップ中心はC<span class="math notranslate nohighlight">\(\alpha\)</span>原子の重心である．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">anatra</span> <span class="n">trjconv</span>                           \
+  <span class="o">-</span><span class="n">stype</span>      <span class="n">parm7</span>                      \
+  <span class="o">-</span><span class="n">sfile</span>      <span class="nb">complex</span><span class="o">.</span><span class="n">prmtop</span>             \
+  <span class="o">-</span><span class="n">tintype</span>    <span class="n">dcd</span>                        \
+  <span class="o">-</span><span class="n">tin</span>        <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>                    \
+  <span class="o">-</span><span class="n">totype</span>     <span class="n">dcd</span>                        \
+  <span class="o">-</span><span class="n">to</span>         <span class="n">OUT</span><span class="o">.</span><span class="n">dcd</span>                    \
+  <span class="o">-</span><span class="n">refpdb</span>     <span class="n">REF</span><span class="o">.</span><span class="n">pdb</span>                    \
+  <span class="o">-</span><span class="n">sel0</span>       <span class="nb">all</span>                        \
+  <span class="o">-</span><span class="n">sel1</span>       <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">192</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">CA</span> \
+  <span class="o">-</span><span class="n">sel2</span>       <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">192</span> <span class="ow">and</span> <span class="n">name</span> <span class="n">CA</span> \
+  <span class="o">-</span><span class="n">fit</span>        <span class="n">true</span>                       \
+  <span class="o">-</span><span class="n">wrap</span>       <span class="n">true</span>                       \
+  <span class="o">-</span><span class="n">wrapcenter</span> <span class="n">com</span>                        \
+  <span class="o">-</span><span class="n">wrapcomp</span>   <span class="n">fragment</span>                   \
+  <span class="o">-</span><span class="n">outselid</span>   <span class="mi">0</span>                          \
+  <span class="o">-</span><span class="n">fitselid</span>   <span class="mi">1</span>                          \
+  <span class="o">-</span><span class="n">refselid</span>   <span class="mi">2</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>PBCラップ&amp;センタリング<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>中心に据える部分として，脂質膜(<code class="docutils literal notranslate"><span class="pre">resid</span> <span class="pre">1</span> <span class="pre">to</span> <span class="pre">200</span> <span class="pre">and</span> <span class="pre">segid</span> <span class="pre">MEMB</span></code>とする)
+を設定した場合の例を示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">anatra</span> <span class="n">trjconv</span>                              \
+  <span class="o">-</span><span class="n">stype</span>      <span class="n">psf</span>                           \
+  <span class="o">-</span><span class="n">sfile</span>      <span class="nb">complex</span><span class="o">.</span><span class="n">psf</span>                   \
+  <span class="o">-</span><span class="n">tintype</span>    <span class="n">dcd</span>                           \
+  <span class="o">-</span><span class="n">tin</span>        <span class="n">INP</span><span class="o">.</span><span class="n">dcd</span>                       \
+  <span class="o">-</span><span class="n">totype</span>     <span class="n">dcd</span>                           \
+  <span class="o">-</span><span class="n">to</span>         <span class="n">OUT</span><span class="o">.</span><span class="n">dcd</span>                       \
+  <span class="o">-</span><span class="n">sel0</span>       <span class="nb">all</span>                           \
+  <span class="o">-</span><span class="n">sel1</span>       <span class="n">resid</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">segid</span> <span class="n">MEMB</span> \
+  <span class="o">-</span><span class="n">centering</span>  <span class="n">false</span>                         \
+  <span class="o">-</span><span class="n">wrap</span>       <span class="n">true</span>                          \
+  <span class="o">-</span><span class="n">wrapcenter</span> <span class="n">com</span>                           \
+  <span class="o">-</span><span class="n">wrapcomp</span>   <span class="n">fragment</span>                      \
+  <span class="o">-</span><span class="n">outselid</span>   <span class="mi">0</span>                             \
+  <span class="o">-</span><span class="n">fitselid</span>   <span class="mi">1</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

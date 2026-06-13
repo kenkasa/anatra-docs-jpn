@@ -1,0 +1,130 @@
+## 移動平均(moving_average, movave)
+
+この解析モードでは，与えられた1次元データ(分布関数など)の移動平均による平滑化を行う．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|fcv|      & 関数データファイル名 \\
+                     & \verb|flist_cv| & 関数データファイル一覧を格納したファイル名 \\
+\hline
+\verb|&output_param| & \verb|fhead|    & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|dx|            & グリッド間隔 \\
+                     & \verb|xsta|          & グリッドの開始位置 \\
+                     & \verb|xsep|          & 領域の境界位置 \\
+                     & \verb|nregion|       & 領域数 \\
+                     & \verb|npoint|        & 各領域で移動平均に用いる点数 \\
+                     & \verb|include_zero|  & 原点を保持するかどうか \\
+\hline
+\end{tabular}
+}
+```
+
+### ``&option_param``
+
+* **``dx``**
+    * Default: None
+    * Example: ``dx = 0.1d0``
+
+    関数データのグリッド間隔を指定する．
+
+----
+* **``xsta``**
+    * Default: ``0.0d0`` 
+    * Example: ``xsta = 0.0d0``
+
+    グリッドの開始位置を指定する．
+
+    $i$番目のグリッド位置を$x_i$とすると，
+
+    $$
+    x_i = x_0 + (i-1)\Delta x
+    $$
+
+    で与えられる．
+
+----
+* **``nregion``**
+    * Default: ``1``
+    * Example: ``nregion = 2``
+
+    異なる移動平均条件を適用する領域数を指定する．
+    ``npoint`` には，この領域数に対応した個数の値を指定する．
+
+----
+* **``xsep``**
+    * Default: ``0.0d0``
+    * Example: ``xsep = 1.0d0``
+
+    異なる移動平均幅を適用する領域の境界を指定する．
+    ``nregion = 1`` の場合は使用されず，``xsep = 0.0d0`` を指定すればよい．
+    例えば，$N$領域に分ける場合には，境界値を$N-1$個指定する必要がある．
+
+----
+* **``npoint``**
+    * Default: None
+    * Example: ``npoint = 3 5``
+
+    各領域で移動平均に用いるデータ点数を指定する．
+    奇数を指定する必要がある．
+    上記の例では，
+
+    * 第1領域：3点移動平均
+    * 第2領域：5点移動平均
+
+    を適用する．
+
+----
+* **``include_zero``**
+    * Default: ``.true.``
+    * Example: ``include_zero = .false.``
+
+    移動平均後に原点での値を保持するかどうかを指定する．
+    ``.true.`` の場合は，原点での値は入力値のまま固定される．
+
+### 出力ファイルのフォーマット
+* ``*XXXX.dat``
+    * 1列目：$x$軸
+    * 2列目: 関数値
+
+    ``flist_cv``などで入力したファイルごとに平滑化されたファイルが出力される．
+
+### 解析例
+
+1次元の関数$f\left(x\right)$を格納した
+ファイル``input.dat`` (軸の始点``0``, グリッド間隔``0.1``)を
+$x\leq 1.0$, $x> 1.0$の2つの領域に分割して，それぞれの領域について3点平均，
+5点平均する場合のインプットを下記に示す．
+
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ fcv      = "input.dat"
+/
+&output_param
+ fhead = "out"
+/
+&option_param
+  dx          = 0.1d0  
+  xsta        = 0.0d0  
+  xsep        = 1.0d0  
+  nregion      = 2     
+  npoint       = 3 5   
+  include_zero = .true.
+/
+EOF
+
+fanatra moving_average run.inp 
+```
+これを実行すると，平滑化された関数データを格納した``out0001.dat``が出力される．

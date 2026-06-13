@@ -1,0 +1,1286 @@
+# Integral-Equation formalism of Population DYNamics (IEPDYN) 
+
+Integral-Equation formalism of Population DYNamics (IEPDYN)法は，状態間遷移を記述する方法論である．この方法の特徴は，連続的な時間変化によって状態ダイナミクスを表現する点にあり，Markov-state model (MSM)をはじめとする既存理論で導入される離散的な時間スケール(ラグタイム)を必要とせず，ラグタイムに依存しないダイナミクスの記述が可能である．
+また，IEPDYN法による記述には局所的な状態間遷移に関する時間相関関数の計算が必要となるが，これらは局所的な情報のみを含むため，短時間MD計算から評価することができる．したがって，短時間MD計算から得られる情報を用いて，長時間スケールにわたるポピュレーションダイナミクスを記述することが可能である．
+
+ANATRAでは，``fanatra``の解析モードの一つとしてIEPDYN法を実装している．
+
+## 理論背景
+
+### IEPDYNの理論表式
+
+注目系を構成する原子の位置と運動量のセット(位相点)を$\bm{\Gamma}$とし，
+$\bm{\Gamma}$で張られた空間(位相空間)を複数の構造状態に分割する．系のLiouville演算子を$\mathcal{L}$とすると，時刻$t$における状態$j$の確率密度$\hat{f}_{j}\left(\bm{\Gamma},t\right)$の厳密な時間発展は次式によって表される．
+\begin{align}
+\dfrac{\partial}{\partial t}\hat{f}_{j}\left(\bm{\Gamma},t\right) =& -\mathcal{L}\hat{f}_{j}\left(\bm{\Gamma},t\right) -\sum_{i\in\mathcal{N}_{j}}S_{ij}\left(\bm{\Gamma}\right)\hat{f}_{j}\left(\bm{\Gamma},t\right) +\sum_{k\in\mathcal{N}_{j}}S_{jk}\left(\bm{\Gamma}\right)\hat{f}_{k}\left(\bm{\Gamma},t\right).
+\end{align}
+ここで，$\mathcal{N}_{j}$は状態$j$の隣接状態のセット，$S_{ij}$は
+反応シンク関数と呼ばれ，$S_{ij}\left(\bm{\Gamma}\right)\hat{f}_{j}\left(\bm{\Gamma},t\right)$
+が時刻$t\sim t+dt$の間に系が状態$j$から$i$に遷移する確率となるように定義される．
+時刻$t$において系が状態$j$として存在する確率$P_{j}\left(t\right)$は，$\hat{f}_{j}\left(\bm{\Gamma},t\right)$を$\bm{\Gamma}$で積分することにより得られる．上式の形式解から$P_{j}\left(t\right)$の近似表式
+\begin{align}
+P_{j}\left(t\right) & =P_{j}^{0}\left(t\right)+\sum_{k\in\mathcal{N}_{j}}\int_{0}^{t}d\tau\,M_{jk}\left(t-\tau\right)Q_{jk}\left(\tau\right),
+\end{align}
+が得られる．式中の$P_{j}^{0}\left(t\right)$は時刻0で状態$j$の系が時刻$t$でも隣接状態に一度も遷移せずに滞留する確率，$Q_{jk}\left(t\right)$は時刻$t\sim t+dt$で系が状態$k$から$j$に遷移する確率，そして，
+$M_{jk}\left(t\right)$は状態$k$から$j$に遷移した時刻を0として，時刻$t$でも隣接状態に遷移することなく状態$j$に滞留する確率である．
+$P_j^0(t)$や$M_{jk}(t)$は単一の遷移イベントしか関与しないため，短時間MDにより計算可能である．
+さらに，$Q_{jk}\left(t\right)$についても，
+短時間スケールで減衰する関数を積分核に持つ積分方程式
+\begin{align}
+Q_{ij}\left(t\right) = R_{ij}\left(t\right) + \sum_{k\in \mathcal{N}_{j}}\int_{0}^{t}d\tau\, K_{ijk}\left(t-\tau\right) Q_{jk}\left(\tau\right), 
+\end{align}
+で表せることが分かっている．
+ここで，$R_{ij}\left(t\right)$は時刻0で状態$j$にいた系が時刻$t\sim t+dt$の間に状態$i$に遷移する確率，
+$K_{ijk}\left(t\right)$は時刻$0\sim dt$の間に状態$k$から$j$に遷移した系が，時刻$t\sim t+dt$で状態$i$に遷移する確率を表す．
+$P_{j}^{0}\left(t\right)$, $M_{jk}\left(t\right)$と同様に，
+$R_{ij}\left(t\right)$, $K_{ijk}\left(t\right)$は短時間MDから計算可能である．さらに，$R_{ij}\left(t\right)$, $K_{ijk}\left(t\right)$から$P_{j}^{0}\left(t\right)$, $M_{jk}\left(t\right)$を構成することが可能である．したがって，
+短時間MDを実行し$R_{ij}\left(t\right)$, $K_{ijk}\left(t\right)$を計算することで，長時間スケールのポピュレーションダイナミクス($P_{j}\left(t\right)$)の予測が可能である．
+
+IEPDYN法によるポピュレーションダイナミクスの記述では，
+初期時刻における各状態のポピュレーション$w_{j}$を与える必要がある．
+初期時刻で系が平衡にあるとした場合，初期時刻でポピュレーションを持つ状態のセットを$\mathcal{M}_{\mathrm{I}}$，状態$j$の平衡ポピュレーションを$P_{j}^{\mathrm{eq}}$とすると，$w_{j}$は
+\begin{align}
+\forall j\in \mathcal{M}_{\mathrm{I}},~ w_{j} = \dfrac{P_{j}^{\mathrm{eq}}}{\displaystyle\sum_{k\in\mathcal{M}_{\mathrm{I}}} P_{k}^{\mathrm{eq}}}
+\end{align}
+で与えられる．$w_j$はアンブレラサンプリング法などによる自由エネルギー計算によって求めても良いが，
+後で示すように，IEPDYN法で平衡ポピュレーションを解析的評価することも可能である．
+
+```{figure} ./figures/Pj_Qij_scheme.eps
+:name: Pj_Qij_scheme.eps
+:scale: 100 
+:align: center 
+IEPDYN法のスキーム図．
+```
+
+### 境界条件の導入
+
+IEPDYN法では，粗視化された反応ダイナミクスに対して，反射境界条件(reflecting boundary condition)および吸収境界条件(absorbing boundary condition)を導入することができる．これらの境界条件は，状態間遷移確率$Q_{ij}(t)$に対して直接課され，再帰確率(RP)理論を用いた分子結合過程の解析に利用される．
+
+反射境界条件では，ある状態へ流入したポピュレーションは，その状態に滞留することなく直ちに隣接状態へ再分配される．流入を許さない状態の集合を$\mathcal{M}_{\mathrm{reflect}}$とすると，反射境界条件は
+\begin{align}
+& \forall i\in\mathcal{M}_{\mathrm{reflect}},~\forall j\in\mathcal{N}_{i}, \notag \\
+& Q_{ji}\left(t\right)=R_{ij}\left(t\right) + \sum_{k\in\mathcal{N}_{j}}\int_{0}^{t}d\tau,K_{ijk}\left(t-\tau\right)Q_{jk}\left(\tau\right),\\
+& Q_{ij}\left(t\right)=0,
+\end{align}
+によって与えられる．上式は，状態$j$から$i\in \mathcal{M}_{\mathrm{reflect}}$へ流入したポピュレーションが即座に状態$j$へ折り返されることを表している．
+
+一方，吸収境界条件では，ある状態へ到達したポピュレーションは，その後他の状態へ遷移しないものとする．吸収状態の集合を$\mathcal{M}_{\mathrm{absorb}}$とすると，吸収境界条件は
+\begin{align}
+\forall i\in\mathcal{M}_{\mathrm{absorb}},~\forall j \in\mathcal{N}_{i},\quad Q_{ji}\left(t\right) =0,
+\end{align}
+
+によって与えられる．この条件は，吸収状態から他の状態への流入が完全に存在しないことを意味しており，一度吸収状態へ到達したポピュレーションは終状態として取り扱われる．
+
+このように，IEPDYN法では，状態間遷移確率に対して境界条件を直接導入することで，反射境界および吸収境界を統一的に取り扱うことができる．
+
+### 再帰確率(Returning probability, RP)理論との連携
+
+RP理論は，拡散律速反応を厳密に記述する理論であり，分子結合過程を反応状態(reactive state)の熱力学的および動力学的性質によって特徴づける．IEPDYN法では，RP理論で必要となる動力学量を短時間MD計算から効率的に評価することができる．
+
+RP理論における結合の速度定数$k_{\mathrm{on}}$は，
+\begin{align}
+k_{\mathrm{on}}
+=
+k_{\mathrm{ins}}K^{*}
+\left(
+1+k_{\mathrm{ins}}
+\int_{0}^{\infty}
+dt,
+P_{\mathrm{RET}}\left(t\right)
+\right)^{-1},
+\label{kon_rp}
+\end{align}
+によって与えられる．ここで，$K^{*}$は反応状態と解離状態との間の平衡定数，$k_{\mathrm{ins}}$は反応状態から結合状態への遷移速度定数，$P_{\mathrm{RET}}\left(t\right)$は，初期時刻に反応状態に存在した系が時刻$t$においても反応状態に存在する条件付き確率(再帰確率)である．
+
+IEPDYN法では，反応状態の集合を$\mathcal{M}_{\mathrm{R}}$とし，初期状態を$\mathcal{M}_{\mathrm{I}}=\mathcal{M}_{\mathrm{R}}$と設定する．さらに，適切な境界条件を導入することで，$k_{\mathrm{ins}}$および$P_{\mathrm{RET}}(t)$を状態存在確率$P_j(t)$から計算することができる．
+
+$k_{\mathrm{ins}}$の計算では，結合過程の終了を定義するために吸収境界条件を導入し，反応状態のうち解離側に位置する隣接状態に反射境界条件を課す．このとき，
+\begin{align}
+\dfrac{1}{k_{\mathrm{ins}}}
+=
+\int_{0}^{\infty}
+dt,
+\sum_{j\notin\mathcal{M}_{\mathrm{absorb}}}
+P_{j}\left(t\right),
+\label{kins}
+\end{align}
+が成り立つ．右辺は，反応状態から吸収状態までの平均初到達時間(Mean First Passage Time, MFPT)に対応しており，その逆数として$k_{\mathrm{ins}}$が得られる．
+
+一方，$P_{\mathrm{RET}}(t)$の計算では，反応状態のうち結合状態側に位置する隣接状態を反射境界として設定する．このとき，$P_{\mathrm{RET}}(t)$は
+
+\begin{align}
+P_{\mathrm{RET}}\left(t\right)
+=
+\sum_{j\in\mathcal{M}_{\mathrm{R}}}
+P_{j}\left(t\right),
+\end{align}
+によって与えられる．
+
+このように，IEPDYN法では境界条件を適切に設定することで，RP理論で必要となる$k_{\mathrm{ins}}$および$P_{\mathrm{RET}}(t)$を短時間MD計算から効率的に評価できる．さらに，平衡定数$K^{*}$と組み合わせることで，長時間スケールの分子結合過程に対する結合速度定数$k_{\mathrm{on}}$を算出することが可能となる．
+
+### $P_{j}\left(t\right)$の時間積分に対する解析的評価
+
+RP理論における$k_{\mathrm{ins}}$をはじめとして，速度論的なパラメータは，
+状態ポピュレーションの時間積分
+\begin{align}
+\tau_j=\int_0^\infty dt\,P_j(t)
+\end{align}
+によって与えられる．
+吸収境界条件あるいは無限遠方を含む状態を導入することで，$P_j(t)$は$t\to\infty$においてゼロへ収束する．
+通常は，積分方程式を逐次的に解いて$P_j(t)$の時間発展を計算した後，その時間積分を評価する必要がある．
+しかし，IEPDYN法ではLaplace変換を利用することで，$P_j(t)$を陽に計算することなく$\tau_j$を直接評価することができる．
+
+関数$f(t)$のLaplace変換を
+\begin{align}
+\widetilde{f}(s)=\int_0^\infty dt\,e^{-st}f(t)
+\end{align}
+と定義すると，状態存在確率の積分方程式は
+\begin{align}
+\widetilde{P}_{j}\left(s\right)
+=
+\widetilde{P}_{j}^{0}\left(s\right)
++
+\sum_{k\in\mathcal{N}_{j}}
+\widetilde{M}_{jk}\left(s\right)
+\widetilde{Q}_{jk}\left(s\right)
+\end{align}
+と表される．さらに，$s\rightarrow 0$の極限を取ることで，
+\begin{align}
+\tau_{j}
+=
+\widetilde{P}_{j}^{0}\left(0\right)
++
+\sum_{k\in\mathcal{N}_{j}}
+\widetilde{M}_{jk}\left(0\right)
+\widetilde{Q}_{jk}\left(0\right)
+\end{align}
+を得る．したがって，$\tau_j$を求めるためには，$\widetilde{Q}_{jk}(0)$を評価すればよい．
+そのために，
+\begin{align}
+\mathcal{K}_{ij,j^{\prime}k}\left(t\right)
+=
+\delta_{jj^{\prime}}
+K_{ijk}\left(t\right)
+\end{align}
+を導入すると，$Q_{ij}(t)$に対する積分方程式はLaplace空間において
+\begin{align}
+\widetilde{Q}_{ij}\left(s\right)
+=
+\widetilde{R}_{ij}\left(s\right)
++
+\sum_{j^{\prime},k}
+\widetilde{\mathcal{K}}_{ij,j^{\prime}k}\left(s\right)
+\widetilde{Q}_{j^{\prime}k}\left(s\right)
+\end{align}
+と書き換えられる．ここで，状態対$(ij)$を複合添字$\lambda$で表すと，上式は
+\begin{align}
+\widetilde{\mathbf{Q}}(s)
+=
+\widetilde{\mathbf{R}}(s)
++
+\widetilde{\boldsymbol{\mathcal{K}}}(s)
+\widetilde{\mathbf{Q}}(s)
+\end{align}
+と行列表記できる．したがって，$s\to0$の極限では，
+\begin{align}
+\widetilde{\mathbf{Q}}\left(0\right)
+=
+\left[
+\mathbf{I}
+-
+\widetilde{\boldsymbol{\mathcal{K}}}\left(0\right)
+\right]^{-1}
+\widetilde{\mathbf{R}}\left(0\right)
+\end{align}
+が得られる．ここで，$\mathbf{I}$は単位行列であり，
+\begin{align}
+\left(
+\mathbf{I}
+-
+\widetilde{\boldsymbol{\mathcal{K}}}\left(0\right)
+\right)_{\lambda\mu}
+=
+\delta_{\lambda\mu}
+-
+\int_0^\infty dt\,
+\mathcal{K}_{\lambda\mu}(t)
+\end{align}
+である．
+
+以上より，時間積分された遷移確率$\widetilde{\mathbf{Q}}(0)$を行列演算によって直接求めることができ，さらに$\tau_j$を解析的に評価できる．この手法により，$P_j(t)$の長時間時間発展を逐次計算することなく，MFPTなどの速度論的パラメータを効率的に算出することが可能となる．
+
+### 平衡ポピュレーション$P_{j}\left(\infty\right)$の解析的評価
+
+IEPDYN法では，全ポピュレーションが保存される系に対して，状態$j$の平衡ポピュレーション
+$P_j^{\mathrm{eq}}\equiv P_j(\infty)$
+を，$P_j(t)$の時間発展を数値積分することなく評価することができる．
+
+まず，$Q_{ij}(t)$を，平衡成分
+$Q_{ij}^{\mathrm{eq}}\equiv Q_{ij}(\infty)$
+と時間依存成分$\delta Q_{ij}(t)$に分解する：
+\begin{align}
+Q_{ij}(t)=Q_{ij}^{\mathrm{eq}}+\delta Q_{ij}(t).
+\end{align}
+ここで，$Q_{ij}^{\mathrm{eq}}$は状態$j$から$i$への平衡状態におけるポピュレーション流束を表す．
+この分解をIEPDYNの積分方程式に適用し，$t\to\infty$の極限を取ると，
+\begin{align}
+P_{j}^{\mathrm{eq}}
+&=
+\lim_{t\to\infty}
+\left[
+\sum_{k\in\mathcal{N}_{j}}
+\int_{0}^{t}
+d\tau\,
+M_{jk}(t-\tau)
+\delta Q_{jk}(\tau)
+\right]
+\notag\\
+&\quad
++
+\sum_{k\in\mathcal{N}_{j}}
+I_{jk}
+Q_{jk}^{\mathrm{eq}},
+\end{align}
+を得る．ただし，
+\begin{align}
+I_{jk}
+=
+\int_{0}^{\infty}
+dt\,
+M_{jk}(t)
+\end{align}
+である．
+$M_{jk}(t)$および$\delta Q_{jk}(t)$はいずれも$t\to\infty$でゼロへ収束するため，第1項は消失し，
+\begin{align}
+P_{j}^{\mathrm{eq}}
+=
+\sum_{k\in\mathcal{N}_{j}}
+I_{jk}
+Q_{jk}^{\mathrm{eq}}
+\end{align}
+が得られる．したがって，平衡遷移流束$Q_{jk}^{\mathrm{eq}}$が求まれば，各状態の平衡ポピュレーションを直接計算することができる．
+さらに，積分方程式を行列表記すると，
+\begin{align}
+\bm{\delta}{\bf Q}(t)
+&=
+{\bf R}(t)
++
+\int_{0}^{t}
+d\tau\,
+\bm{\mathcal{K}}(t-\tau)
+\bm{\delta}{\bf Q}(\tau)
+\notag\\
+&\quad
+-
+{\bf Q}^{\mathrm{eq}}
++
+{\bf J}
+{\bf Q}^{\mathrm{eq}},
+\end{align}
+となる．ここで，
+\begin{align}
+J_{\lambda\mu}
+=
+\int_{0}^{\infty}
+dt\,
+\mathcal{K}_{\lambda\mu}(t)
+\end{align}
+である．$t\to\infty$の極限では，時間依存項が消失するため，
+\begin{align}
+{\bf J}
+{\bf Q}^{\mathrm{eq}}
+=
+{\bf Q}^{\mathrm{eq}}
+\end{align}
+を得る．すなわち，${\bf Q}^{\mathrm{eq}}$は行列${\bf J}$の固有値1に対応する固有ベクトルとして与えられる．したがって，${\bf J}$の固有値問題を解くことで${\bf Q}^{\mathrm{eq}}$を求め，さらに
+\begin{align}
+P_{j}^{\mathrm{eq}}
+=
+\sum_{k\in\mathcal{N}_{j}}
+I_{jk}
+Q_{jk}^{\mathrm{eq}}
+\end{align}
+を用いて平衡ポピュレーションを評価することができる．
+得られた平衡ポピュレーションは，IEPDYN法における初期統計重み
+\begin{align}
+\forall j\in\mathcal{M}_{\mathrm{I}},
+\quad
+w_j
+=
+\frac{P_j^{\mathrm{eq}}}
+{\displaystyle
+\sum_{k\in\mathcal{M}_{\mathrm{I}}}
+P_k^{\mathrm{eq}}
+}
+\end{align}
+の評価にも利用される．また，結合・解離過程では，
+最外殻状態に反射境界条件を導入することで全ポピュレーション保存系を構成できるため，
+本手法を適用して平衡ポピュレーションを効率的に求めることができる．
+
+## パラメータ一覧 
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|fcv|      & 時系列CVデータファイル \\
+                     & \verb|flist_cv| & CVデータファイル一覧 \\
+\hline
+\verb|&output_param| & \verb|fhead|    & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|input_type|           & 入力ファイル形式 \\
+                     & \verb|output_histogram|     & リスタートファイルの出力 \\
+                     & \verb|use_perturbed_traj| & バイアスポテンシャル存在下のMDに基づくかどうか \\
+                     & \verb|f_unperturbed_id| & 各データでどの状態のダイナミクスが乱されていないか \\
+                     & \verb|use_dissociate_state| & 解離状態を定義するかどうか \\
+                     & \verb|use_reflection_state| & 反射状態を定義するかどうか \\
+                     & \verb|use_product_state|    & 生成状態を定義するかどうか \\
+                     & \verb|calc_steady|          & 定常状態分布を計算するかどうか \\
+                     & \verb|calc_Pint|            & 時間積分を解析的に計算するかどうか \\
+                     & \verb|extrapolate|          & 積分方程式に基づく時間発展の評価 \\
+                     & \verb|nstate|               & 状態数 \\
+                     & \verb|ndim|                 & CVの次元数 \\
+                     & \verb|nmol|                 & 対象分子数 \\
+                     & \verb|dt|                   & 時間グリッド幅 \\
+                     & \verb|t_sparse|             & TCF計算用の粗い時間グリッド幅 \\
+                     & \verb|t_range|              & K, M, R, P0関数の計算時間範囲 \\
+                     & \verb|t_extend|             & P, Q関数の出力時間範囲 \\
+                     & \verb|dt_tcfout|            & P, Q関数の出力時間間隔 \\
+                     & \verb|initial_state_ids|    & 初期状態ID \\
+                     & \verb|reflection_state_ids| & 反射状態ID \\
+                     & \verb|product_state_ids|    & 生成状態ID \\
+\hline
+\verb|&state| & state definition & 各状態の範囲および初期ポピュレーション \\
+\hline
+\end{tabular}
+}
+```
+
+## ``&option_param``
+
+* **``input_type``**
+    * Default: ``"TIMESERIES"``
+    * Example: ``input_type = "TIMESERIES"``
+
+    入力ファイル形式を指定する．
+    利用可能な形式は
+
+    * ``TIMESERIES`` : ANATRA標準の時系列データ
+    * ``HISTOGRAM`` : ``output_histogram = .true.`` により生成されたヒストグラムファイル(``*.krhist``)
+
+    である．
+
+----
+* **``output_histogram``**
+    * Default: ``.false.``
+    * Example: ``output_histogram = .true.``
+
+    計算結果からヒストグラム形式のリスタートファイル(``*.krhist``)を出力するかどうかを指定する．
+
+----
+* **``use_perturbed_traj``**
+    * Default: ``.false.``
+    * Example: ``use_perturbed_traj = .true.``
+
+    入力の時系列データがバイアスポテンシャル下でのMD計算により得られたものかどうかを指定する．フラットボトムポテンシャルなど，特定の状態内についてのダイナミクスを乱さないバイアスポテンシャルを用いる必要がある．
+    ``.true.``の場合には，``f_unperturbed_id``を指定する必要がある．
+
+----
+* **``f_unperturbed_id``**
+    * Default: N/A
+    * Example: ``f_unperturbed_id = "funp.list"``
+
+    ``use_perturbed_traj = .true.``の場合に指定する必要がある．
+    各時系列データについて，(1) どの状態内でのダイナミクスがバイアスポテンシャルによって乱されていないか，(2) $R_{ij}(t)$の計算に用いるか，を列挙したリストファイルを指定する．
+    ``flist_cv``や``fcv``で列挙したファイルの順番に合わせる形で，1行ごとに
+
+    * 1列目：乱されていない状態ID
+    * 2列目：$R_{ij}(t)$の計算に利用するか(``1``)，利用しないか(``0``)
+
+    を記す．例えば，``f_unperturbed_id``で指定したリストファイル``funp.list``が 
+    
+    ```
+    1 1
+    1 1
+    2 0 
+    2 0 
+    ``` 
+
+    となっている場合，最初の2つの時系列データは状態1のダイナミクスが乱されおらず，$R_{ij}(t)$の計算に用いる，ということを意味し，次の2つの時系列データは状態2のダイナミクスが乱されておらず，$R_{ij}(t)$の計算には用いない，ということを意味する．
+
+----
+* **``use_dissociate_state``**
+    * Default: ``.false.``
+    * Example: ``use_dissociate_state = .true.``
+
+    解離状態を定義するかどうかを指定する．
+
+----
+* **``use_reflection_state``**
+    * Default: ``.false.``
+    * Example: ``use_reflection_state = .true.``
+
+    反射状態を定義するかどうかを指定する．
+
+----
+* **``use_product_state``**
+    * Default: ``.false.``
+    * Example: ``use_product_state = .true.``
+
+    吸収状態（生成状態）を定義するかどうかを指定する．
+
+----
+* **``calc_steady``**
+    * Default: ``.false.``
+    * Example: ``calc_steady = .true.``
+
+    定常状態（平衡状態）における各状態の存在確率の解析的評価を実行するかどうかを指定する．
+
+----
+* **``calc_Pint``**
+    * Default: ``.false.``
+    * Example: ``calc_Pint = .true.``
+
+    各状態存在確率の時間積分の解析的評価を実行するかどうかを指定する．
+
+----
+* **``extrapolate``**
+    * Default: ``.false.``
+    * Example: ``extrapolate = .true.``
+
+    積分方程式を用いて，各状態存在確率$P_{j}(t)$の時間発展を計算するかどうかを指定する．
+
+----
+* **``nstate``**
+    * Default: None
+    * Example: ``nstate = 4``
+
+    状態数を指定する．
+
+----
+* **``ndim``**
+    * Default: ``1``
+    * Example: ``ndim = 2``
+
+    Collective Variable (CV) の次元数を指定する．
+
+----
+* **``nmol``**
+    * Default: ``1``
+    * Example: ``nmol = 1``
+
+    対象とする分子数を指定する．
+
+----
+* **``dt``**
+    * Default: None
+    * Example: ``dt = 0.1d0``
+
+    時間グリッド幅を指定する．
+
+----
+* **``t_sparse``**
+    * Default: None
+    * Example: ``t_sparse = 0.1d0``
+
+    $K_{ijk}(t)$などの時間相関関数（TCF）の計算に用いる粗い時間グリッド幅を指定する．
+
+----
+* **``t_range``**
+    * Default: None
+    * Example: ``t_range = 10.0``
+
+    $K_{ijk}(t)$, $M_{jk}(t)$, $R_{ij}(t)$, $P_{j}^{0}(t)$を計算する時間範囲を指定する．
+
+----
+* **``t_extend``**
+    * Default: None
+    * Example: ``t_extend = 100.0``
+
+    $P_{j}(t)$, $Q_{ij}(t)$を出力する時間範囲を指定する．
+
+----
+* **``dt_tcfout``**
+    * Default: None
+    * Example: ``dt_tcfout = 1.0``
+
+    $P_{j}(t)$, $Q_{ij}(t)$を出力する時間間隔を指定する．
+
+----
+* **``initial_state_ids``**
+    * Default: None
+    * Example: ``initial_state_ids = 2 3``
+
+    初期状態として扱う状態IDを指定する．
+
+----
+* **``reflection_state_ids``**
+    * Default: None
+    * Example: ``reflection_state_ids = 4``
+
+    反射状態として扱う状態IDを指定する．
+
+----
+* **``product_state_ids``**
+    * Default: None
+    * Example: ``product_state_ids = 1``
+
+    吸収状態（生成状態）として扱う状態IDを指定する．
+
+## ``&state``
+
+``&state`` セクションでは，各状態のCV範囲と初期ポピュレーションを1行ずつ下記のように指定する．
+
+```text
+lower_bound(CV1)  upper_bound(CV1) lower_bound(CV2) upper_bound(CV2) ... lower_bound(CVndim) upper_bound(CVndim) weight
+```
+
+* 1列目：状態のCV1の下限値
+* 2列目：状態のCV1の上限値
+* 3列目：状態のCV2の下限値
+* 4列目：状態のCV2の上限値
+
+...
+
+* 最終列：状態の初期ポピュレーション
+
+このように，下限と上限のセットは``ndim``で指定した分だけ必要となる．
+例えば，``ndim=1``の場合に，
+
+```text
+&state
+-500.0  -16.0  0.5
+ -16.0  -15.0  0.5
+ -15.0   -2.0  0.0
+  -2.0  500.0  0.0
+/
+```
+
+と指定すると，4つの状態が定義され，最初の2状態に初期ポピュレーション0.5が割り当てられる．
+
+## 補助ツール
+
+``iepdyn``には多くの設定が存在する．
+そこで，下記にインプット作成を補助するPythonスクリプトを用意している．
+```
+$ANATRA_PATH/utility/iepdyn_util
+```
+以下の2つのスクリプトはいずれも対話型であり，
+引数なしで利用できる．
+
+* ``iepdyn_setup.py``  
+    ``iepdyn``用のインプットを作成するための補助ツール．
+
+* ``cvlist_generator.py``  
+    時系列データのリストを作成するための補助ツール．
+    バイアスポテンシャルによって摂動を含んでいる時系列データを用いた場合(``use_perturbed_traj = .true.``の場合)，時系列データの分類をディレクトリ階層に基づいて行うことができる．
+
+
+## 出力ファイル
+
+* ``*.krhist`` (``output_histogram = .true.``の場合)   
+   リスタート用の$K_{ijk}(t)$, $R_{ij}(t)$に関する情報が格納されている．リスタートでは，複数の``krhist``ファイルを読み込ませることが可能である．このファイルに格納される情報は境界条件を課す前のものであり，境界条件の設定を変えた場合でも際計算することなく利用可能である．
+
+* ``*.P0``
+    * 1列目：時刻
+    * 2列目以降：$P^{0}_{j}(t)$
+
+    何列目がどの状態の$P_{j}(t)$に対応しているかはファイル内にヘッダーとして記されている．
+
+* ``*.Rij``
+    * 1列目：時刻
+    * 2列目以降：$R_{ij}(t)$
+    何列目がどの$R_{ij}(t)$に対応しているかはファイル内にヘッダーとして記されている．
+
+* ``*.Mij``
+    * 1列目：時刻
+    * 2列目以降：$M_{ij}(t)$
+ 
+    何列目がどのの$M_{ij}(t)$に対応しているかはファイル内にヘッダーとして記されている．
+
+* ``*.Kijk``
+    * 1列目：時刻
+    * 2列目以降：$K_{ijk}(t)$
+
+    何列目がどのの$K_{ijk}(t)$に対応しているかはファイル内にヘッダーとして記されている．
+
+* ``*.pj`` (``extrapolate = .true.``の場合)  
+    * 1列目：時刻
+    * 2列目以降：$P_{j}(t)$
+
+    何列目がどのの$P_{j}(t)$に対応しているかはファイル内にヘッダーとして記されている．
+
+* ``*.tcf`` (``extrapolate = .true.``の場合)  
+    * 1列目：時刻
+    * 2列目以降：$\displaystyle\sum_{k\in \mathcal{M}_{\mathrm{I}}}P_{k}(t)$
+
+* ``*.q`` (``extrapolate = .true.``の場合)  
+    * 1列目：時刻
+    * 2列目以降：$Q_{ij}(t)$
+
+    何列目がどのの$Q_{ij}(t)$に対応しているかはファイル内にヘッダーとして記されている．
+
+* ``*.int`` (``calc_Pint = .true.``の場合)  
+    下記のフォーマットで
+
+    \begin{align}
+    \tau_{j} = \int_{0}^{\infty} dt\, P_{j}\left(t\right),
+    \end{align}
+    が格納されている．
+    ```
+    Pint InitTotal    0.5549862E+02
+    Pint         1    0.5474586E+02
+    Pint         2    0.6403562E+00
+    Pint         3    0.9158297E-01
+    Pint         4    0.1578925E-01
+    Pint         5    0.5035148E-02
+    Pint         6    0.7000565E-02
+    Pint         7    0.3941343E-01
+    Pint         8    0.6599485E-01
+    ```
+    2列目は状態インデックスを表しており，3列目が$\tau_j$の値である．
+    ``InitTotal``は，初期状態$\mathcal{M}_{\mathrm{I}}$に属する状態に対する$\tau_{j}$の和である．
+
+* ``*.steady`` (``calc_steady = .true.``の場合)
+    * 1列目：時刻
+    * 2列目：状態インデックス($j$)
+    * 3列目：$P_{j}^{\mathrm{eq}}$
+    * 4列目：$-k_{\mathrm{B}}T \log \dfrac{P_{j}^{\mathrm{eq}}}{\displaystyle\sum_{k\in \mathcal{M}_{\mathrm{I}}}P_{k}^{\mathrm{eq}}}$
+
+## 解析例
+
+分子間距離$r$で規定される分子結合/解離を例として
+IEPDYN法の適用手順について述べる．
+ここでは，状態を下記のように設定する．
+
+* 状態1(結合状態): $0\leq r < 2$
+* 状態2(結合状態): $2\leq r < 3.5$
+* 状態3: $3.5\leq r < 4$
+* 状態4 (解離状態を含む): $4\leq r $ 
+
+また，求める計算量を，residence time correlation function
+\begin{align}
+P_{\mathrm{B}}\left(t\right) 
+=\dfrac{\displaystyle \sum_{k\in \mathcal{M}_{\mathrm{I}}}P_{k}\left(t\right) }{\displaystyle \sum_{k\in \mathcal{M}_{\mathrm{I}}}P_{k}\left(0\right)} 
+\end{align}
+およびその積分値$\tau_{\mathrm{B}}$と定める．
+$\tau_{\mathrm{B}}$は結合状態の寿命を表す．これらを求めるときには，結合状態1, 2が初期状態となる．
+
+### バイアスポテンシャルなしのMDトラジェクトリを利用する場合(``use_perturbed_traj = .false.``)
+
+#### リスタートファイル(``krhist``)の作成
+
+まずは，時系列データごとにリスタートファイル(``krhist``)を作成する．時系列データ``0001.ts``を読み込んで，
+``krhist/0001.krhist``を作成する場合のインプットを下記に示す．
+状態1と2が結合状態(初期状態)であるが，
+``krhist``ファイル作成の際には，初期ポピュレーション値は参照されないので，
+``&state``でのこれらの状態の初期ポピュレーション値は1.0にしておいて良い．
+
+```
+#!/usr/bin/env bash
+
+mkdir -p krhist
+
+cat << EOF > run0001.inp
+&input_param
+ fcv = "0001.ts"
+/
+&output_param
+ fhead = "krhist/0001"
+/
+&option_param
+ input_type           = "TIMESERIES"
+ output_histogram     = .true.
+ use_perturbed_traj   = .false.
+ use_dissociate_state = .true.
+ use_reflection_state = .false.
+ use_product_state    = .false.
+ calc_steady          = .false.
+ calc_Pint            = .false.
+ extrapolate          = .false.
+ nstate               = 4 
+ ndim                 = 1
+ nmol                 = 1
+ dt                   = 2e-05
+ t_sparse             = 2e-05
+ t_range              = 1.0
+ initial_state_ids    = 1 2 
+ dissociate_state_ids = 4 
+/
+&state
+0.0     2.0      1.0
+2.0     3.5      1.0
+3.5     4.0      0.0
+4.0     1.0d10   0.0
+/
+EOF
+
+fanatra iepdyn run0001.inp
+```
+
+#### 平衡ポピュレーション値の計算
+
+$P_{\mathrm{B}}\left(t\right)$をIEPDYN法により計算するためには，状態1, 2の初期ポピュレーション値が必要となる．
+そこで，解離状態4を反射状態と定めることで，
+状態1--3でポピュレーションが保存されるようにした上で，
+一つ前で計算したリスタートファイル(``krhist``)をもとに，平衡状態のポピュレーション($P_{j}^{\mathrm{eq}}$)を計算する．
+そのために，
+
+* ``calc_Pint            = .true.``
+* ``use_reflection_state = .true.``
+* ``reflection_state_ids = 4``
+
+と設定した上で，
+
+* ``use_dissociate_state = .false.``
+
+に設定する．
+
+```
+#!/usr/bin/env bash
+
+mkdir -p steady
+
+# Create list of krhist files
+#
+ls krhist/*.krhist > krhist.list 
+
+# Create input file
+#
+cat << EOF > steady.inp
+&input_param
+ flist_cv = "krhist.list"
+/
+&output_param
+ fhead = "steady/out"
+/
+&option_param
+ input_type           = "HISTOGRAM"
+ output_histogram     = .false.
+ use_perturbed_traj   = .false.
+ use_dissociate_state = .false.
+ use_reflection_state = .true.
+ use_product_state    = .false.
+ calc_steady          = .true.
+ calc_Pint            = .false.
+ extrapolate          = .false.
+ nstate               = 4 
+ ndim                 = 1
+ nmol                 = 1
+ dt                   = 2e-05
+ t_sparse             = 2e-05
+ t_range              = 1.0
+ initial_state_ids    = 1 2 
+ reflection_state_ids = 4 
+/
+&state
+0.0     2.0      1.0
+2.0     3.5      1.0
+3.5     4.0      0.0
+4.0     1.0d10   0.0
+/
+EOF
+
+fanatra iepdyn steady.inp
+```
+これを実行すると，``steady/out.int``が得られ，
+その中身は，例えば下記のようなものである．
+
+```
+    1    0.9874940E+00    0.7502598E-02
+    2    0.1066799E-01    0.2706875E+01
+    3    0.1489986E-02    0.3880407E+01
+```
+2列目が平衡ポピュレーションの値である．
+
+#### $P_{\mathrm{B}}(t)$の計算 
+
+1つ前のステップで得た平衡ポピュレーション値を
+``&state``内の状態1, 2について入力した上で，
+
+* ``extrapolate = .true.``
+* ``t_extend    = 10.0``
+
+を指定する．``t_extend``は$P_{j}\left(t\right)$を計算する時間範囲を規定する．
+また，
+
+* ``use_dissociate_state = .true``
+* ``use_reflection_state = .false.``
+* ``dissociate_state_ids = 4``
+
+に設定にしておく．
+
+なお，初期状態の平衡ポピュレーション値の和が1になるようにプログラム内で処理される．
+
+```
+#!/usr/bin/env bash
+
+mkdir -p extrapolate 
+
+# Create list of krhist files
+#
+ls krhist/*.krhist > krhist.list 
+
+# Create input file
+#
+cat << EOF > extrapolate.inp
+&input_param
+ flist_cv = "krhist.list"
+/
+&output_param
+ fhead = "extrapolate/out"
+/
+&option_param
+ input_type           = "HISTOGRAM"
+ output_histogram     = .false.
+ use_perturbed_traj   = .false.
+ use_dissociate_state = .true.
+ use_reflection_state = .false.
+ use_product_state    = .false.
+ calc_steady          = .false.
+ calc_Pint            = .false.
+ extrapolate          = .true.
+ nstate               = 4 
+ ndim                 = 1
+ nmol                 = 1
+ dt                   = 2e-05
+ t_sparse             = 2e-05
+ t_range              = 1.0
+ t_extend             =  10.0
+ dt_tcfout            = 2e-05
+ initial_state_ids    = 1 2 
+ dissociate_state_ids = 4 
+/
+&state
+0.0     2.0      0.9874940E+00
+2.0     3.5      0.1066799E-01
+3.5     4.0      0.0
+4.0     1.0d10   0.0
+/
+EOF
+
+fanatra iepdyn extrapolate.inp
+
+```
+これを実行すると，出力ファイルの1つとして``extrapolate/out.tcf``が得られるが，このファイル内に$P_{\mathrm{B}}\left(t\right)$の情報が格納されている．
+
+#### $P_{\mathrm{B}}(t)$の時間積分の解析的評価
+
+今度は，$P_{\mathrm{B}}\left(t\right)$の時間積分を，解析的方法により求める．
+この場合は，1つ前のステップでのインプットのうち，下記の変数を変更する．
+
+* ``extrapolate = .false.``
+* ``calc_Pint   = .true.``
+
+また，``t_extend``や``dt_tcfout``などは結果に影響を与えないが，削除しておく．
+
+```
+#!/usr/bin/env bash
+
+mkdir -p Pint 
+
+# Create list of krhist files
+#
+ls krhist/*.krhist > krhist.list 
+
+# Create input file
+#
+cat << EOF > Pint.inp
+&input_param
+ flist_cv = "krhist.list"
+/
+&output_param
+ fhead = "Pint/out"
+/
+&option_param
+ input_type           = "HISTOGRAM"
+ output_histogram     = .false.
+ use_perturbed_traj   = .false.
+ use_dissociate_state = .true.
+ use_reflection_state = .false.
+ use_product_state    = .false.
+ calc_steady          = .false.
+ calc_Pint            = .true.
+ extrapolate          = .false.
+ nstate               = 4 
+ ndim                 = 1
+ nmol                 = 1
+ dt                   = 2e-05
+ t_sparse             = 2e-05
+ t_range              = 1.0
+ initial_state_ids    = 1 2 
+ dissociate_state_ids = 4 
+/
+&state
+0.0     2.0      0.9874940E+00
+2.0     3.5      0.1066799E-01
+3.5     4.0      0.0
+4.0     1.0d10   0.0
+/
+EOF
+
+fanatra iepdyn Pint.inp
+``` 
+これを実行すると，``Pint/out.int``が得られる．
+このファイル内の1行目の3列目が$P_{\mathrm{B}}\left(t\right)$の時間積分値である．
+
+### バイアスポテンシャルありのMDトラジェクトリを利用する場合(``use_perturbed_id = .true.``)
+
+バイアスなしの場合と手順はほぼ同様だが，
+用意する``f_unperturbed_id``で指定するリストの作成などが必要となり，手続きがやや煩雑となる．
+
+#### リスタートファイル(``krhist``)の作成
+
+ここでは，時系列データごとに``krhist``ファイルを作成する．
+状態$j$のダイナミクスが乱されていない時系列データが，
+```
+ts/0001/run0001.dis
+ts/0001/run0002.dis
+...
+```
+のようにディレクトリ名(``XXXX=0001, 0002, ...``)で分類されているとする．このディレクトリ構造をもとに，まずは``flist_cv``と``f_unperturbed_id``に対応するリストを下記のPythonスクリプトから作成する．
+```
+$ $ANATRA_PATH/utility/iepdyn_util/cvlist_generator.py
+```
+実行すると，下記のように，情報の入力を求められるので，指示に従って入力していく．
+```
+=== File Search Utility ===
+
+(1) Enter the root directory to search: ts 
+(2) Enter the target extension (e.g., txt): dis
+(3) Enter the maximum search directory depth: 2
+
+Searching files...
+
+=== Matched Files ===
+
+/path/to/ts/0001/run0001.dis
+/path/to/ts/0001/run0002.dis
+/path/to/ts/0002/run0001.dis
+/path/to/ts/0002/run0002.dis
+/path/to/ts/0003/run0001.dis
+/path/to/ts/0003/run0002.dis
+/path/to/ts/0004/run0001.dis
+/path/to/ts/0004/run0002.dis
+
+----------------------------------------
+
+(4) Enter directory level counted from the deepest directory for grouping (default: 1): 1
+
+=== Grouped Files ===
+
+--- State 1: 0001 ---
+/path/to/ts/0001/run0001.dis
+/path/to/ts/0001/run0002.dis
+
+--- State 2: 0002 ---
+/path/to/ts/0002/run0001.dis
+/path/to/ts/0002/run0002.dis
+
+--- State 3: 0003 ---
+/path/to/ts/0003/run0001.dis
+/path/to/ts/0003/run0002.dis
+
+--- State 4: 0004 ---
+/path/to/ts/0004/run0001.dis
+/path/to/ts/0004/run0002.dis
+
+----------------------------------------
+
+Did these files come from perturbed dynamics? (y/n): y
+
+Available states:
+  1 : 0001
+  2 : 0002
+  3 : 0003
+  4 : 0004
+
+Enter state numbers used for Rij calculation (space-separated, empty input allowed): 1 2
+
+----------------------------------------
+
+Enter fraction of files to be listed from each state (default: 1.0 (corresponding to all the files)): 1.0
+
+=== Output Preview ===
+
+/path/to/ts/0001/run0001.dis
+1 1
+/path/to/ts/0001/run0002.dis
+1 1
+/path/to/ts/0002/run0001.dis
+2 1
+/path/to/ts/0002/run0002.dis
+2 1
+/path/to/ts/0003/run0001.dis
+3 0 
+/path/to/ts/0003/run0002.dis
+3 0 
+/path/to/ts/0004/run0001.dis
+4 0 
+/path/to/ts/0004/run0002.dis
+4 0 
+
+----------------------------------------
+
+Enter filename to save the file list: flist
+Enter filename to save state_id and Rij_flag: funp
+```
+この操作により，時系列データのリスト``flist``
+と各時系列データのどの領域が乱されていないかなどを記した``funp``が得られる．
+
+次に，時系列データごとに``krhist``を計算するために，作成した``flist``と``funp``を下記のPythonスクリプトにより1行ずつのファイルに分割する．
+```
+$ $ANATRA_PATH/utility/iepdyn_util/split_cv.py --flist flist --funp funp
+```
+上記を実行することで，下記のディレクトリとファイルが生成される．
+```
+0001/0001.flist
+0001/0001.funp
+0001/0002.flist
+0001/0002.funp
+0002/0001.flist
+0002/0001.funp
+0002/0002.flist
+0002/0002.funp
+0003/0001.flist
+0003/0001.funp
+0003/0002.flist
+0003/0002.funp
+0004/0001.flist
+0004/0001.funp
+0004/0002.flist
+0004/0002.funp
+```
+生成された``XXXX.flist``, ``XXXX.funp``が1つの時系列データに対する``flist_cv``, ``f_unperturbed_id``である．
+したがって，これらを順次読み込んで``krhist``を作成すれば良い．
+```
+#!/usr/bin/env bash
+
+for i in {0001..0004};do
+  for f in `ls $i/*.flist`;do
+    num=`basename $f | sed -e "s/.flist//g"`
+    flist=$i/${num}.flist
+    funp=$i/${num}.funp
+
+cat << EOF > $i/run${num}.inp
+&input_param
+ flist_cv = "$i/${num}.flist"
+/
+&output_param
+ fhead = "$i/run${num}"
+/
+&option_param
+ use_perturbed_traj   = .true.
+ f_unperturbed_id     = "$i/${num}.funp"
+
+ output_histogram     = .true.
+ use_dissociate_state = .true.
+ use_reflection_state = .false.
+ use_product_state    = .false.
+ calc_steady          = .false.
+ calc_Pint            = .false.
+ extrapolate          = .false.
+ nstate               = 4 
+ ndim                 = 1
+ nmol                 = 1
+ dt                   = 2e-05
+ t_sparse             = 2e-05
+ t_range              = 1.0
+ initial_state_ids    = 1 2
+ dissociate_state_ids = 4 
+/
+&state
+0.0     2.0      1.0
+2.0     3.5      1.0
+3.5     4.0      0.0
+4.0     1.0d10   0.0
+/
+EOF
+    fanatra iepdyn $i/run${num}.inp >& $i/run${num}.out
+  done
+done
+```
+これを実行することで，`krhist``ファイルが生成される．
+```
+0001/run0001.krhist
+0001/run0002.krhist
+0002/run0001.krhist
+0002/run0002.krhist
+0003/run0001.krhist
+0003/run0002.krhist
+0004/run0001.krhist
+0004/run0002.krhist
+```
+
+#### 平衡ポピュレーション値の計算
+
+バイアスポテンシャルがない場合と同様に，
+状態1, 2の初期ポピュレーション値を反射境界条件を導入することで計算する．
+``krhist``からなるリストなどは再度``cvlist_generator.py``を利用することで求めておく．
+下記は，実行時に入力が求められている部分のみを抜粋した．
+```
+(1) Enter the root directory to search: . 
+(2) Enter the target extension (e.g., txt): krhist 
+(3) Enter the maximum search directory depth: 2
+(4) Enter directory level counted from the deepest directory for grouping (default: 1): 1
+Did these files come from perturbed dynamics? (y/n): y
+Enter state numbers used for Rij calculation (space-separated, empty input allowed): 1 2
+Enter fraction of files to be listed from each state (default: 1.0 (corresponding to all the files)): 1.0
+Enter filename to save the file list: fkrhist.list
+Enter filename to save state_id and Rij_flag: fkrhist.unp
+```
+
+```
+#!/usr/bin/env bash
+
+mkdir -p steady
+
+# Create input file
+#
+cat << EOF > steady.inp
+&input_param
+ flist_cv = "fkrhist.list"
+/
+&output_param
+ fhead = "steady/out"
+/
+&option_param
+ use_perturbed_traj   = .false.
+ f_unperturbed_id     = "fkrhist.unp"
+
+ input_type           = "HISTOGRAM"
+ output_histogram     = .false.
+ use_dissociate_state = .false.
+ use_reflection_state = .true.
+ use_product_state    = .false.
+ calc_steady          = .true.
+ calc_Pint            = .false.
+ extrapolate          = .false.
+ nstate               = 4 
+ ndim                 = 1
+ nmol                 = 1
+ dt                   = 2e-05
+ t_sparse             = 2e-05
+ t_range              = 1.0
+ initial_state_ids    = 1 2 
+ reflection_state_ids = 4 
+/
+&state
+0.0     2.0      1.0
+2.0     3.5      1.0
+3.5     4.0      0.0
+4.0     1.0d10   0.0
+/
+EOF
+
+fanatra iepdyn steady.inp
+```
+実行することで，平衡ポピュレーション値が格納されている``steady/out.steady``が得られる．
+
+#### $P_{\mathrm{B}}(t)$の計算 
+
+$P_{\mathrm{B}}\left(t\right)$の時間発展を``extrapolate = .true.``と設定することで計算する．
+```
+#!/usr/bin/env bash
+
+mkdir -p extrapolate 
+
+# Create input file
+#
+cat << EOF > extrapolate.inp
+&input_param
+ flist_cv = "fkrhist.list"
+/
+&output_param
+ fhead = "extrapolate/out"
+/
+&option_param
+ use_perturbed_traj   = .true.
+ f_unperturbed_id     = "fkrhist.unp"
+
+ input_type           = "HISTOGRAM"
+ output_histogram     = .false.
+ use_dissociate_state = .true.
+ use_reflection_state = .false.
+ use_product_state    = .false.
+ calc_steady          = .false.
+ calc_Pint            = .false.
+ extrapolate          = .true.
+ nstate               = 4 
+ ndim                 = 1
+ nmol                 = 1
+ dt                   = 2e-05
+ t_sparse             = 2e-05
+ t_range              = 1.0
+ t_extend             =  10.0
+ dt_tcfout            = 2e-05
+ initial_state_ids    = 1 2 
+ dissociate_state_ids = 4 
+/
+&state
+0.0     2.0      0.9874940E+00
+2.0     3.5      0.1066799E-01
+3.5     4.0      0.0
+4.0     1.0d10   0.0
+/
+EOF
+
+fanatra iepdyn extrapolate.inp
+```
+
+#### $P_{\mathrm{B}}(t)$の時間積分の解析的評価
+
+下記を実行すれば良い．
+```
+#!/usr/bin/env bash
+
+mkdir -p Pint
+
+# Create input file
+#
+cat << EOF > Pint.inp
+&input_param
+ flist_cv = "fkrhist.list"
+/
+&output_param
+ fhead = "Pint/out"
+/
+&option_param
+ use_perturbed_traj   = .true.
+ f_unperturbed_id     = "fkrhist.unp"
+
+ input_type           = "HISTOGRAM"
+ output_histogram     = .false.
+ use_dissociate_state = .true.
+ use_reflection_state = .false.
+ use_product_state    = .false.
+ calc_steady          = .false.
+ calc_Pint            = .false.
+ extrapolate          = .true.
+ nstate               = 4 
+ ndim                 = 1
+ nmol                 = 1
+ dt                   = 2e-05
+ t_sparse             = 2e-05
+ t_range              = 1.0
+ t_extend             =  10.0
+ dt_tcfout            = 2e-05
+ initial_state_ids    = 1 2 
+ dissociate_state_ids = 4 
+/
+&state
+0.0     2.0      0.9874940E+00
+2.0     3.5      0.1066799E-01
+3.5     4.0      0.0
+4.0     1.0d10   0.0
+/
+EOF
+
+fanatra iepdyn Pint.inp
+```
+実行後，``Pint/out.int``が得られる．

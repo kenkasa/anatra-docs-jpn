@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANATRA User Guide &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c033477b"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="ANATRAとは？" href="01_about_anatra/main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_fanatra_usage/combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ANATRA User Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="anatra-user-guide">
+<h1>ANATRA User Guide<a class="headerlink" href="#anatra-user-guide" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Installation/main.html">ANATRAのインストール</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_Installation/main.html#id1">ANATRAを利用する上で必要となるプログラム</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_Installation/main.html#id4">ソースコードからインストールする</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_Installation/main.html#hdf5">HDF5ライブラリを併せてビルドする場合</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02_Installation/main.html#openblas">OpenBLASを利用する場合</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03_anatra_usage/combined.html">anatraの使い方</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#id1">はじめに</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#id2">共通オプション</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#trjconv">トラジェクトリ変換(trjconv)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id3">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id4">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id5">トラジェクトリから水を除去</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#pbc">PBCラップ</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id6">フィッティング</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id7">センタリング</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id8">PBCラップ&amp;フィッティング</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id9">PBCラップ&amp;センタリング</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#distance-dis">距離(distance, dis)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id10">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id11">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id12">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id13">通常の原子間距離の計算</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#center-of-mass-com">重心解析・平均二乗変位(center_of_mass, com)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id14">理論背景</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id15">平均二乗変位</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id16">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id17">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id18">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#msd">タンパク質のMSD計算</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id19">複数個存在する小分子のMSD計算</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#radial-distr-rdf">動径分布関数(radial_distr, rdf)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id20">理論背景</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id21">同種粒子間の動径分布関数</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id22">異種粒子間の動径分布関数</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id23">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id24">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id25">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#rdf">水分子の酸素原子間のRDF</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id26">水分子の酸素原子–水素原子間のRDF</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#c-alphardf">タンパク質のC<span class="math notranslate nohighlight">\(\alpha\)</span>原子と水分子の酸素原子の間のRDF</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#spatial-distr-sdf">空間分布関数(spatial_distr, sdf)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id27">理論背景</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id28">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id29">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id30">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#sdf">タンパク質周りの水分子のSDF</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#rmsd">平均二乗偏差(rmsd)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id31">理論背景</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id32">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id33">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id34">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id35">水中におけるタンパク質の結晶構造からのRMSD</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#interaction-energy-ene">相互作用エネルギー(interaction_energy, ene)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id36">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id37">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id38">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#lj">溶質間の静電相互作用とLJ相互作用の和</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id39">溶質間のLJ相互作用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#lipid-order-scd">脂質膜秩序(lipid_order, scd)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id40">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id41">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id42">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#dppcs-mathrm-cd">DPPC脂質膜の<span class="math notranslate nohighlight">\(S_{\mathrm{CD}}\)</span>計算</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#z-z-profile-zprof">界面法線方向(<span class="math notranslate nohighlight">\(z\)</span>)に沿った分布関数(z_profile, zprof)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id43">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id44">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id45">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id46">脂質膜–水系における水分子の数密度分布</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#z-z-orient-zori">特定の方向<span class="math notranslate nohighlight">\(z\)</span>に対する分子の配向(z_orient, zori)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id47">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id48">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id49">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id50">脂質二分子膜内における脂質分子の配向分布</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#cluster-size">クラスターサイズ(cluster_size)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id51">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id52">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id53">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id54">水クラスターのサイズ分布</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_anatra_usage/combined.html#free-volume">自由体積プロファイル(free_volume)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id55">オプション一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id56">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_anatra_usage/combined.html#id57">解析例</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_anatra_usage/combined.html#id58">脂質膜系における自由体積プロファイル</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="05_fanatra_usage/combined.html">fanatraの使い方</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="05_fanatra_usage/combined.html#id1">はじめに</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_fanatra_usage/combined.html#id2">共通パラメータ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#input-param">&amp;input_param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id3">時系列データのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id4">統計重みデータのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#output-param">&amp;output_param</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_fanatra_usage/combined.html#histogram-hist">ヒストグラム(histogram, hist)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id5">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#option-param">&amp;option_param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id6">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id7">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_fanatra_usage/combined.html#potential-of-mean-force-pmf">平均力ポテンシャル(potential_of_mean_force, pmf)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id8">理論背景</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id9">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id10">&amp;option_param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#matplotlib-param">&amp;matplotlib_param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id11">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id12">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_fanatra_usage/combined.html#restricted-radial-rrpmf">制限つき動径平均力ポテンシャル(restricted_radial, rrpmf)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id13">理論背景</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id14">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id15">入力ファイル(時系列データ)のフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id16"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#bootopt-param"><code class="docutils literal notranslate"><span class="pre">&amp;bootopt_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id17">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id18">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_fanatra_usage/combined.html#extract-frame-extf">フレーム抽出(extract_frame, extf)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id19">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id20"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id21">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id22">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_fanatra_usage/combined.html#random-frame-randf">フレームのランダム抽出(random_frame, randf)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id23">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id24"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id25">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id26">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_fanatra_usage/combined.html#moving-average-movave">移動平均(moving_average, movave)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id27">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id28"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id29">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id30">解析例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_fanatra_usage/combined.html#average-function-avef">関数の平均(average_function, avef)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id31">パラメータ一覧</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id32"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id33"><code class="docutils literal notranslate"><span class="pre">&amp;bootopt_param</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id34">出力ファイルのフォーマット</a></li>
+<li class="toctree-l3"><a class="reference internal" href="05_fanatra_usage/combined.html#id35">解析例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="06_iepdyn/combined.html#id1">理論背景</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_iepdyn/combined.html#iepdyn">IEPDYNの理論表式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_iepdyn/combined.html#id2">境界条件の導入</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_iepdyn/combined.html#returning-probability-rp">再帰確率(Returning probability, RP)理論との連携</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_iepdyn/combined.html#p-j-left-t-right"><span class="math notranslate nohighlight">\(P_{j}\left(t\right)\)</span>の時間積分に対する解析的評価</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_iepdyn/combined.html#p-j-left-infty-right">平衡ポピュレーション<span class="math notranslate nohighlight">\(P_{j}\left(\infty\right)\)</span>の解析的評価</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="06_iepdyn/combined.html#id3">パラメータ一覧</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_iepdyn/combined.html#option-param"><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_iepdyn/combined.html#state"><code class="docutils literal notranslate"><span class="pre">&amp;state</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_iepdyn/combined.html#id4">補助ツール</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_iepdyn/combined.html#id5">出力ファイル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_iepdyn/combined.html#id6">解析例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_iepdyn/combined.html#md-use-perturbed-traj-false">バイアスポテンシャルなしのMDトラジェクトリを利用する場合(<code class="docutils literal notranslate"><span class="pre">use_perturbed_traj</span> <span class="pre">=</span> <span class="pre">.false.</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="06_iepdyn/combined.html#krhist">リスタートファイル(<code class="docutils literal notranslate"><span class="pre">krhist</span></code>)の作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="06_iepdyn/combined.html#id7">平衡ポピュレーション値の計算</a></li>
+<li class="toctree-l4"><a class="reference internal" href="06_iepdyn/combined.html#p-mathrm-b-t"><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の計算</a></li>
+<li class="toctree-l4"><a class="reference internal" href="06_iepdyn/combined.html#id8"><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の時間積分の解析的評価</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="06_iepdyn/combined.html#md-use-perturbed-id-true">バイアスポテンシャルありのMDトラジェクトリを利用する場合(<code class="docutils literal notranslate"><span class="pre">use_perturbed_id</span> <span class="pre">=</span> <span class="pre">.true.</span></code>)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="06_iepdyn/combined.html#id9">リスタートファイル(<code class="docutils literal notranslate"><span class="pre">krhist</span></code>)の作成</a></li>
+<li class="toctree-l4"><a class="reference internal" href="06_iepdyn/combined.html#id10">平衡ポピュレーション値の計算</a></li>
+<li class="toctree-l4"><a class="reference internal" href="06_iepdyn/combined.html#id11"><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の計算</a></li>
+<li class="toctree-l4"><a class="reference internal" href="06_iepdyn/combined.html#id12"><span class="math notranslate nohighlight">\(P_{\mathrm{B}}(t)\)</span>の時間積分の解析的評価</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="01_about_anatra/main.html" class="btn btn-neutral float-right" title="ANATRAとは？" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

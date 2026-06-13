@@ -1,0 +1,409 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fanatraの使い方 &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">fanatraの使い方</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/05_fanatra_usage/01_main.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="fanatra">
+<h1>fanatraの使い方<a class="headerlink" href="#fanatra" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2>はじめに<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p><strong>fanatra</strong>は&quot;Fortran ANATRA&quot;の略であり，その名の通りFortranを用いて解析を行うプログラムである．この章では<strong>fanatra</strong>の使い方を解説する．<strong>fanatra</strong>はVMDを通さずに解析を行うプログラム群であるため，計算ノード上でのVMDの利用が難しい計算機システムでも
+利用が可能となる．<code class="docutils literal notranslate"><span class="pre">fanatra</span> <span class="pre">-h</span></code>を実行することでその種類の一覧が表示される．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ fanatra -h
+Available analysis in Fortran ANATRA
+histogram               (hist)   : Histogram Analysis
+potential_of_mean_force (pmf)    : Free-energy Profile Analysis
+restricted_radial       (rrpmf)  : Restricted Radial Analysis
+extract_frame           (extf)   : Extract Frames Using CV
+random_frame            (randf)  : Randomly Extract Frames
+state_define            (sdef)   : Define States From Time-series Data
+moving_average          (movave) : Moving Average Analysis
+average_function        (avef)   : Function Average Analysis
+bootstrap_prepper       (boot)   : Bootstrap Sample Generator
+return_prob             (rp)     : Returning Probability Analysis
+rprate                  (rprate) : Rate Constant Analysis based on RP theory
+iepdyn                  (iepdyn) : Integral-equation Formalism of Population Dynamics
+</pre></div>
+</div>
+<p>上記のうち，<code class="docutils literal notranslate"><span class="pre">histogram</span></code>などが解析モードであり，
+省略して<code class="docutils literal notranslate"><span class="pre">hist</span></code>として入力することも可能である．
+<strong>anatra</strong>がコマンドライン上でパラメータを指定して解析可能だったのに対して，
+<strong>fanatra</strong>ではパラメータファイルを別に用意して読み込ませる形で実行する．例えば，</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ fanatra hist コントロールファイル
+</pre></div>
+</div>
+<p>のように実行する．読み込ませるパラメータファイルはFortranのnamelist形式である．
+また，各解析モードでのパラメータファイルの形式やその内容は<code class="docutils literal notranslate"><span class="pre">&quot;fanatra</span> <span class="pre">&lt;解析モード&gt;　-h&quot;</span></code>
+で簡単な説明とサンプルが表示されるため大体の使い方はそれで理解ができる．<code class="docutils literal notranslate"><span class="pre">histogram</span></code>を例を以下に示す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ fanatra histogram -h
+
+==================================================
+
+              Histogram Analysis
+
+==================================================
+&amp;input_param
+ fcv      = &quot;cvdata1&quot; &quot;cvdata2&quot; ! Time-series CV data
+ flist_cv = &quot;list&quot; ! CV-file list (Either fcv or flist_cv should be specified)
+/
+&amp;output_param
+ fhead = &quot;run&quot; ! header of output filename
+/
+&amp;option_param
+  dx       = 0.1d0  ! grid spacing
+  xsta     = 0.0d0  ! minimum value of the coordinate
+  nx       = 100    ! number of grids
+  ncol     = 1      ! number of data column
+/
+
+
+::: format of time-series data :::
+1st column: time (arbitrary), Nth column (N&gt;1): data
+example)
+
+0.00   0.02120
+0.01   0.03140
+0.02   0.22310
+....   .......
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2>共通パラメータ<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p><strong>fanatra</strong>におけるパラメータファイルのほとんどはFortranのnamelist形式に依拠しており，
+<strong>input_param</strong>セクション，<strong>output_param</strong>セクション，<strong>option_param</strong>セクションに分けてパラメータを指定する．
+全ての解析モードで共通している<strong>input_param</strong>と<strong>output_param</strong>について，ここで示しておく．</p>
+<section id="input-param">
+<h3>&amp;input_param<a class="headerlink" href="#input-param" title="Link to this heading"></a></h3>
+<p>このnamelistでは，入力ファイルに関するパラメータを指定する．</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><strong>パラメータ名</strong></p></th>
+<th class="head text-center"><p><strong>機能</strong></p></th>
+<th class="head text-center"><p><strong>例</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>ftraj</p></td>
+<td class="text-center"><p>入力トラジェクトリ名を指定(複数指定可)</p></td>
+<td class="text-center"><p>ftraj      = “inp1.dcd”, “inp2.dcd”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>fcv</p></td>
+<td class="text-center"><p>入力時系列データ名を指定(複数指定可)</p></td>
+<td class="text-center"><p>fcv        = “cv1.txt”, “cv2.txt”</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>fweight</p></td>
+<td class="text-center"><p>入力時系列データに対応する各ステップでの統計重みを指定(複数指定可)</p></td>
+<td class="text-center"><p>fweight        = “weight1.txt”, “weight2.txt”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>flist_traj<span class="math notranslate nohighlight">\(^{1}\)</span></p></td>
+<td class="text-center"><p>入力トラジェクトリの一覧を格納したファイルを指定</p></td>
+<td class="text-center"><p>flist_traj = “list.txt”</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>flist_cv<span class="math notranslate nohighlight">\(^{2}\)</span></p></td>
+<td class="text-center"><p>入力時系列データの一覧を格納したファイルを指定</p></td>
+<td class="text-center"><p>flist_cv   = “list.txt”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>flist_weight<span class="math notranslate nohighlight">\(^{3}\)</span></p></td>
+<td class="text-center"><p>統計重みファイルの一覧を格納したファイルを指定</p></td>
+<td class="text-center"><p>flist_weight   = “list.txt”</p></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math notranslate nohighlight">\(^{1}\)</span> <code class="docutils literal notranslate"><span class="pre">ftraj</span></code>と<code class="docutils literal notranslate"><span class="pre">flist_traj</span></code>の両方を指定した場合，<code class="docutils literal notranslate"><span class="pre">flist_traj</span></code>の内容が優先される．<br />
+<span class="math notranslate nohighlight">\(^{2}\)</span> <code class="docutils literal notranslate"><span class="pre">fcv</span></code>と<code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>の両方を指定した場合，<code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>の内容が優先される．<br />
+<span class="math notranslate nohighlight">\(^{3}\)</span> <code class="docutils literal notranslate"><span class="pre">fweight</span></code>と<code class="docutils literal notranslate"><span class="pre">flist_weight</span></code>の両方を指定した場合，<code class="docutils literal notranslate"><span class="pre">flist_weight</span></code>の内容が優先される．</p>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ftraj</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ftraj</span> <span class="pre">=</span> <span class="pre">&quot;inp1.dcd&quot;,</span> <span class="pre">&quot;inp2.dcd&quot;</span></code></p></li>
+</ul>
+<p>入力のトラジェクトリファイルを指定する．例に示す通り，複数のファイルを指定することも可能である．
+ファイル数が膨大な場合は，<code class="docutils literal notranslate"><span class="pre">flist_traj</span></code>で指定することも可能である．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">fcv</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fcv</span> <span class="pre">=</span> <span class="pre">&quot;cv1.txt&quot;,</span> <span class="pre">&quot;cv2.txt&quot;</span></code></p></li>
+</ul>
+<p>入力の時系列データファイルを指定する．例に示す通り，複数のファイルを指定することも可能である．
+ファイル数が膨大な場合は，<code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>で指定することも可能である．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">fweight</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fweight</span> <span class="pre">=</span> <span class="pre">&quot;cv1.txt&quot;,</span> <span class="pre">&quot;cv2.txt&quot;</span></code></p></li>
+</ul>
+<p>入力の統計重みファイルを指定する．
+統計重みファイルでは，時系列データの各ステップでの統計的重みを与えることができる．統計的重みとしてエンハンスドサンプリング法やMultistate Bennett Acceptance Ratio (MBAR)法によって得られたものを入力することが可能である．統計重みの総和値はプログラム内で自動的に1に規格化される．
+例に示す通り，複数のファイルを指定することも可能である．
+ファイル数が膨大な場合は，<code class="docutils literal notranslate"><span class="pre">flist_weight</span></code>で指定することも可能である．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">flist_traj</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">flist_traj</span> <span class="pre">=</span> <span class="pre">&quot;list.txt&quot;</span></code></p></li>
+</ul>
+<p>入力のトラジェクトファイルのリストを格納したファイルを指定する．<code class="docutils literal notranslate"><span class="pre">flist_traj</span></code>で指定された内容が，<code class="docutils literal notranslate"><span class="pre">ftraj</span></code>で指定した内容よりも優先される．
+リストファイルには，下記の例の通り，入力のトラジェクトリファイルが1行ごとに記されている必要がある．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inp1</span><span class="o">.</span><span class="n">dcd</span>
+<span class="n">inp2</span><span class="o">.</span><span class="n">dcd</span>
+<span class="n">inp3</span><span class="o">.</span><span class="n">dcd</span>
+<span class="n">inp4</span><span class="o">.</span><span class="n">dcd</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">flist_cv</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">flist_cv</span> <span class="pre">=</span> <span class="pre">&quot;list.txt&quot;</span></code></p></li>
+</ul>
+<p>入力の時系列データファイルのリストを格納したファイルを指定する．<code class="docutils literal notranslate"><span class="pre">flist_cv</span></code>で指定された内容が，<code class="docutils literal notranslate"><span class="pre">fcv</span></code>で指定した内容よりも優先される．
+リストファイルには，下記の例の通り，入力の時系列データファイルが1行ごとに記されている必要がある．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inp1</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp2</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp3</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp4</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">flist_weight</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: N/A</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">flist_weight</span> <span class="pre">=</span> <span class="pre">&quot;list.txt&quot;</span></code></p></li>
+</ul>
+<p>入力の統計重みデータファイルのリストを格納したファイルを指定する．<code class="docutils literal notranslate"><span class="pre">flist_weight</span></code>で指定された内容が，<code class="docutils literal notranslate"><span class="pre">fweight</span></code>で指定した内容よりも優先される．
+リストファイルには，下記の例の通り，入力の統計重みファイルが1行ごとに記されている必要がある．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inp1</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp2</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp3</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">inp4</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="id3">
+<h3>時系列データのフォーマット<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>時系列データのフォーマットは下記である．</p>
+<ul class="simple">
+<li><p>1列目: 時間軸</p></li>
+<li><p>2列目: 1つめの時系列データ</p></li>
+<li><p>3列目: 2つめの時系列データ</p></li>
+</ul>
+<p>1列目は，全ての解析モードにおいて読み込まれず，2列目から1つめのデータ列としてカウントされる．</p>
+</section>
+<section id="id4">
+<h3>統計重みデータのフォーマット<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>統計重みデータのフォーマットは下記である．</p>
+<ul class="simple">
+<li><p>1列目: 時間軸</p></li>
+<li><p>2列目: 統計重み値</p></li>
+</ul>
+<p>1列目は，全ての解析モードにおいて読み込まれず，2列目のみ利用される．
+統計重みデータの行数は対応する時系列データの行数と一致している必要がある．</p>
+</section>
+<section id="output-param">
+<h3>&amp;output_param<a class="headerlink" href="#output-param" title="Link to this heading"></a></h3>
+<p>このnamelistでは，出力に関するパラメータを指定する．</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p><strong>パラメータ名</strong></p></th>
+<th class="head text-center"><p><strong>機能</strong></p></th>
+<th class="head text-center"><p><strong>例</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>fhead</p></td>
+<td class="text-center"><p>出力ファイル名の拡張子以外の部分を指定</p></td>
+<td class="text-center"><p>fhead          = “run”</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>file_extension<span class="math notranslate nohighlight">\(^{1}\)</span></p></td>
+<td class="text-center"><p>出力ファイル名の拡張子を指定</p></td>
+<td class="text-center"><p>file_extension = “dat”</p></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math notranslate nohighlight">\(^{1}\)</span> このパラメータが有効化される解析モードは多くない．</p>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">fhead</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">run</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fhead</span> <span class="pre">=</span> <span class="pre">&quot;run&quot;</span></code></p></li>
+</ul>
+<p>出力するファイル名の拡張子を除いた部分(basename)を指定する．
+例えば，<code class="docutils literal notranslate"><span class="pre">fhead</span> <span class="pre">=</span> <span class="pre">run</span></code>と指定した場合，次に述べる解析モード<code class="docutils literal notranslate"><span class="pre">histogram</span></code>は，
+デフォルトでは<code class="docutils literal notranslate"><span class="pre">run.dat</span></code>というファイルを出力する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">file_extension</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">dat</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">file_extension</span> <span class="pre">=</span> <span class="pre">&quot;dat&quot;</span></code></p></li>
+</ul>
+<p>出力するファイル名の拡張子を指定する．ただし，このパラメータが有効化される解析モードは，<code class="docutils literal notranslate"><span class="pre">histogram</span></code>などごく一部である．</p>
+</li>
+</ul>
+<!---
+ **セクション名**                      |**オプション名**                  | **機能**                                 | **例**             
+:----------------------------------|:----------------------------------|:----------------------------------------:|---------------:
+``&input_param``                       | ``flist``                             | 解析対象のデータファイル名を記述した入力ファイルを指定          | ``flist = "input_list.txt"``    
+``&output_param``                      | ``fhead``                             | 解析結果の出力ファイル名のヘッダーを指定        | ``fhead = "out" ``
+
+上記のflistで指定する入力ファイルの例を以下に示しておく．
+このように**fanatra**では"解析対象のファイル名を記述した"ファイルを入力として渡す．これは複数のデータを一挙に解析するためである．
+```
+$cat input_list.txt
+
+../../../06_2d/02_2dene/03_atr/combined_0001.dat
+../../../06_2d/02_2dene/03_atr/combined_0002.dat
+../../../06_2d/02_2dene/03_atr/combined_0003.dat
+../../../06_2d/02_2dene/03_atr/combined_0004.dat
+../../../06_2d/02_2dene/03_atr/combined_0005.dat
+../../../06_2d/02_2dene/03_atr/combined_0006.dat
+../../../06_2d/02_2dene/03_atr/combined_0007.dat
+../../../06_2d/02_2dene/03_atr/combined_0008.dat
+../../../06_2d/02_2dene/03_atr/combined_0009.dat
+../../../06_2d/02_2dene/03_atr/combined_0010.dat
+../../../06_2d/02_2dene/03_atr/combined_0011.dat
+../../../06_2d/02_2dene/03_atr/combined_0012.dat
+../../../06_2d/02_2dene/03_atr/combined_0013.dat
+../../../06_2d/02_2dene/03_atr/combined_0014.dat
+../../../06_2d/02_2dene/03_atr/combined_0015.dat
+../../../06_2d/02_2dene/03_atr/combined_0016.dat
+```
+
+## 解析対象ファイルのフォーマット
+
+``flist``内で指定した解析対象ファイルのフォーマットは，**anatra**にて出力されるファイル形式と同様であり，
+* 一列目: 時系列データ
+* 二列目: 解析対象データ  
+
+という構造である必要がある．
+--->
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

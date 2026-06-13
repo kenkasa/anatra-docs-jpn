@@ -1,0 +1,139 @@
+## 関数の平均(average_function, avef)
+
+この解析モードでは，複数の入力ファイルに格納されている1次元関数を平均する．
+例えば，$i$番目のファイルに格納されている関数を$f_{i}\left(x\right)$，ファイル数を$N$とすると，平均後の関数$f_{\mathrm{ave}}\left(x\right)$は
+\begin{align}
+f_{\mathrm{ave}}\left(x\right) = \dfrac{1}{N}\sum_{i=1}^{N}f_{i}\left(x\right),
+\end{align}
+で表される．
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|flist_cv|      & 関数データファイル一覧を格納したファイル名 \\
+\hline
+\verb|&output_param| & \verb|fhead|         & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|use_bootstrap| & ブートストラップ解析の有無 \\
+                     & \verb|xsta|          & グリッドの開始位置 \\
+                     & \verb|dx|            & グリッド間隔 \\
+\hline
+\verb|&bootopt_param| & \verb|duplicate|    & 重複抽出を許可するかどうか \\
+                      & \verb|iseed|        & 乱数シード \\
+                      & \verb|nsample|      & 各試行で抽出するサンプル数 \\
+                      & \verb|ntrial|       & ブートストラップ試行回数 \\
+\hline
+\end{tabular}
+}
+```
+
+### ``&option_param``
+
+* **``use_bootstrap``**
+    * Default: ``.false.``
+    * Example: ``use_bootstrap = .true.``
+
+    ブートストラップ法による誤差評価を実施するかどうかを指定する．
+    ``.true.`` の場合は，``&bootopt_param`` の設定に従ってブートストラップ解析を行う．
+
+----
+* **``xsta``**
+    * Default: ``0.0d0``
+    * Example: ``xsta = 0.0d0``
+
+    グリッドの開始位置を指定する．
+
+    $i$番目のグリッド位置を$x_i$とすると，
+
+    $$
+    x_i = x_0 + (i-1)\Delta x
+    $$
+
+    で与えられる．
+
+----
+* **``dx``**
+    * Default: ``0.1d0``
+    * Example: ``dx = 0.1d0``
+
+    関数データのグリッド間隔を指定する．
+
+### ``&bootopt_param``
+
+ここでは，ブートストラップ法による誤差解析の設定を行う．
+``use_bootstrap = .true.``の場合に有効となる．
+
+* **``iseed``**
+    * Default: 自動生成
+    * Example: ``iseed = 3141592``
+
+    ブートストラップ解析で使用する乱数シードを指定する．
+    ``iseed <= 0`` の場合はプログラムが自動的にシードを生成する．
+
+----
+* **``nsample``**
+    * Default: None
+    * Example: ``nsample = 1000``
+
+    各ブートストラップ試行で抽出するサンプル数を指定する．
+
+----
+* **``duplicate``**
+    * Default: ``.true.``
+    * Example: ``duplicate = .false.``
+
+    ブートストラップサンプリング時に重複抽出を許可するかどうかを指定する．
+
+----
+* **``ntrial``**
+    * Default: None
+    * Example: ``ntrial = 100``
+
+    ブートストラップ試行回数を指定する．
+    試行回数を増やすことで統計誤差の推定精度が向上するが，計算コストも増加する．
+
+### 出力ファイルのフォーマット
+* ``*.ave``
+    * 1列目：$x$軸
+    * 2列目：関数値
+    * 3列目：標準誤差(``use_bootstrap = .true.``の場合)
+
+### 解析例
+
+1次元の関数$f\left(x\right)$ (軸の始点``0``, グリッド間隔``0.1``)がファイルごとに格納されていて，そのファイルリストが``list``にまとめられているとして，その平均と標準誤差をブートストラップ法で計算する例を示す．
+
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ flist_cv = "list"
+/
+&output_param
+ fhead         = "out"
+/
+&option_param
+ use_bootstrap =  .false.
+ xsta          =  0.0d0  
+ dx            =  0.1d0  
+/
+
+&bootopt_param
+ duplicate     = .true.   
+ iseed         =  3141592 
+ nsample       =  1000    
+ ntrial        =  100     
+/
+EOF
+
+fanatra average_function run.inp 
+```
+これを実行すると，平均化された関数データを格納した``out.ave``が出力される．

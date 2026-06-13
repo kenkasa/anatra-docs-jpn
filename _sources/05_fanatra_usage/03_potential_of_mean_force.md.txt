@@ -1,0 +1,396 @@
+## 平均力ポテンシャル(potential_of_mean_force, pmf)
+
+この解析モードでは，
+反応座標に対する時系列データ$\bm{\xi}\left(t\right)$から，
+反応座標$\bm{\zeta}$に沿った自由エネルギープロファイル$W\left(\bm{\zeta}\right)$を計算する．
+$W\left(\bm{\zeta}\right)$は平均力ポテンシャルとも呼ばれる．
+
+### 理論背景
+
+系の配置を${\bf X}$，そしてポテンシャルを$U\left({\bf X}\right)$とする．
+このとき，配置積分$Z$は逆温度を$\beta$として
+
+\begin{align}
+Z & =\int d{\bf X}\,\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}
+
+で与えられる．
+同様に，系が反応座標空間($\bm{\zeta}\left({\bf X}\right)$)上の
+微小区間$\bm{\zeta} - \bm{\zeta}+\Delta \bm{\zeta}$にトラップされている状態に対応する分配関数は
+
+\begin{align}
+Z\left(\bm{\zeta}\right) & =\Delta\bm{\zeta}\int d{\bf X}\,\delta\left(\bm{\zeta}-\bm{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}
+
+である．$\bm{\zeta}$に対する確率密度を
+
+\begin{align}
+\rho\left(\bm{\zeta}\right) & = \Braket{\delta\left(\bm{\zeta} - \bm{\xi}\left({\bf X}\right)\right)} = \dfrac{1}{Z}\int d{\bf X}\,\delta\left(\bm{\zeta}-\bm{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}
+
+と定義すると，
+
+\begin{align}
+\dfrac{Z\left(\bm{\zeta}\right)}{Z} & =\rho\left(\bm{\zeta}\right)\Delta\bm{\zeta}
+\end{align}
+
+が成り立つ．したがって，系が領域$\bm{\zeta}-\bm{\zeta} + \Delta \bm{\zeta}$に制限されている状態と制限されていない状態の自由エネルギー差$\Delta F\left(\bm{\zeta}\right)$は
+
+\begin{align}
+\Delta F\left(\bm{\zeta}\right) & =-\dfrac{1}{\beta}\log\dfrac{Z\left(\bm{\zeta}\right)}{Z} 
+ = -\dfrac{1}{\beta}\log \left(\rho\left(\bm{\zeta}\right)\Delta \bm{\zeta}\right)
+\end{align}
+
+と表せる．$\bm{\zeta}_{0}$を基準にとった自由エネルギーは
+
+\begin{align}
+W\left(\bm{\zeta}\right) & =\Delta F\left(\bm{\zeta}\right)-\Delta F\left(\bm{\zeta}_{0}\right)\notag\\
+ & =-\dfrac{1}{\beta}\log\dfrac{\rho\left(\bm{\zeta}\right)}{\rho\left(\bm{\zeta}_{0}\right)}
+ \label{pmf:pmf}
+\end{align}
+
+である．この$W$のことを平均力ポテンシャルと呼ぶ．$\bm{\zeta}_{0}$の設定は任意であるが，
+多くの場合，$W\left(\bm{\zeta}\right)$の最小値が0となるようにとる．
+$W\left(\bm{\zeta}\right)$を計算することで，$\bm{\zeta}$に応じた熱力学的な安定性の変化を
+議論することが可能となる．式EQREF(pmf:pmfEQREF)は，$\bm{\zeta}$に依存する部分と定数$C$に分けて
+
+\begin{align}
+W\left(\bm{\zeta}\right) & =-\dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\bm{\zeta}-\bm{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)+C
+\label{pmf:pmf2}
+\end{align}
+
+と書き直すこともできる．ただし，$C$は
+
+\begin{align}
+C & = \dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\bm{\zeta}_{0}-\bm{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
+\end{align}
+
+で与えられる．
+
+
+### パラメータ一覧
+
+```{raw} latex
+\renewcommand{\arraystretch}{1.2}
+{\arrayrulewidth=0.5pt
+\begin{tabular}{p{3cm}p{5cm}p{7cm}}
+\arrayrulecolor{gray}
+\rowcolor{headerColor}
+\hline
+\textbf{Namelist} & \textbf{パラメータ} & \textbf{備考}\\
+\hline
+\verb|&input_param|  & \verb|flist_cv|     & CVファイル一覧を格納したファイル名 \\
+                     & \verb|flist_weight| & 重みファイル一覧を格納したファイル名（オプション） \\
+                     & \verb|fcv|           & CVファイル名 \\
+                     & \verb|flist_weight|  & 重みファイル名（オプション） \\
+\hline
+\verb|&output_param| & \verb|fhead|        & 出力ファイル名のヘッダ \\
+\hline
+\verb|&option_param| & \verb|ndim|               & CVの次元数 \\
+                     & \verb|xyzcol|             & CVデータ中の列番号 \\
+                     & \verb|ng3|                & 各CV方向のグリッド数 \\
+                     & \verb|del|                & 各CV方向のグリッド間隔 \\
+                     & \verb|origin|             & 各CV方向のグリッド原点 \\
+                     & \verb|temperature|        & 温度 [K] \\
+                     & \verb|use_radial|         & 動径成分のCVを含むかどうか \\
+                     & \verb|radcol|             & CVデータ中にある動径成分の列番号 \\
+                     & \verb|box_system|         & 系のボックスサイズ（\verb|ndim=3| の場合のみ使用） \\
+                     & \verb|use_spline|         & スプライン補間の有無 \\
+                     & \verb|spline_resolution|  & スプライン補間の分解能 \\
+                     & \verb|gen_script_mpl2d|   & 2次元PMF描画用Pythonスクリプト生成の有無 \\
+                     & \verb|skip_calc|          & PMF計算をスキップするかどうか \\
+\hline
+\verb|&matplotlib_param| & \verb|fpdf|    & 出力PDFファイル名 \\
+                         & \verb|labels|  & 軸ラベルおよびカラーバーラベル \\
+                         & \verb|ranges|  & 描画範囲 \\
+                         & \verb|tics|    & 軸目盛り間隔 \\
+                         & \verb|scales|  & 軸の単位変換係数 \\
+\hline
+\end{tabular}
+}
+```
+
+### &option_param
+
+* **``ndim``**
+    * Default: None
+    * Example: ``ndim = 2``
+
+    Collective Variable (CV) の次元数を指定する．
+    例えば ``ndim = 2`` の場合は2次元PMF，``ndim = 3`` の場合は3次元PMFを計算する．
+
+----
+* **``xyzcol``**
+    * Default: ``1`` 
+    * Example: ``xyzcol = 1 2``
+
+    CVデータファイル中で，各CVに対応する列番号を指定する．
+    先頭列は時刻やステップ数として扱われるため無視される．
+
+    例えば
+
+    ```
+    time  cv1  cv2  cv3
+    ```
+
+    の形式でデータが格納されている場合，
+
+    ```
+    xyzcol = 1 2
+    ```
+
+    とすると，``cv1`` と ``cv2`` を用いて2次元PMFを計算する．
+
+----
+* **``ng3``**
+    * Default: ``1 1 1`` 
+    * Example: ``ng3 = 10 20``
+
+    各CV方向のグリッド数を指定する．
+
+    ``ndim = N`` の場合，``ng3`` には各次元に対するグリッド数を順番に与える．
+
+----
+* **``del``**
+    * Default: ``1.0 1.0 1.0`` 
+    * Example: ``del = 0.1d0 0.2d0``
+
+    各CV方向のグリッド間隔を指定する．
+
+    $i$番目のCVについて，グリッド間隔を$\Delta_i$とすると，隣接するグリッド点の距離は$\Delta_i$となる．
+
+----
+* **``origin``**
+    * Default: ``0.0 0.0 0.0``
+    * Example: ``origin = 0.0d0 1.0d0``
+
+    各CV方向のグリッドの原点を指定する．
+
+    $k$番目のCVについて，原点を$x_k^{(0)}$，グリッド間隔を$\Delta_k$とすると，$i$番目のグリッド位置は
+
+    \begin{align}
+    x_k^{(i)} = x_k^{(0)} + (i-1)\Delta_k
+    \end{align}
+
+    で与えられる．
+
+----
+* **``temperature``**
+    * Default: ``300.0d0`` 
+    * Example: ``temperature = 298.0d0``
+
+    PMF計算で用いる温度 $T$ [K] を指定する．
+
+----
+* **``use_radial``**
+    * Default: ``.false.``
+    * Example: ``use_radial = .true.``
+
+    CVが動径成分であるかどうかを指定する．
+    ``.true.``の場合には，次の``radcol``で指定したCV成分$x_k$について，ビンあたりの体積を
+    $4\pi x_{k}^{2} \Delta_{k}^{2}$として分布関数を計算する．
+
+----
+* **``radcol``**
+    * Default: N/A
+    * Example: ``radcol = 1``
+
+    何番目のCVが動径成分であるかを指定する．
+    ``use_radial = .true.``の場合のみ有効となる．
+
+
+----
+* **``box_system``**
+    * Default: ``0.0 0.0 0.0`` 
+    * Example: ``box_system = 50.0d0 50.0d0 50.0d0``
+
+    系のボックスサイズを指定する．
+
+    このパラメータは ``ndim = 3`` の場合に使用される．
+    各方向のボックス長を順番に与える．
+
+----
+* **``use_spline``**
+    * Default: ``.false.``
+    * Example: ``use_spline = .true.``
+
+    PMF計算後にスプライン補間を行うかどうかを指定する．
+
+    ``.true.`` の場合はスプライン補間を実施し，``.false.`` の場合は元のグリッドをそのまま使用する．
+
+----
+* **``spline_resolution``**
+    * Default: ``4``
+    * Example: ``spline_resolution = 8``
+
+    スプライン補間時の分解能を指定する．
+
+    大きな値を指定するほど細かい補間グリッドが生成される．
+
+----
+* **``gen_script_mpl2d``**
+    * Default: ``.false.``
+    * Example: ``gen_script_mpl2d = .true.``
+
+    2次元PMFを可視化するための Python スクリプトを生成するかどうかを指定する．
+
+    現在は ``ndim = 2`` の場合のみサポートされている．
+
+----
+* **``skip_calc``**
+    * Default: ``.false.``
+    * Example: ``skip_calc = .true.``
+
+    PMF計算をスキップするかどうかを指定する．
+
+    ``.true.`` の場合はPMF計算を行わず，補助ファイルの生成などのみを実行する．
+    ``.false.`` の場合は通常通りPMF計算を実行する．
+    このオプションは，Matplotlib (Python)スクリプトを設定変した上で再作成したい場合に便利である．
+
+### &matplotlib_param
+
+Python (Matplotlib)で2次元PMFを可視化するためのスクリプト作成するためのオプション．
+``&option_param``内で``gen_script_mpl2d = .true.``とした場合に有効となる．
+
+* **``fpdf``**
+    * Default: None
+    * Example: ``fpdf = "pmf.pdf"``
+
+    出力するPDFファイル名を指定する．
+
+----
+* **``labels``**
+    * Default: None
+    * Example: ``labels = "$x$" "$y$" "PMF"``
+
+    プロットに表示する軸ラベルを指定する．
+
+    ``ndim = 2`` の場合は，
+
+    ```
+    labels = "xlabel" "ylabel" "zlabel"
+    ```
+
+    の順に，$x$軸，$y$軸，およびPMF値に対応するカラーバーのラベルを指定する．
+
+    LaTeX形式の数式表記を利用できる．
+
+----
+* **``ranges``**
+    * Default: None
+    * Example: ``ranges = -10.0 10.0 -5.0 5.0 0.0 10.0``
+
+    描画範囲を指定する．
+
+    ``ndim = 2`` の場合は，
+
+    ```
+    ranges = xmin xmax ymin ymax zmin zmax
+    ```
+
+    の順に指定する．
+
+    ここで，
+
+    * ``xmin``, ``xmax`` : $x$軸の表示範囲
+    * ``ymin``, ``ymax`` : $y$軸の表示範囲
+    * ``zmin``, ``zmax`` : PMF値の表示範囲
+
+    を表す．
+
+----
+* **``tics``**
+    * Default: None
+    * Example: ``tics = 1.0 1.0 0.5``
+
+    軸目盛りの間隔を指定する．
+
+    ``ndim = 2`` の場合は，
+
+    ```
+    tics = xtic ytic ztic
+    ```
+
+    の順に指定する．
+
+    ここで，
+
+    * ``xtic`` : $x$軸の目盛り間隔
+    * ``ytic`` : $y$軸の目盛り間隔
+    * ``ztic`` : PMF値に対応するカラーバーの目盛り間隔
+
+    を表す．
+
+----
+* **``scales``**
+    * Default: ``1.0 1.0 1.0``
+    * Example: ``scales = 10.0 10.0 0.239006``
+
+    軸の単位変換係数を指定する．
+
+    ``ndim = 2`` の場合は，
+
+    ```
+    scales = xscale yscale zscale
+    ```
+
+    の順に指定する．
+
+    読み込まれたデータ値は描画時に各係数倍される．
+
+    例えば，
+
+    ```
+    scales = 10.0 10.0 1.0
+    ```
+
+    とすると，$x$軸および$y$軸の値は10倍された状態で表示される． 
+
+### 出力ファイルのフォーマット
+
+* ``*_original.gnplt``
+
+    このファイルにPMF ($W(\bm{\zeta})$)が出力される．
+    
+    * 1列目: 座標
+    * 2列目: PMF
+
+* ``*_g_original.gnplt``
+
+    このファイルに分布関数($\rho\left(\bm{\zeta}\right)/\rho_{0}\left(\bm{\zeta}_{0}\right)$)が出力される．
+   
+    * 1列目: 座標
+    * 2列目: 分布関数
+
+``use_spline = .true.``の場合には，スプライン後のPMFと
+分布関数がそれぞれ``*_spline.gnplt``, ``*_g_spline.gnplt``という名前で出力される．
+
+### 解析例
+
+1つのデータ列を持つ時系列データ``inp.ts``から，$5\leq x \leq 10$の範囲について
+$\Delta x = 0.1$の間隔でPMF ($W\left(x\right)$)を計算する例を以下に示す．
+```
+#!/usr/bin/env bash
+
+cat << EOF > run.inp
+&input_param
+ fcv     = "inp.ts"
+/
+&output_param
+ fhead = "out"
+/
+&option_param
+  ndim        = 1
+  xyzcol      = 1
+  ng3         = 50 
+  del         = 0.1
+  origin      = 5.0 
+  temperature = 300.0d0
+  use_spline  = .false.
+  use_radial  = .false.
+/
+EOF
+
+fanatra potential_of_mean_force run.inp 
+
+```

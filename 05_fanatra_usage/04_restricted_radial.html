@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ja" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>制限つき動径平均力ポテンシャル(restricted_radial, rrpmf) &mdash; ANATRA 1.1.1 User Guide  ドキュメント</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e72c8e07" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c033477b"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=91613774"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ANATRA 1.1.1 User Guide
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_about_anatra/main.html">ANATRAとは？</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Installation/main.html">ANATRAのインストール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_anatra_usage/combined.html">anatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="combined.html">fanatraの使い方</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_iepdyn/combined.html">Integral-Equation formalism of Population DYNamics (IEPDYN)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ANATRA 1.1.1 User Guide</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">制限つき動径平均力ポテンシャル(restricted_radial, rrpmf)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/05_fanatra_usage/04_restricted_radial.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="restricted-radial-rrpmf">
+<h1>制限つき動径平均力ポテンシャル(restricted_radial, rrpmf)<a class="headerlink" href="#restricted-radial-rrpmf" title="Link to this heading"></a></h1>
+<p>この解析モードでは，何らかの反応座標(集団座標)によって
+条件づけられた状態の動径方向に対する自由エネルギープロファイルを計算できる．
+また，このプロファイルから，ホスト分子とゲスト分子の結合に伴う自由エネルギー変化
+(結合自由エネルギー)の計算が可能である．</p>
+<section id="id1">
+<h2>理論背景<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>系が配置<span class="math notranslate nohighlight">\({\bf X}\)</span>をとるときの
+ホスト–ゲスト分子間の距離，結合状態を規定する反応座標の値をそれぞれ<span class="math notranslate nohighlight">\(d\left({\bf X}\right)\)</span>, <span class="math notranslate nohighlight">\(\bm{\xi}\left({\bf X}\right)\)</span>とする．
+距離に対する平均力ポテンシャルを</p>
+<div class="amsmath math notranslate nohighlight" id="equation-f624e7b8-9fb2-437c-b704-5d55d27e7dc8">
+<span class="eqno">()<a class="headerlink" href="#equation-f624e7b8-9fb2-437c-b704-5d55d27e7dc8" title="Permalink to this equation"></a></span>\[\begin{align}
+w\left(r\right) &amp; =-\dfrac{1}{\beta}\log\left[\int d{\bf X}\,\dfrac{\delta\left(r-d\left({\bf X}\right)\right)}{4\pi r^{2}}\exp\left(-\beta U\left({\bf X}\right)\right)\right]+C
+\end{align}\]</div>
+<p>と定義する．
+さらに，反応座標空間上の結合状態に対応する領域を<span class="math notranslate nohighlight">\(\bm{\Upsilon}\)</span>とし，次式に示す特性関数<span class="math notranslate nohighlight">\(\Theta\left(\bm{\xi}\right)\)</span>を導入する．</p>
+<div class="amsmath math notranslate nohighlight" id="equation-a4ecdc14-96c7-4309-921b-99b8460bc4a5">
+<span class="eqno">()<a class="headerlink" href="#equation-a4ecdc14-96c7-4309-921b-99b8460bc4a5" title="Permalink to this equation"></a></span>\[\begin{align}
+\Theta_{\mathrm{B}}\left(\bm{\xi}\right) &amp; =\begin{cases}
+1 &amp; \bm{\xi}\in\bm{\Upsilon}\\
+0 &amp; \bm{\xi}\notin\bm{\Upsilon}
+\end{cases}
+\end{align}\]</div>
+<p>この<span class="math notranslate nohighlight">\(\Theta\left(\bm{\xi}\right)\)</span>を用いれば，結合状態に属する配置に対する平均力ポテンシャルは</p>
+<div class="amsmath math notranslate nohighlight" id="equation-8ee9ce57-0b6d-4024-912b-a386af81e9e6">
+<span class="eqno">()<a class="headerlink" href="#equation-8ee9ce57-0b6d-4024-912b-a386af81e9e6" title="Permalink to this equation"></a></span>\[\begin{align}
+w_{\mathrm{B}}\left(r\right) &amp; =-\dfrac{1}{\beta}\log\left[\int d{\bf X}\,\dfrac{\delta\left(r-d\left({\bf X}\right)\right)}{4\pi r^{2}}\Theta_{\mathrm{B}}\left(\bm{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)\right]+C
+\end{align}\]</div>
+<p>と表せる．<span class="math notranslate nohighlight">\(w\left(r\right)\)</span>と<span class="math notranslate nohighlight">\(w_{\mathrm{B}}\left(r\right)\)</span>に含まれる定数<span class="math notranslate nohighlight">\(C\)</span>は同一の値とし，
+<span class="math notranslate nohighlight">\(w_{\mathrm{B}}\left(r\right)\)</span>が最小値がゼロとなるように設定する．
+<span class="math notranslate nohighlight">\(w\left(r\right)\)</span>は<span class="math notranslate nohighlight">\(r\)</span>が十分に大きいときに定数となるので，
+その定数を<span class="math notranslate nohighlight">\(\Delta w\)</span>とし，<span class="math notranslate nohighlight">\(w\left(r\right) = \Delta w\)</span>を満たす領域Uを<span class="math notranslate nohighlight">\(r_{0}\leq r\leq r_{1}\)</span>と定める．
+<span class="math notranslate nohighlight">\(r_{0}, r_{1}\)</span>の設定は，<span class="math notranslate nohighlight">\(w\left(r\right) = \Delta w\)</span>を満たしてさえいれば，任意に決めて良い．このことについては後で述べる．
+2分子が<span class="math notranslate nohighlight">\(r_{0}\leq r \leq r_{1}\)</span>の距離範囲に存在する状態Uと結合状態Bの
+存在確率比は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-e56dd25f-780e-4b04-93da-30b003974181">
+<span class="eqno">()<a class="headerlink" href="#equation-e56dd25f-780e-4b04-93da-30b003974181" title="Permalink to this equation"></a></span>\[\begin{align}
+\dfrac{{\displaystyle \int_{\bm{\Upsilon}}dr\,\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)}}{{\displaystyle \int_{r_{0}}^{r_{1}}dr\,\exp\left(-\beta w\left(r\right)\right)}}
+\end{align}\]</div>
+<p>であることから，UからBの変化に伴う自由エネルギー変化<span class="math notranslate nohighlight">\(\Delta G_{\mathrm{PMF}}\)</span>は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-acff8234-f040-4fda-bb41-628193fccf7c">
+<span class="eqno">()<a class="headerlink" href="#equation-acff8234-f040-4fda-bb41-628193fccf7c" title="Permalink to this equation"></a></span>\[\begin{align}
+\Delta G_{\mathrm{PMF}} &amp; =-\dfrac{1}{\beta}\log\dfrac{{\displaystyle \int_{\bm{\Upsilon}}dr\,4\pi r^{2}\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)}}{{\displaystyle \int_{r_{0}}^{r_{1}}dr\,4\pi r^{2}\exp\left(-\beta w\left(r\right)\right)}}
+\end{align}\]</div>
+<p>と表せる．
+分母に含まれる<span class="math notranslate nohighlight">\(w\left(r\right)\)</span>は<span class="math notranslate nohighlight">\(r_{0}\leq r\leq r_{1}\)</span>の範囲で<span class="math notranslate nohighlight">\(\Delta w\)</span>なので，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-aee87564-6f06-4f99-bccf-8711a4e3cc62">
+<span class="eqno">()<a class="headerlink" href="#equation-aee87564-6f06-4f99-bccf-8711a4e3cc62" title="Permalink to this equation"></a></span>\[\begin{align}
+\Delta G_{\mathrm{PMF}} &amp; =-\Delta w-\dfrac{1}{\beta}\log\dfrac{V_{\mathrm{B}}}{V_{\mathrm{U}}}
+\label{pmf:dGpmf}
+\end{align}\]</div>
+<p>と書き直せる．ただし，<span class="math notranslate nohighlight">\(V_{\mathrm{B}}\)</span>, <span class="math notranslate nohighlight">\(V_{\mathrm{U}}\)</span>は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-3cb4502a-80cf-48f9-91f3-a6f76b52069a">
+<span class="eqno">()<a class="headerlink" href="#equation-3cb4502a-80cf-48f9-91f3-a6f76b52069a" title="Permalink to this equation"></a></span>\[\begin{align}
+V_{\mathrm{B}} &amp; =\int_{\bm{\Upsilon}}dr\,4\pi r^{2}\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)\\
+V_{\mathrm{U}} &amp; =\int_{r_{0}}^{r_{1}}dr\,4\pi r^{2}
+\end{align}\]</div>
+<p>で定義される．式EQREF(pmf:dGpmfEQREF)の第2項は，ゲスト分子が濃度<span class="math notranslate nohighlight">\(1/V_{\mathrm{U}}\)</span>の状態から濃度<span class="math notranslate nohighlight">\(1/V_{\mathrm{B}}\)</span>の
+状態への移行に伴う自由エネルギー変化である．実験での結合自由エネルギーは標準状態濃度(典型的には<span class="math notranslate nohighlight">\(c^{\circ} = 1~\mathrm{mol~L^{-1}}\)</span>)
+のゲスト分子がホスト分子に結合するのに伴う自由エネルギー変化(<span class="math notranslate nohighlight">\(\Delta G^{\circ}\)</span>)であり，<span class="math notranslate nohighlight">\(\Delta G_{\mathrm{PMF}}\)</span>とは異なる．
+ゲスト分子1つで濃度<span class="math notranslate nohighlight">\(c^{\circ}\)</span>となるときの体積を<span class="math notranslate nohighlight">\(V^{\circ}\)</span>とするとこれは<span class="math notranslate nohighlight">\(V^{\circ} = 1661\)</span> ANGSTROM<span class="math notranslate nohighlight">\(^{3}\)</span>である．
+ゲスト分子が濃度<span class="math notranslate nohighlight">\(c^{\circ} = 1/V^{\circ} \)</span>の状態から濃度が<span class="math notranslate nohighlight">\(1/V_{\mathrm{U}}\)</span>の状態への移行に対する自由エネルギー変化<span class="math notranslate nohighlight">\(\Delta G^{\circ}_{\mathrm{corr}}\)</span>は</p>
+<div class="amsmath math notranslate nohighlight" id="equation-f5a1fa30-dd54-4a54-bda3-b46b186ea611">
+<span class="eqno">()<a class="headerlink" href="#equation-f5a1fa30-dd54-4a54-bda3-b46b186ea611" title="Permalink to this equation"></a></span>\[\begin{align}
+\Delta G^{\circ}_{\mathrm{corr}} = - \dfrac{1}{\beta} \log \dfrac{V_{\mathrm{U}}}{V^{\circ}}
+\label{pmf:dGcorr}
+\end{align}\]</div>
+<p>である．つまり，<span class="math notranslate nohighlight">\(1/V^{\circ} \to 1/V_{\mathrm{B}}\)</span>の変化を<span class="math notranslate nohighlight">\(1/V^{\circ} \to 1/V_{\mathrm{U}}\)</span>と<span class="math notranslate nohighlight">\(1/V_{\mathrm{U}} 
+\to 1/V_{\mathrm{B}}\)</span>の2段階に分けることで，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-0cf17bbf-1f54-4993-ad67-21e42b60f888">
+<span class="eqno">()<a class="headerlink" href="#equation-0cf17bbf-1f54-4993-ad67-21e42b60f888" title="Permalink to this equation"></a></span>\[\begin{align}
+\Delta G^{\circ} = \Delta G_{\mathrm{PMF}} + \Delta G_{\mathrm{corr}}^{\circ}
+\end{align}\]</div>
+<p>と表すことができる．式EQREF(pmf:dGpmfEQREF), EQREF(pmf:dGcorrEQREF)を上式に代入することで，</p>
+<div class="amsmath math notranslate nohighlight" id="equation-3e740f6e-5b94-4a38-976e-4f8d4b2205bd">
+<span class="eqno">()<a class="headerlink" href="#equation-3e740f6e-5b94-4a38-976e-4f8d4b2205bd" title="Permalink to this equation"></a></span>\[\begin{align}
+\Delta G^{\circ} = - \Delta w - \dfrac{1}{\beta} \log \dfrac{V_{\mathrm{B}}}{V^{\circ}}
+\end{align}\]</div>
+<p>を得る．この式には<span class="math notranslate nohighlight">\(V_{\mathrm{U}}\)</span>が含まれていないことから，<span class="math notranslate nohighlight">\(\Delta G^{\circ}\)</span>の値は<span class="math notranslate nohighlight">\(r_{0},r_{1}\)</span>の選択に依存しない．</p>
+</section>
+<section id="id2">
+<h2>パラメータ一覧<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+</section>
+<section id="id3">
+<h2>入力ファイル(時系列データ)のフォーマット<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>1列目：時間軸</p></li>
+<li><p>2列目〜<span class="math notranslate nohighlight">\((N+1)\)</span>列目：CV値</p></li>
+<li><p>最終列：分子間距離</p></li>
+</ul>
+<p>1 列目は読み込まれず，2 列目から1 つめのデータ列としてカウントされる．
+分子間距離のみがCVの場合，つまり</p>
+<ul class="simple">
+<li><p>1列目：時間軸</p></li>
+<li><p>2列目：分子間距離</p></li>
+</ul>
+<p>の場合には，<code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code>内で<code class="docutils literal notranslate"><span class="pre">only_r</span> <span class="pre">=</span> <span class="pre">.true.</span></code>を指定すれば良い．</p>
+</section>
+<section id="option-param">
+<h2><code class="docutils literal notranslate"><span class="pre">&amp;option_param</span></code><a class="headerlink" href="#option-param" title="Link to this heading"></a></h2>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">calcfe</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.true.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">calcfe</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>標準結合自由エネルギーを計算するかどうかを指定する．
+<code class="docutils literal notranslate"><span class="pre">.true.</span></code> の場合は標準結合自由エネルギーを計算し，<code class="docutils literal notranslate"><span class="pre">.false.</span></code> の場合はPMFのみを出力する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ndim</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ndim</span> <span class="pre">=</span> <span class="pre">1</span></code></p></li>
+</ul>
+<p>CVの次元数を指定する．
+現在は1次元および多次元PMFに対応している．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">only_r</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">only_r</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></li>
+</ul>
+<p>分子間距離がCVであり，それ以外のCVが存在しない場合に<code class="docutils literal notranslate"><span class="pre">.true.</span></code>を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">temperature</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">298.0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">temperature</span> <span class="pre">=</span> <span class="pre">300.0</span></code></p></li>
+</ul>
+<p>自由エネルギー計算に用いる温度 <span class="math notranslate nohighlight">\(T\)</span> [K] を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dr</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">dr</span> <span class="pre">=</span> <span class="pre">0.1d0</span></code></p></li>
+</ul>
+<p>距離方向のグリッド間隔を指定する．
+グリッド点間の間隔 <span class="math notranslate nohighlight">\(\Delta r\)</span> として用いられる．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ngrid</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ngrid</span> <span class="pre">=</span> <span class="pre">1000</span></code></p></li>
+</ul>
+<p>距離方向のグリッド数を指定する．
+PMFは <code class="docutils literal notranslate"><span class="pre">ngrid</span></code> 個のグリッド上で評価される．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nsta</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nsta</span> <span class="pre">=</span> <span class="pre">100</span></code></p></li>
+</ul>
+<p>解析を開始するフレーム番号を指定する．
+<code class="docutils literal notranslate"><span class="pre">nsta</span></code> より前のフレームは解析から除外される．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">use_bootstrap</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.false.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">use_bootstrap</span> <span class="pre">=</span> <span class="pre">.true.</span></code></p></li>
+</ul>
+<p>ブートストラップ法による誤差評価を実施するかどうかを指定する．
+<code class="docutils literal notranslate"><span class="pre">.true.</span></code> の場合は <code class="docutils literal notranslate"><span class="pre">&amp;bootopt_param</span></code> の設定に従ってブートストラップ解析を行う．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">vol0</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">1661.0d0</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">vol0</span> <span class="pre">=</span> <span class="pre">1661.0d0</span></code></p></li>
+</ul>
+<p>標準状態体積 <span class="math notranslate nohighlight">\(V^\circ\)</span>を指定する．
+デフォルト値はANGSTROM単位で1 mol/Lに対応する体積(1661 ANGSTROM<span class="math notranslate nohighlight">\(^3\)</span>)である．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">urange</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">urange</span> <span class="pre">=</span> <span class="pre">25.0</span> <span class="pre">30.0</span></code></p></li>
+</ul>
+<p>非結合状態（unbound state）とみなす距離範囲を指定する．
+1つ目の値が下限，2つ目の値が上限を表す．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">bound_range</span></code></strong></p>
+<ul>
+<li><p>Default: None</p></li>
+<li><p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">react_range</span> <span class="o">=</span> <span class="mf">0.0</span> <span class="mf">10.0</span>
+              <span class="mf">5.0</span> <span class="mf">20.0</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>結合状態（bound state）のCV範囲を指定する．
+各行について，1つ目の値が下限，2つ目の値が上限を表す．
+<code class="docutils literal notranslate"><span class="pre">ndim</span></code> 個の範囲を指定することで，多次元結合領域を定義できる．</p>
+</li>
+</ul>
+</section>
+<section id="bootopt-param">
+<h2><code class="docutils literal notranslate"><span class="pre">&amp;bootopt_param</span></code><a class="headerlink" href="#bootopt-param" title="Link to this heading"></a></h2>
+<p>ここでは，ブートストラップ法による誤差解析の設定を行う．
+<code class="docutils literal notranslate"><span class="pre">use_bootstrap</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合に有効となる．</p>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">iseed</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: 自動生成</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">iseed</span> <span class="pre">=</span> <span class="pre">3141592</span></code></p></li>
+</ul>
+<p>ブートストラップ解析で使用する乱数シードを指定する．
+<code class="docutils literal notranslate"><span class="pre">iseed</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code> の場合はプログラムが自動的にシードを生成する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nsample</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">nsample</span> <span class="pre">=</span> <span class="pre">1000</span></code></p></li>
+</ul>
+<p>各ブートストラップ試行で抽出するサンプル数を指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">duplicate</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">.true.</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">duplicate</span> <span class="pre">=</span> <span class="pre">.false.</span></code></p></li>
+</ul>
+<p>ブートストラップサンプリング時に重複抽出を許可するかどうかを指定する．</p>
+</li>
+</ul>
+<hr class="docutils" />
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">ntrial</span></code></strong></p>
+<ul class="simple">
+<li><p>Default: None</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">ntrial</span> <span class="pre">=</span> <span class="pre">100</span></code></p></li>
+</ul>
+<p>ブートストラップ試行回数を指定する．
+試行回数を増やすことで統計誤差の推定精度が向上するが，計算コストも増加する．</p>
+</li>
+</ul>
+</section>
+<section id="id4">
+<h2>出力ファイルのフォーマット<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*.rd</span></code></p>
+<ul>
+<li><p>1列目: 分子間距離<span class="math notranslate nohighlight">\(r\)</span></p></li>
+<li><p>2列目: <span class="math notranslate nohighlight">\(r\)</span>に沿った通常のPMF</p></li>
+<li><p>3列目: 結合状態に対応するPMF</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id5">
+<h2>解析例<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>CV数が1，最終列に分子間距離を格納した時系列データ<code class="docutils literal notranslate"><span class="pre">inp.ts</span></code>から，<span class="math notranslate nohighlight">\(18\leq r/\)</span>ANGSTROM<span class="math notranslate nohighlight">\(\leq 20\)</span>の範囲を解離状態，結合状態に対応するCV (<span class="math notranslate nohighlight">\(\zeta\)</span>)の値域が<span class="math notranslate nohighlight">\(5.0\leq \zeta \leq 10.0\)</span>の範囲のときの結合自由エネルギーの値を計算する例を下記に記す．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env bash</span>
+
+<span class="n">cat</span> <span class="o">&lt;&lt;</span> <span class="n">EOF</span> <span class="o">&gt;</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span>
+<span class="o">&amp;</span><span class="n">input_param</span>
+ <span class="n">fcv</span>      <span class="o">=</span> <span class="s2">&quot;inp.ts&quot;</span> 
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">output_param</span>
+ <span class="n">fhead</span>         <span class="o">=</span> <span class="s2">&quot;out&quot;</span>
+<span class="o">/</span>
+<span class="o">&amp;</span><span class="n">option_param</span>
+ <span class="n">calcfe</span>        <span class="o">=</span> <span class="o">.</span><span class="n">true</span><span class="o">.</span>
+ <span class="n">only_r</span>        <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>
+ <span class="n">ndim</span>          <span class="o">=</span>  <span class="mi">1</span>       
+ <span class="n">temperature</span>   <span class="o">=</span>  <span class="mf">300.0</span>   
+ <span class="n">dr</span>            <span class="o">=</span>  <span class="mf">0.1</span><span class="n">d0</span>   
+ <span class="n">ngrid</span>         <span class="o">=</span>  <span class="mi">1000</span>    
+ <span class="n">nsta</span>          <span class="o">=</span>  <span class="mi">1</span>       
+ <span class="n">use_bootstrap</span> <span class="o">=</span> <span class="o">.</span><span class="n">false</span><span class="o">.</span>  
+ <span class="n">vol0</span>          <span class="o">=</span> <span class="mf">1661.0</span><span class="n">d0</span>
+ <span class="n">urange</span>        <span class="o">=</span>  <span class="mf">18.0</span>  <span class="mf">20.0</span>
+ <span class="n">bound_range</span>   <span class="o">=</span>  <span class="mf">5.0</span>  <span class="mf">10.0</span> 
+<span class="o">/</span>
+<span class="n">EOF</span>
+
+<span class="n">fanatra</span> <span class="n">restricted_radial</span> <span class="n">run</span><span class="o">.</span><span class="n">inp</span> 
+</pre></div>
+</div>
+<p>これを実行すると，ログファイルの後半に結果が出力される．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span> <span class="n">Thermodynamic</span> <span class="n">analysis</span> <span class="o">...</span>
+<span class="n">vb</span>      <span class="p">(</span><span class="n">A</span><span class="o">^</span><span class="mi">3</span><span class="p">)</span>      <span class="o">=</span>      <span class="mf">21.5444908</span>
+<span class="n">wu</span>      <span class="p">(</span><span class="n">kcal</span><span class="o">/</span><span class="n">mol</span><span class="p">)</span> <span class="o">=</span>      <span class="o">-</span><span class="mf">1.3486059</span>
+<span class="n">wb</span>      <span class="p">(</span><span class="n">kcal</span><span class="o">/</span><span class="n">mol</span><span class="p">)</span> <span class="o">=</span>       <span class="mf">0.0000000</span>
+<span class="n">dw</span>      <span class="p">(</span><span class="n">kcal</span><span class="o">/</span><span class="n">mol</span><span class="p">)</span> <span class="o">=</span>      <span class="o">-</span><span class="mf">1.3486059</span>
+<span class="n">dGv</span>     <span class="p">(</span><span class="n">kcal</span><span class="o">/</span><span class="n">mol</span><span class="p">)</span> <span class="o">=</span>       <span class="mf">2.5903536</span>
+<span class="n">dGzero</span>  <span class="p">(</span><span class="n">kcal</span><span class="o">/</span><span class="n">mol</span><span class="p">)</span> <span class="o">=</span>       <span class="mf">3.9389595</span>
+<span class="n">Keq</span>     <span class="p">(</span><span class="n">M</span><span class="o">^-</span><span class="mi">1</span><span class="p">)</span>     <span class="o">=</span>   <span class="mf">1.3506025E-03</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Classmethod.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

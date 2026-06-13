@@ -1,0 +1,176 @@
+# anatra_wo_vmdの使い方
+
+## はじめに
+
+前章で述べた通り，**anatra**プログラムはVMDの分子情報の選択等の前処理，
+Fortranによる解析の二段階に分かれて実行される．
+従って，VMDのビルドや使用が難しい外部計算機の計算ノード上での利用は
+制限される場合がある．
+そこで，VMDによる前処理を事前に済ませておき，実際の解析のみを計算ノード上で行う
+**anatra_wo_vmd**プログラムを開発した．  
+
+## 使用について
+
+このプログラムは**anatra**プログラムの中の数種類の解析モードに対応しており
+（のちに説明），使用の際は
+1. vmdが使える環境下にて，``-prep_only true``オプション指定
+して**anatra**コマンドを実行，中間ファイルを生成する．
+2. 計算ノード上などで**anatra_wo_vmd**を実行して解析を行う．  
+
+という二段階の操作をすることとなる．  
+
+**anatra_wo_vmd**プログラムにて利用可能な解析は
+``anatra_wo_vmd -h``を実行することで表示される．
+
+```
+$ anatra_wo_vmd -h
+Available analysis in ANATRA w/o VMD
+comcrd      : Center-of-Mass Analysis
+lipidorder  : Scd order-parameter Analysis
+z_profile   : Z-profile Analysis
+area        : Area Per Lipid Analysis
+rdf         : RDF Analysis
+z_orient    : Orientation Analysis
+sdf         : SDF Analysis
+distance    : PBC Distance Analysis
+energy      : Energy Analysis
+strucsample : Structural Sampling Analysis
+sasa        : SASA Analysis
+rotation    : rotation Analysis
+```
+``comcrd``などが解析モードである．
+以上から分かる通り，**anatra**プログラムの一部が実装されている．
+また，実行の際は
+```
+anatra_wo_vmd comcrd <インプットファイル>
+```
+のように実行する．
+ここでのインプットファイルは**anatra**プログラムにて
+``-prep_only true``を指定した際に生成される中間
+ファイルを指す．また，**anatra**側で指定してあるため
+**anatra_wo_vmdにオプションは不要である．**
+
+## 解析例
+
+タンパク質(``resid 1 to 161``)とリガンド分子(``resname LIG``)の間のLJ相互作用
+を，``anatra_wo_vmd``にて解析する場合の例を示しておく．
+
+### anatra側での操作
+
+内部計算機や外部計算機ログインノードなどvmdの動作する環境にて，
+作業ディレクトリに解析対象のトラジェクトリファイル``INP.dcd``と
+その構造ファイル``complex.prmtop``が存在する場合を前提とする．
+
+```
+$ls 
+
+INP.dcd  complex.prmtop
+```
+
+以下のbashスクリプトを実行する．
+
+```
+#!/bin/bash
+
+anatra energy -stype      parm7                \
+              -sfile      complex.prmtop       \
+              -tintype    dcd                  \
+              -tin        INP.dcd              \
+              -fhead      out                  \
+              -pbc        true                 \
+              -calc_elec  false                \
+              -calc_vdw   false                \
+              -vdw        standard             \
+              -dt         0.01                 \
+              -rljcut     12.0                 \
+              -relcut     1.0e10               \
+              -sel0       resid 1 to 161       \
+              -sel1       resname LIG          \
+              -mode0      whole                \
+              -mode1      whole                \
+              -prep_only  true
+
+```
+この時，パラメータとして``-prep_only true``を指定していることに注意されたい．
+実行後は以下のように``.molfile``と``.inp``拡張子の中間ファイルが生成される．
+
+```
+$ ls
+ 
+ INP.dcd         en.inp        en_1.molinfo
+complex.prmtop  en_0.molinfo
+```
+
+ここで，``en.inp``ファイルは**anatra_wo_vmd**プログラムの
+インプットファイルに該当する．このファイルはFortranのnamelist形式で記述されており
+，中には指定したパラメータが格納されている．Fortranで書かれた**anatra_wo_vmd**
+プログラムは各種パラメータをこのファイルから読み取って解析を行う．  
+また，この時点では指定したアウトプットファイルは生成しないので注意が必要である．
+```
+$ cat en.inp
+
+&input_param
+   fprmtop  = "complex.prmtop"
+   ftraj = "INP.dcd"
+   fanaparm = "complex.anaparm"
+ /
+ &output_param
+   fhead = "out"
+ /
+ &trajopt_param
+   dt        = 0.01
+   molinfo   = "en_0.molinfo" "en_1.molinfo"
+ /
+ &option_param
+   parmformat = "prmtop"
+   pbc        = .true.
+   calc_vdw   = .true.
+   calc_elec  = .false.
+   tottype    = "standard"
+   vdw        = "standard"
+   elec       = "bare"
+   mode       = "whole" "whole"
+   rljcut     = 12.0
+   relcut     = 1.0e10
+   pme_alpha  = 0.35e0
+   pme_grids  = 64 64 64
+   pme_rigid  = .false.
+   pme_dual   = .false.
+ /
+```
+
+### anatra_wo_vmdでの解析
+
+続いて，実際に解析を行う計算機上やディレクトリ内に，前段階での操作で得た中間ファイル
+（``*.molinfo``や``*.inp``）と解析に用いるファイル
+（``*.prmtop``や``*.dcd``など前段階でパラメータ指定したファイル）を移動しておく．
+同一ディレクトリで作業する場合はそのままで問題ない．  
+ここでは外部計算機「富岳」上にて1ノード，24並列で解析する場合のbashスプリプト
+を示す．
+
+```
+#!/bin/bash
+#PJM -L "rscgrp=small"
+#PJM -L "rscunit=rscunit_ft01"
+#PJM -L "node=1"
+#PJM -L "elapse=00:25:00"
+#PJM -j
+#PJM -S
+
+export OMP_NUM_THREADS=24
+export exe=/vol0005/hpXXXXX/data/uXXXXX/packages/vmd_scripts/anatra/bin/anatra_wo_vmd
+
+export PLE_MPI_STD_EMPTYFILE=off
+
+$exe energy en.inp
+```
+上記中，プログラム実行は最終行，"``anatra_wo_vmd energy en.inp``"
+にて行っている．
+実行後はインプットファイルと結果のファイル，計算ノード上での実行結果ファイルがディレクトリに残る．
+
+```
+$ ls
+
+INP.dcd         en.inp        en_1.molinfo  out.uij             run.sh.8944563.stats
+complex.prmtop  en_0.molinfo  out.fsq       run.sh.8944563.out
+```

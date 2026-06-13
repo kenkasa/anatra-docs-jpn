@@ -1,0 +1,109 @@
+## 自由体積プロファイル(free_volume)
+
+``free_volume``は，ユーザーが指定した座標軸に沿って，自由体積(free volume)の存在割合のプロファイルを計算する．
+自由体積とは，``target_selid``で指定した原子が存在しない領域として定義される．
+原子のサイズはLennard-Jonesパラメータを用いて見積もられ，
+各座標位置に対してランダムに粒子を挿入し，挿入した粒子がどの原子とも重ならない割合を自由体積率として評価する．
+
+現時点では，座標軸として$z$方向(``-coord_type z``)のみをサポートしている．
+また，解析前に``center_selid``で指定した分子群を基準として系の中心位置を合わせた後，
+各$z$座標における自由体積率が計算される．
+
+### オプション一覧
+
+**オプション**     | **備考**      | **オプション**    | **備考**
+:-----------------:|:-------------:|:-----------------:|:--------------:
+``-stype``         | Common        | ``-sfile``        | Common
+``-tintype``       | Common        | ``-tin``          | Common
+``-flist_traj``    | Common        | ``-fhead``        | Common
+``-fprmtop``       | Mode specific | ``-xsta``         | Mode specific
+``-dx``            | Mode specific | ``-ngrid``        | Mode specific
+``-nins``          | Mode specific | ``-sel0``         | Common
+``-sel1``          | Common        | ``-target_selid`` | Mode specific
+``-center_selid``  | Mode specific | ``-coord_type``   | Mode specific
+``-prep_only``     | Common        | --                | --
+
+ ---
+* **-fprmtop \<Amber parm7ファイル\>**
+    * Example: ``-fprmtop system.parm7``
+
+    Lennard-Jonesパラメータを取得するためのAmber parm7ファイルを指定する．
+    現在の実装では，parm7形式のみ利用可能である．
+
+* **-xsta \<初期座標(ANGSTROM)\>**
+    * Example: ``-xsta -30.0``
+
+    プロファイルを計算する座標範囲の開始位置を指定する．
+
+* **-dx \<グリッド間隔(ANGSTROM)\>**
+    * Example: ``-dx 1.0``
+
+    自由体積率を評価するグリッドの間隔を指定する．
+
+* **-ngrid \<グリッド数\>**
+    * Example: ``-ngrid 60``
+
+    計算するグリッド数を指定する．
+
+* **-nins \<粒子挿入回数\>**
+    * Example: ``-nins 1000``
+
+    各グリッドに対して実行するランダム粒子挿入の回数を指定する．
+    この値を大きくすると統計精度は向上するが，計算時間も増加する．
+
+* **-target_selid \<対象原子のselection ID\>**
+    * Default: ``0``
+    * Example: ``-target_selid 0``
+
+    自由体積を定義する対象原子群のselection IDを指定する．
+    この原子群と重ならない空間が自由体積として扱われる．
+
+* **-center_selid \<中心合わせに用いるselection ID\>**
+    * Default: ``1``
+    * Example: ``-center_selid 1``
+
+    系の中心位置を決定するためのselection IDを指定する．
+    各フレームについて，この分子群を基準に座標をシフトした後に解析を行う．
+
+* **-coord_type \<座標軸\>**
+    * Default: ``z``
+    * Example: ``-coord_type z``
+
+    自由体積プロファイルを計算する座標軸を指定する．
+    現在の実装では``z``のみ利用可能である．
+
+### 出力ファイルのフォーマット
+
+* ``*.fvz``
+
+    指定した座標軸に沿った自由体積率のプロファイルが出力される．
+
+  * 1列目: 座標値
+  * 2列目: 自由体積率
+
+### 解析例
+
+#### 脂質膜系における自由体積プロファイル
+
+```bash
+#!/usr/bin/env bash
+
+anatra free_volume                \
+  -stype          psf             \
+  -sfile          complex.psf     \
+  -tintype        netcdf          \
+  -flist_traj     flist           \
+  -fhead          out             \
+  -fprmtop        complex.prmtop  \
+  -xsta           0.0             \
+  -dx             1.0             \
+  -ngrid          60              \
+  -nins           1000            \
+  -sel0           all             \
+  -sel1           resname POPC    \
+  -target_selid   0               \
+  -center_selid   1               \
+  -coord_type     z               \
+  -prep_only      false
+```
+

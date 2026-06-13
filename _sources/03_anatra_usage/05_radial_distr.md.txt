@@ -1,0 +1,273 @@
+## 動径分布関数(radial_distr, rdf)
+
+### 理論背景
+
+ここでは，動径分布関数の定義について解説する．
+
+#### 同種粒子間の動径分布関数
+
+粒子$a$が$N_a$個存在している系(体積$V$，粒子$a$の平均(バルク)数密度$\rho_a = N_a/V$)を考え，
+局所密度場$\hat{\rho}_{a}\left({\bf r}\right)$を次式で定義する．
+
+\begin{align}
+\hat{\rho}_{a}\left({\bf r}\right) & =\sum_{i=1}^{N_{a}}\delta\left({\bf r}-{\bf r}_{i}\right).
+\end{align}
+
+ここで，${\bf r}_{i}$は$i$番目の粒子$a$の位置である．
+もし，系に外場などが存在しない場合，局所密度場のアンサンブル平均は
+平均数密度$\rho_{a}$に等しくなる．つまり，
+
+\begin{align}
+\Braket{\hat{\rho}_{a}\left({\bf r}\right)} = \rho_{a},
+\end{align}
+
+である．次に，2体密度相関関数を次式で定義する．
+
+\begin{align}
+\chi\left({\bf r},{\bf r}^{\prime}\right) & =\Braket{\hat{\rho}_{a}\left({\bf r}\right)\hat{\rho}_{a}\left({\bf r}^{\prime}\right)}\\
+ & =\Braket{\sum_{i=1}^{N_{a}}\sum_{j=1}^{N_{a}}\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}.
+\end{align}
+
+上式において，$i=j$の項と$i\neq j$の分けて書くと，
+
+\begin{align}
+\chi\left({\bf r},{\bf r}^{\prime}\right) & =\sum_{i=1}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{i}\right)}+\sum_{i=1}^{N_{a}}{\sum_{j\neq i}^{N_{a}}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)},
+\end{align}
+
+第1項目は同一粒子が${\bf r}$と${\bf r}^{\prime}$の位置に存在する確率を表しており，
+これは${\bf r}={\bf r}^{\prime}$のとき以外は明らかにゼロとなる．つまり，
+
+\begin{align}
+\sum_{i=1}^{N_{a}}\braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{i}\right)} & =\rho_{a}\delta\left({\bf r}-{\bf r}^{\prime}\right),
+\end{align}
+
+である．
+次に，第2項は$i$番目の粒子が${\bf r}$の位置に存在し，$j$番目の粒子が${\bf r}^{\prime}$の位置に存在する確率を表している．この項は2体密度と呼ばれており，
+2粒子の相関関係を表している．2体密度を$\rho^{(2)}_{aa}\left({\bf r},{\bf r}^{\prime}\right)$と表しておくことにする．
+
+\begin{align}
+\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) & =\sum_{i=1}^{N_{a}}\sum_{j\neq i}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}.
+\end{align}
+
+もし，${\bf r}と{\bf r}^{\prime}$の位置が互いに遠く離れている場合，
+そのような配置での2粒子間の相関は無視できる．
+
+\begin{align}
+\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) & \approx\sum_{i=1}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)}\sum_{j\neq i}^{N_{b}}\Braket{\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}\\
+ & =\rho_{a}^{2}\left(1-\dfrac{1}{N_{a}}\right).
+\end{align}
+
+無相関の状態を基準にとって，2体分布関数を次式で定義することにしておく．
+
+\begin{align}
+g_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) & =\dfrac{1}{\rho_{a}^{2}\left(1-1/N_{a}\right)}\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right).
+\end{align}
+
+もし，粒子を十分に多く含んでいる系を取り扱っている場合は，$1/N_a \simeq 0$と考えて，
+
+\begin{align}
+g_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) & =\dfrac{1}{\rho_{a}^{2}}\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right),
+\end{align}
+
+としても良い．
+
+系が均一の場合(外場が存在しない場合など)，2体分布関数(および2体密度)は2粒子の絶対的な位置${\bf r}$，${\bf r}^{\prime}$ではなく，2粒子の相対的な位置${\bf r}^{\prime} - {\bf r}$に依存する．つまり，
+
+\begin{align}
+g^{\left(2\right)}_{aa}\left({\bf r},{\bf r}^{\prime}\right) & =g^{\left(2\right)}_{aa}\left({\bf 0},{\bf r}^{\prime}-{\bf r}\right),
+\end{align}
+
+のような関係が成り立つ．${\bf r}^{\prime}-{\bf r}$を改めて
+${\bf r}$とおき直しておき，空間分布関数(spatial distribution function, SDF)を次式で定義する．
+
+\begin{align}
+g_{aa}\left({\bf r}\right) & =g^{\left(2\right)}_{aa}\left({\bf 0},{\bf r}\right).
+\end{align}
+
+これを角度方向に平均をとり，距離$r$の分布関数に変換したものを動径分布関数(radial distribution function, RDF)と呼ぶ．
+
+\begin{align}
+g_{aa}\left(r\right) & =\dfrac{1}{4\pi r^{2}}\int d{\bf r}\,\delta\left(\left|{\bf r}\right|-r\right)g_{aa}\left({\bf r}\right).
+\end{align}
+
+もし，系が等方的である場合，
+
+\begin{align}
+g_{aa}\left(\left|{\bf r}\right|\right) & =g_{aa}\left({\bf r}\right),
+\end{align}
+
+が成り立つ．
+SDFを計算することに意義が生じるのは，非等方系の場合や，一方の分子(形状を持つ粒子)を特定の配向に固定した座標系で他方の粒子の位置を分布を調べるときである．これについては次節で述べる．
+
+
+RDFは，一方の粒子から眺めて距離$r$での他粒子の存在確率がバルクよりも
+どの程度高いかを表す．つまり，$g_{aa}(r)>0$であれば，その距離で他粒子の存在確率は
+バルクよりも高く，$g_{aa}(r)<0$の場合はバルクよりも存在確率が低いことを意味する．
+
+#### 異種粒子間の動径分布関数
+
+粒子$a$が$N_a$個，粒子$b$が$N_b$個存在している系(体積$V$，平均数密度はそれぞれの粒子で$\rho_a = N_a /V$, $\rho_b = N_b / V$)での，
+粒子$a$と粒子$b$の間のRDFを導入する．
+
+\begin{align}
+\rho_{ab}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) & =\sum_{i=1}^{N_{a}}\sum_{j=1}^{N_{b}}\Braket{\delta\left({\bf r}-{\bf r}_{i}^{a}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}^{b}\right)}.
+\end{align}
+
+ここで，${\bf r}_{i}^{p}~(p=a, b)$ は粒子$p$の$i$番目の粒子の位置である．
+同種粒子間の場合と異なるのは，$j=i$の場合を除外しなくても良い点である．
+これにより，無相関の場合は，
+
+\begin{align}
+\rho_{ab}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) & \approx\rho_{a}\rho_{b},
+\end{align}
+
+となる．それ以外の点は全く同じなので，同様の手続きを踏んで動径分布関数を導入できる．
+まず，空間分布関数は，
+
+\begin{align}
+g_{ab}\left({\bf r}\right) & =\dfrac{1}{\rho_{a}\rho_{b}}\rho_{ab}^{\left(2\right)}\left({\bf 0},{\bf r}\right),
+\end{align}
+
+であり，これを角度方向について平均化することにより，動径分布関数の表式を得る．
+
+\begin{align}
+g_{ab}\left(r\right) & =\dfrac{1}{4\pi r^{2}}\int d{\bf r}\,\delta\left(\left|{\bf r}\right|-r\right)g_{ab}\left({\bf r}\right).
+\end{align}
+
+### オプション一覧
+
+**オプション**     | **備考**      | **オプション**    | **備考**
+:-----------------:|:-------------:|:-----------------:|:--------------:
+``-stype``         | Common        | ``-sfile``        | Common
+``-tintype``       | Common        | ``-tin``          | Common
+``-flist_traj``    | Common        | ``-fhead``        | Common        
+``-sel0``          | Common        | ``-sel1``         | Common        
+``-mode0``         | Common        | ``-mode1``        | Common        
+``-dr``            | Mode specific | ``-identical``    | Mode specific 
+``-normalize``     | Mode specific | ``-separate_self``| Mode specific
+
+  ---
+* **-dr \<距離の刻み (ANGSTROM)\>**  
+  * Default: ``0.1`` 
+
+  RDFを計算するときの距離の刻みを指定する．
+
+  ---
+* **-identical \<true or false\>**  
+  * Default: ``false``
+
+  ``-sel0``と``-sel1``が同一の場合に``true``を指定する．
+  理論の解説で述べたように，RDFの計算は同種粒子間と異種粒子間で扱いが異なるので，
+  ユーザー側でどちらの扱いにするかを指定する必要がある．
+
+  ---
+* **-normalize \<true or false\>**  
+  * Default: ``true``
+
+  RDF ($g_{12}(r)$)をそのまま出力するか(``true``)，``-sel2``側の部位の平均数密度$\rho_{2}$をかけたものを出力するか(``false``)を指定する．
+  ``true``の場合は，$\rho_{12}(r) = \rho_{2}g_{12}(r)$が出力される．
+
+  ---
+* **-separate_self \<true or false\>**  
+   * Default: ``false``
+
+  RDFを分子内と分子間の部分に分けるかどうかを指定する．
+  このオプションが必要となるのは，同種分子の異なる部位間のRDFを計算するときである．
+  例えば，水分子(原子ラベルを``HW1-OW-HW2``とする)のOW原子とHW1原子の間のRDFを計算するときに，
+  "``-separate_self false``"の条件で"``-sel0 name OW``", "``-sel1 name HW1`"と指定すると，RDFの中に同一分子内のOW-HW1の寄与も含まれてしまうが，
+  "``-separate_self true``"と指定することで，同一分子内の寄与を分離することが可能である．
+
+  ---
+
+### 出力ファイルのフォーマット
+
+* ``*.rdf``ファイル
+
+  このファイルには，RDFが出力される．
+  出力内容は``-separate_self``によって異なる．
+
+  * "``-separate_self false``"の場合
+
+    * 1列目: 距離
+    * 2列目: RDF
+
+  * "``-separate_self true``"の場合
+
+    * 1列目: 距離
+    * 2列目: 異なる分子間のRDF
+    * 3列目: 同一分子内のRDF (自己相関関数と呼ばれる)
+
+<!---
+* ``*.rdbin``ファイル
+
+  このファイルには，RDFの情報がバイナリ形式で出力される．
+  ``fanatra``の解析モード``rd_gather``では，
+  複数のトラジェクトリから個別で計算したRDFの平均をとることが可能だが，
+  その際にこの``.rdbin``ファイルを入力として与える必要がある．
+--->
+
+### 解析例
+
+#### 水分子の酸素原子間のRDF
+
+```
+#!/bin/bash
+
+anatra rdf                                        \
+  -stype         parm7                            \
+  -sfile         complex.prmtop                   \
+  -tintype       dcd                              \
+  -tin           INP.dcd                          \
+  -fhead         out                              \
+  -sel0          resname WAT and name O           \
+  -sel1          resname WAT and name O           \
+  -mode0         residue                          \
+  -mode1         residue                          \
+  -dr            0.1                              \
+  -identical     true                             \
+  -normalize     true                             \
+  -separate_self false
+```
+#### 水分子の酸素原子–水素原子間のRDF
+
+```
+#!/bin/bash
+
+anatra rdf                                        \
+  -stype         parm7                            \
+  -sfile         complex.prmtop                   \
+  -tintype       dcd                              \
+  -tin           INP.dcd                          \
+  -fhead         out                              \
+  -sel0          resname WAT and name O           \
+  -sel1          resname WAT and name H1          \
+  -mode0         residue                          \
+  -mode1         residue                          \
+  -dr            0.1                              \
+  -identical     false                            \
+  -normalize     true                             \
+  -separate_self true 
+```
+
+### タンパク質のC$\alpha$原子と水分子の酸素原子の間のRDF
+
+タンパク質(``resid 1 to 192``)の各C$\alpha$原子と水分子の酸素原子の間のRDFを
+計算し，各RDFを平均化したものが出力される．
+
+```
+anatra rdf                                        \
+  -stype         parm7                            \
+  -sfile         complex.prmtop                   \
+  -tintype       dcd                              \
+  -tin           INP.dcd                          \
+  -fhead         out                              \
+  -sel0          resid 1 to 192 and name CA       \
+  -sel1          resname WAT and name O           \
+  -mode0         atom                             \
+  -mode1         residue                          \
+  -dr            0.1                              \
+  -identical     false                            \
+  -normalize     true                             \
+  -separate_self false
+```
+
