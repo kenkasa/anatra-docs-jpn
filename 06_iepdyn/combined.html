@@ -120,16 +120,16 @@
 <h3>IEPDYNの理論表式<a class="headerlink" href="#iepdyn" title="Link to this heading"></a></h3>
 <p>注目系を構成する原子の位置と運動量のセット(位相点)を<span class="math notranslate nohighlight">\(\boldsymbol{\Gamma}\)</span>とし，
 <span class="math notranslate nohighlight">\(\boldsymbol{\Gamma}\)</span>で張られた空間(位相空間)を複数の構造状態に分割する．系のLiouville演算子を<span class="math notranslate nohighlight">\(\mathcal{L}\)</span>とすると，時刻<span class="math notranslate nohighlight">\(t\)</span>における状態<span class="math notranslate nohighlight">\(j\)</span>の確率密度<span class="math notranslate nohighlight">\(\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right)\)</span>の厳密な時間発展は次式によって表される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-aea24410-26bf-4d73-ba23-1da9ce15a237">
-<span class="eqno">(72)<a class="headerlink" href="#equation-aea24410-26bf-4d73-ba23-1da9ce15a237" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-0c159352-2176-4220-8f9c-6b7d5dbdebd2">
+<span class="eqno">(72)<a class="headerlink" href="#equation-0c159352-2176-4220-8f9c-6b7d5dbdebd2" title="Permalink to this equation"></a></span>\[\begin{align}
 \dfrac{\partial}{\partial t}\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right) =&amp; -\mathcal{L}\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right) -\sum_{i\in\mathcal{N}_{j}}S_{ij}\left(\boldsymbol{\Gamma}\right)\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right) +\sum_{k\in\mathcal{N}_{j}}S_{jk}\left(\boldsymbol{\Gamma}\right)\hat{f}_{k}\left(\boldsymbol{\Gamma},t\right).
 \end{align}\]</div>
 <p>ここで，<span class="math notranslate nohighlight">\(\mathcal{N}_{j}\)</span>は状態<span class="math notranslate nohighlight">\(j\)</span>の隣接状態のセット，<span class="math notranslate nohighlight">\(S_{ij}\)</span>は
 反応シンク関数と呼ばれ，<span class="math notranslate nohighlight">\(S_{ij}\left(\boldsymbol{\Gamma}\right)\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right)\)</span>
 が時刻<span class="math notranslate nohighlight">\(t\sim t+dt\)</span>の間に系が状態<span class="math notranslate nohighlight">\(j\)</span>から<span class="math notranslate nohighlight">\(i\)</span>に遷移する確率となるように定義される．
 時刻<span class="math notranslate nohighlight">\(t\)</span>において系が状態<span class="math notranslate nohighlight">\(j\)</span>として存在する確率<span class="math notranslate nohighlight">\(P_{j}\left(t\right)\)</span>は，<span class="math notranslate nohighlight">\(\hat{f}_{j}\left(\boldsymbol{\Gamma},t\right)\)</span>を<span class="math notranslate nohighlight">\(\boldsymbol{\Gamma}\)</span>で積分することにより得られる．上式の形式解から<span class="math notranslate nohighlight">\(P_{j}\left(t\right)\)</span>の近似表式</p>
-<div class="amsmath math notranslate nohighlight" id="equation-cbb57255-9086-4343-ad14-4c0bd75d7440">
-<span class="eqno">(73)<a class="headerlink" href="#equation-cbb57255-9086-4343-ad14-4c0bd75d7440" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-5771d29e-9635-496d-83a3-fee56501f5f0">
+<span class="eqno">(73)<a class="headerlink" href="#equation-5771d29e-9635-496d-83a3-fee56501f5f0" title="Permalink to this equation"></a></span>\[\begin{align}
 P_{j}\left(t\right) &amp; =P_{j}^{0}\left(t\right)+\sum_{k\in\mathcal{N}_{j}}\int_{0}^{t}d\tau\,M_{jk}\left(t-\tau\right)Q_{jk}\left(\tau\right),
 \end{align}\]</div>
 <p>が得られる．式中の<span class="math notranslate nohighlight">\(P_{j}^{0}\left(t\right)\)</span>は時刻0で状態<span class="math notranslate nohighlight">\(j\)</span>の系が時刻<span class="math notranslate nohighlight">\(t\)</span>でも隣接状態に一度も遷移せずに滞留する確率，<span class="math notranslate nohighlight">\(Q_{jk}\left(t\right)\)</span>は時刻<span class="math notranslate nohighlight">\(t\sim t+dt\)</span>で系が状態<span class="math notranslate nohighlight">\(k\)</span>から<span class="math notranslate nohighlight">\(j\)</span>に遷移する確率，そして，
@@ -137,8 +137,8 @@ P_{j}\left(t\right) &amp; =P_{j}^{0}\left(t\right)+\sum_{k\in\mathcal{N}_{j}}\in
 <span class="math notranslate nohighlight">\(P_j^0(t)\)</span>や<span class="math notranslate nohighlight">\(M_{jk}(t)\)</span>は単一の遷移イベントしか関与しないため，短時間MDにより計算可能である．
 さらに，<span class="math notranslate nohighlight">\(Q_{jk}\left(t\right)\)</span>についても，
 短時間スケールで減衰する関数を積分核に持つ積分方程式</p>
-<div class="amsmath math notranslate nohighlight" id="equation-470fbb38-b13e-4679-9bee-d6fbb7fdde4d">
-<span class="eqno">(74)<a class="headerlink" href="#equation-470fbb38-b13e-4679-9bee-d6fbb7fdde4d" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-221f32de-3750-4df9-a30f-6e3333a2dc9a">
+<span class="eqno">(74)<a class="headerlink" href="#equation-221f32de-3750-4df9-a30f-6e3333a2dc9a" title="Permalink to this equation"></a></span>\[\begin{align}
 Q_{ij}\left(t\right) = R_{ij}\left(t\right) + \sum_{k\in \mathcal{N}_{j}}\int_{0}^{t}d\tau\, K_{ijk}\left(t-\tau\right) Q_{jk}\left(\tau\right), 
 \end{align}\]</div>
 <p>で表せることが分かっている．
@@ -150,8 +150,8 @@ Q_{ij}\left(t\right) = R_{ij}\left(t\right) + \sum_{k\in \mathcal{N}_{j}}\int_{0
 <p>IEPDYN法によるポピュレーションダイナミクスの記述では，
 初期時刻における各状態のポピュレーション<span class="math notranslate nohighlight">\(w_{j}\)</span>を与える必要がある．
 初期時刻で系が平衡にあるとした場合，初期時刻でポピュレーションを持つ状態のセットを<span class="math notranslate nohighlight">\(\mathcal{M}_{\mathrm{I}}\)</span>，状態<span class="math notranslate nohighlight">\(j\)</span>の平衡ポピュレーションを<span class="math notranslate nohighlight">\(P_{j}^{\mathrm{eq}}\)</span>とすると，<span class="math notranslate nohighlight">\(w_{j}\)</span>は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-9bbcc781-5ddf-4677-9749-6d08270c8846">
-<span class="eqno">(75)<a class="headerlink" href="#equation-9bbcc781-5ddf-4677-9749-6d08270c8846" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-abb66edd-e1a5-418e-8508-661679c6d58b">
+<span class="eqno">(75)<a class="headerlink" href="#equation-abb66edd-e1a5-418e-8508-661679c6d58b" title="Permalink to this equation"></a></span>\[\begin{align}
 \forall j\in \mathcal{M}_{\mathrm{I}},~ w_{j} = \dfrac{P_{j}^{\mathrm{eq}}}{\displaystyle\sum_{k\in\mathcal{M}_{\mathrm{I}}} P_{k}^{\mathrm{eq}}}
 \end{align}\]</div>
 <p>で与えられる．<span class="math notranslate nohighlight">\(w_j\)</span>はアンブレラサンプリング法などによる自由エネルギー計算によって求めても良いが，
@@ -168,16 +168,16 @@ Q_{ij}\left(t\right) = R_{ij}\left(t\right) + \sum_{k\in \mathcal{N}_{j}}\int_{0
 <h3>境界条件の導入<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <p>IEPDYN法では，粗視化された反応ダイナミクスに対して，反射境界条件(reflecting boundary condition)および吸収境界条件(absorbing boundary condition)を導入することができる．これらの境界条件は，状態間遷移確率<span class="math notranslate nohighlight">\(Q_{ij}(t)\)</span>に対して直接課され，再帰確率(RP)理論を用いた分子結合過程の解析に利用される．</p>
 <p>反射境界条件では，ある状態へ流入したポピュレーションは，その状態に滞留することなく直ちに隣接状態へ再分配される．流入を許さない状態の集合を<span class="math notranslate nohighlight">\(\mathcal{M}_{\mathrm{reflect}}\)</span>とすると，反射境界条件は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-58b95ae2-2f20-4d2f-986b-8af2ade1bba8">
-<span class="eqno">(76)<a class="headerlink" href="#equation-58b95ae2-2f20-4d2f-986b-8af2ade1bba8" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-fd4d714b-bbbe-44de-abcb-e411c807e0c8">
+<span class="eqno">(76)<a class="headerlink" href="#equation-fd4d714b-bbbe-44de-abcb-e411c807e0c8" title="Permalink to this equation"></a></span>\[\begin{align}
 &amp; \forall i\in\mathcal{M}_{\mathrm{reflect}},~\forall j\in\mathcal{N}_{i}, \notag \\
 &amp; Q_{ji}\left(t\right)=R_{ij}\left(t\right) + \sum_{k\in\mathcal{N}_{j}}\int_{0}^{t}d\tau,K_{ijk}\left(t-\tau\right)Q_{jk}\left(\tau\right),\\
 &amp; Q_{ij}\left(t\right)=0,
 \end{align}\]</div>
 <p>によって与えられる．上式は，状態<span class="math notranslate nohighlight">\(j\)</span>から<span class="math notranslate nohighlight">\(i\in \mathcal{M}_{\mathrm{reflect}}\)</span>へ流入したポピュレーションが即座に状態<span class="math notranslate nohighlight">\(j\)</span>へ折り返されることを表している．</p>
 <p>一方，吸収境界条件では，ある状態へ到達したポピュレーションは，その後他の状態へ遷移しないものとする．吸収状態の集合を<span class="math notranslate nohighlight">\(\mathcal{M}_{\mathrm{absorb}}\)</span>とすると，吸収境界条件は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-2d7f09e0-2b88-4648-a24a-e19e9feee4db">
-<span class="eqno">(77)<a class="headerlink" href="#equation-2d7f09e0-2b88-4648-a24a-e19e9feee4db" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-ea464315-de1b-488a-bd17-e9f3ecd98b53">
+<span class="eqno">(77)<a class="headerlink" href="#equation-ea464315-de1b-488a-bd17-e9f3ecd98b53" title="Permalink to this equation"></a></span>\[\begin{align}
 \forall i\in\mathcal{M}_{\mathrm{absorb}},~\forall j \in\mathcal{N}_{i},\quad Q_{ji}\left(t\right) =0,
 \end{align}\]</div>
 <p>によって与えられる．この条件は，吸収状態から他の状態への流入が完全に存在しないことを意味しており，一度吸収状態へ到達したポピュレーションは終状態として取り扱われる．</p>
@@ -187,8 +187,8 @@ Q_{ij}\left(t\right) = R_{ij}\left(t\right) + \sum_{k\in \mathcal{N}_{j}}\int_{0
 <h3>再帰確率(Returning probability, RP)理論との連携<a class="headerlink" href="#returning-probability-rp" title="Link to this heading"></a></h3>
 <p>RP理論は，拡散律速反応を厳密に記述する理論であり，分子結合過程を反応状態(reactive state)の熱力学的および動力学的性質によって特徴づける．IEPDYN法では，RP理論で必要となる動力学量を短時間MD計算から効率的に評価することができる．</p>
 <p>RP理論における結合の速度定数<span class="math notranslate nohighlight">\(k_{\mathrm{on}}\)</span>は，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-434b9efc-94ec-4c4b-8428-cfa67e9fa0ce">
-<span class="eqno">(78)<a class="headerlink" href="#equation-434b9efc-94ec-4c4b-8428-cfa67e9fa0ce" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-3b2c08dc-f830-40b8-afea-ba8d0fb9d32f">
+<span class="eqno">(78)<a class="headerlink" href="#equation-3b2c08dc-f830-40b8-afea-ba8d0fb9d32f" title="Permalink to this equation"></a></span>\[\begin{align}
 k_{\mathrm{on}}
 =
 k_{\mathrm{ins}}K^{*}
@@ -203,8 +203,8 @@ P_{\mathrm{RET}}\left(t\right)
 <p>によって与えられる．ここで，<span class="math notranslate nohighlight">\(K^{*}\)</span>は反応状態と解離状態との間の平衡定数，<span class="math notranslate nohighlight">\(k_{\mathrm{ins}}\)</span>は反応状態から結合状態への遷移速度定数，<span class="math notranslate nohighlight">\(P_{\mathrm{RET}}\left(t\right)\)</span>は，初期時刻に反応状態に存在した系が時刻<span class="math notranslate nohighlight">\(t\)</span>においても反応状態に存在する条件付き確率(再帰確率)である．</p>
 <p>IEPDYN法では，反応状態の集合を<span class="math notranslate nohighlight">\(\mathcal{M}_{\mathrm{R}}\)</span>とし，初期状態を<span class="math notranslate nohighlight">\(\mathcal{M}_{\mathrm{I}}=\mathcal{M}_{\mathrm{R}}\)</span>と設定する．さらに，適切な境界条件を導入することで，<span class="math notranslate nohighlight">\(k_{\mathrm{ins}}\)</span>および<span class="math notranslate nohighlight">\(P_{\mathrm{RET}}(t)\)</span>を状態存在確率<span class="math notranslate nohighlight">\(P_j(t)\)</span>から計算することができる．</p>
 <p><span class="math notranslate nohighlight">\(k_{\mathrm{ins}}\)</span>の計算では，結合過程の終了を定義するために吸収境界条件を導入し，反応状態のうち解離側に位置する隣接状態に反射境界条件を課す．このとき，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-d39cf9bf-8996-475c-bef8-e11b67881ad3">
-<span class="eqno">(79)<a class="headerlink" href="#equation-d39cf9bf-8996-475c-bef8-e11b67881ad3" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-4e73d8c5-db8a-4a20-9657-e6b3c81d2090">
+<span class="eqno">(79)<a class="headerlink" href="#equation-4e73d8c5-db8a-4a20-9657-e6b3c81d2090" title="Permalink to this equation"></a></span>\[\begin{align}
 \dfrac{1}{k_{\mathrm{ins}}}
 =
 \int_{0}^{\infty}
@@ -215,8 +215,8 @@ P_{j}\left(t\right),
 \end{align}\]</div>
 <p>が成り立つ．右辺は，反応状態から吸収状態までの平均初到達時間(Mean First Passage Time, MFPT)に対応しており，その逆数として<span class="math notranslate nohighlight">\(k_{\mathrm{ins}}\)</span>が得られる．</p>
 <p>一方，<span class="math notranslate nohighlight">\(P_{\mathrm{RET}}(t)\)</span>の計算では，反応状態のうち結合状態側に位置する隣接状態を反射境界として設定する．このとき，<span class="math notranslate nohighlight">\(P_{\mathrm{RET}}(t)\)</span>は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-45942c7a-6e65-48cb-877a-73106d59fac8">
-<span class="eqno">(80)<a class="headerlink" href="#equation-45942c7a-6e65-48cb-877a-73106d59fac8" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-46070dd4-7c9a-4dca-b6ef-cb0d034dc678">
+<span class="eqno">(80)<a class="headerlink" href="#equation-46070dd4-7c9a-4dca-b6ef-cb0d034dc678" title="Permalink to this equation"></a></span>\[\begin{align}
 P_{\mathrm{RET}}\left(t\right)
 =
 \sum_{j\in\mathcal{M}_{\mathrm{R}}}
@@ -229,8 +229,8 @@ P_{j}\left(t\right),
 <h3><span class="math notranslate nohighlight">\(P_{j}\left(t\right)\)</span>の時間積分に対する解析的評価<a class="headerlink" href="#p-j-left-t-right" title="Link to this heading"></a></h3>
 <p>RP理論における<span class="math notranslate nohighlight">\(k_{\mathrm{ins}}\)</span>をはじめとして，速度論的なパラメータは，
 状態ポピュレーションの時間積分</p>
-<div class="amsmath math notranslate nohighlight" id="equation-6a50867f-7700-48b0-a262-09b981a6d2fa">
-<span class="eqno">(81)<a class="headerlink" href="#equation-6a50867f-7700-48b0-a262-09b981a6d2fa" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-30d3d10c-26aa-4077-a905-f6122b22e2cc">
+<span class="eqno">(81)<a class="headerlink" href="#equation-30d3d10c-26aa-4077-a905-f6122b22e2cc" title="Permalink to this equation"></a></span>\[\begin{align}
 \tau_j=\int_0^\infty dt\,P_j(t)
 \end{align}\]</div>
 <p>によって与えられる．
@@ -238,13 +238,13 @@ P_{j}\left(t\right),
 通常は，積分方程式を逐次的に解いて<span class="math notranslate nohighlight">\(P_j(t)\)</span>の時間発展を計算した後，その時間積分を評価する必要がある．
 しかし，IEPDYN法ではLaplace変換を利用することで，<span class="math notranslate nohighlight">\(P_j(t)\)</span>を陽に計算することなく<span class="math notranslate nohighlight">\(\tau_j\)</span>を直接評価することができる．</p>
 <p>関数<span class="math notranslate nohighlight">\(f(t)\)</span>のLaplace変換を</p>
-<div class="amsmath math notranslate nohighlight" id="equation-8521a998-cf41-485f-96eb-4d1ea0945d65">
-<span class="eqno">(82)<a class="headerlink" href="#equation-8521a998-cf41-485f-96eb-4d1ea0945d65" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-4850b310-34e3-4eea-81a3-dbbb4f70a4c9">
+<span class="eqno">(82)<a class="headerlink" href="#equation-4850b310-34e3-4eea-81a3-dbbb4f70a4c9" title="Permalink to this equation"></a></span>\[\begin{align}
 \widetilde{f}(s)=\int_0^\infty dt\,e^{-st}f(t)
 \end{align}\]</div>
 <p>と定義すると，状態存在確率の積分方程式は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-c1f20da2-5bcc-4aed-8b90-b4253b14b408">
-<span class="eqno">(83)<a class="headerlink" href="#equation-c1f20da2-5bcc-4aed-8b90-b4253b14b408" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-8b236ea5-e77d-4845-ba06-d74ec9652716">
+<span class="eqno">(83)<a class="headerlink" href="#equation-8b236ea5-e77d-4845-ba06-d74ec9652716" title="Permalink to this equation"></a></span>\[\begin{align}
 \widetilde{P}_{j}\left(s\right)
 =
 \widetilde{P}_{j}^{0}\left(s\right)
@@ -254,8 +254,8 @@ P_{j}\left(t\right),
 \widetilde{Q}_{jk}\left(s\right)
 \end{align}\]</div>
 <p>と表される．さらに，<span class="math notranslate nohighlight">\(s\rightarrow 0\)</span>の極限を取ることで，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-2dab35fa-d820-4ecd-b845-aa84c23c4810">
-<span class="eqno">(84)<a class="headerlink" href="#equation-2dab35fa-d820-4ecd-b845-aa84c23c4810" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-8b887a05-3bbe-457a-944c-65254bd06c13">
+<span class="eqno">(84)<a class="headerlink" href="#equation-8b887a05-3bbe-457a-944c-65254bd06c13" title="Permalink to this equation"></a></span>\[\begin{align}
 \tau_{j}
 =
 \widetilde{P}_{j}^{0}\left(0\right)
@@ -266,16 +266,16 @@ P_{j}\left(t\right),
 \end{align}\]</div>
 <p>を得る．したがって，<span class="math notranslate nohighlight">\(\tau_j\)</span>を求めるためには，<span class="math notranslate nohighlight">\(\widetilde{Q}_{jk}(0)\)</span>を評価すればよい．
 そのために，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-e9e5c1db-43d8-49eb-8a39-cd1241368bae">
-<span class="eqno">(85)<a class="headerlink" href="#equation-e9e5c1db-43d8-49eb-8a39-cd1241368bae" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-bd8a0621-4009-472f-a760-8db154635508">
+<span class="eqno">(85)<a class="headerlink" href="#equation-bd8a0621-4009-472f-a760-8db154635508" title="Permalink to this equation"></a></span>\[\begin{align}
 \mathcal{K}_{ij,j^{\prime}k}\left(t\right)
 =
 \delta_{jj^{\prime}}
 K_{ijk}\left(t\right)
 \end{align}\]</div>
 <p>を導入すると，<span class="math notranslate nohighlight">\(Q_{ij}(t)\)</span>に対する積分方程式はLaplace空間において</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f05c13ce-1a17-4fcd-9e4b-098c6b9ab0fc">
-<span class="eqno">(86)<a class="headerlink" href="#equation-f05c13ce-1a17-4fcd-9e4b-098c6b9ab0fc" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-17ff6fbd-e33f-489a-9c14-93f59f839c8f">
+<span class="eqno">(86)<a class="headerlink" href="#equation-17ff6fbd-e33f-489a-9c14-93f59f839c8f" title="Permalink to this equation"></a></span>\[\begin{align}
 \widetilde{Q}_{ij}\left(s\right)
 =
 \widetilde{R}_{ij}\left(s\right)
@@ -285,8 +285,8 @@ K_{ijk}\left(t\right)
 \widetilde{Q}_{j^{\prime}k}\left(s\right)
 \end{align}\]</div>
 <p>と書き換えられる．ここで，状態対<span class="math notranslate nohighlight">\((ij)\)</span>を複合添字<span class="math notranslate nohighlight">\(\lambda\)</span>で表すと，上式は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-83faecbf-58a3-40c1-84c4-840442d1e240">
-<span class="eqno">(87)<a class="headerlink" href="#equation-83faecbf-58a3-40c1-84c4-840442d1e240" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-49a72036-f1ad-4f5e-a641-cbe65ec136a8">
+<span class="eqno">(87)<a class="headerlink" href="#equation-49a72036-f1ad-4f5e-a641-cbe65ec136a8" title="Permalink to this equation"></a></span>\[\begin{align}
 \widetilde{\mathbf{Q}}(s)
 =
 \widetilde{\mathbf{R}}(s)
@@ -295,8 +295,8 @@ K_{ijk}\left(t\right)
 \widetilde{\mathbf{Q}}(s)
 \end{align}\]</div>
 <p>と行列表記できる．したがって，<span class="math notranslate nohighlight">\(s\to0\)</span>の極限では，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-752646ce-be1b-4d83-a34c-b1089284d24d">
-<span class="eqno">(88)<a class="headerlink" href="#equation-752646ce-be1b-4d83-a34c-b1089284d24d" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-4c5c5b44-a1e7-4022-9fdf-3433d868a11b">
+<span class="eqno">(88)<a class="headerlink" href="#equation-4c5c5b44-a1e7-4022-9fdf-3433d868a11b" title="Permalink to this equation"></a></span>\[\begin{align}
 \widetilde{\mathbf{Q}}\left(0\right)
 =
 \left[
@@ -307,8 +307,8 @@ K_{ijk}\left(t\right)
 \widetilde{\mathbf{R}}\left(0\right)
 \end{align}\]</div>
 <p>が得られる．ここで，<span class="math notranslate nohighlight">\(\mathbf{I}\)</span>は単位行列であり，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-3c3d9066-511f-43eb-9ffc-909644f72507">
-<span class="eqno">(89)<a class="headerlink" href="#equation-3c3d9066-511f-43eb-9ffc-909644f72507" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-1bf35154-617d-4b24-9667-7932c76c1ec8">
+<span class="eqno">(89)<a class="headerlink" href="#equation-1bf35154-617d-4b24-9667-7932c76c1ec8" title="Permalink to this equation"></a></span>\[\begin{align}
 \left(
 \mathbf{I}
 -
@@ -331,14 +331,14 @@ K_{ijk}\left(t\right)
 <p>まず，<span class="math notranslate nohighlight">\(Q_{ij}(t)\)</span>を，平衡成分
 <span class="math notranslate nohighlight">\(Q_{ij}^{\mathrm{eq}}\equiv Q_{ij}(\infty)\)</span>
 と時間依存成分<span class="math notranslate nohighlight">\(\delta Q_{ij}(t)\)</span>に分解する：</p>
-<div class="amsmath math notranslate nohighlight" id="equation-3f0ca525-3a3e-4570-80b1-47011103d2b2">
-<span class="eqno">(90)<a class="headerlink" href="#equation-3f0ca525-3a3e-4570-80b1-47011103d2b2" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-4bfd7ca5-7906-4d33-af1a-314b1d18812f">
+<span class="eqno">(90)<a class="headerlink" href="#equation-4bfd7ca5-7906-4d33-af1a-314b1d18812f" title="Permalink to this equation"></a></span>\[\begin{align}
 Q_{ij}(t)=Q_{ij}^{\mathrm{eq}}+\delta Q_{ij}(t).
 \end{align}\]</div>
 <p>ここで，<span class="math notranslate nohighlight">\(Q_{ij}^{\mathrm{eq}}\)</span>は状態<span class="math notranslate nohighlight">\(j\)</span>から<span class="math notranslate nohighlight">\(i\)</span>への平衡状態におけるポピュレーション流束を表す．
 この分解をIEPDYNの積分方程式に適用し，<span class="math notranslate nohighlight">\(t\to\infty\)</span>の極限を取ると，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-2eb15619-3d21-482e-98a2-c4a63ad0d8ae">
-<span class="eqno">(91)<a class="headerlink" href="#equation-2eb15619-3d21-482e-98a2-c4a63ad0d8ae" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-6ddc63b4-4367-457f-b386-5d38667ed290">
+<span class="eqno">(91)<a class="headerlink" href="#equation-6ddc63b4-4367-457f-b386-5d38667ed290" title="Permalink to this equation"></a></span>\[\begin{align}
 P_{j}^{\mathrm{eq}}
 &amp;=
 \lim_{t\to\infty}
@@ -357,8 +357,8 @@ I_{jk}
 Q_{jk}^{\mathrm{eq}},
 \end{align}\]</div>
 <p>を得る．ただし，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-aa58d8b4-dfb4-44a1-9d79-cf0aa8c60297">
-<span class="eqno">(92)<a class="headerlink" href="#equation-aa58d8b4-dfb4-44a1-9d79-cf0aa8c60297" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-322b7b33-107e-4b01-8755-3f6844ced4d5">
+<span class="eqno">(92)<a class="headerlink" href="#equation-322b7b33-107e-4b01-8755-3f6844ced4d5" title="Permalink to this equation"></a></span>\[\begin{align}
 I_{jk}
 =
 \int_{0}^{\infty}
@@ -367,8 +367,8 @@ M_{jk}(t)
 \end{align}\]</div>
 <p>である．
 <span class="math notranslate nohighlight">\(M_{jk}(t)\)</span>および<span class="math notranslate nohighlight">\(\delta Q_{jk}(t)\)</span>はいずれも<span class="math notranslate nohighlight">\(t\to\infty\)</span>でゼロへ収束するため，第1項は消失し，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-fdeb1213-cbc5-482c-9beb-2af2f4090b16">
-<span class="eqno">(93)<a class="headerlink" href="#equation-fdeb1213-cbc5-482c-9beb-2af2f4090b16" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-e22cbbd2-18d4-4ef9-aa80-0ed65b584ba2">
+<span class="eqno">(93)<a class="headerlink" href="#equation-e22cbbd2-18d4-4ef9-aa80-0ed65b584ba2" title="Permalink to this equation"></a></span>\[\begin{align}
 P_{j}^{\mathrm{eq}}
 =
 \sum_{k\in\mathcal{N}_{j}}
@@ -377,8 +377,8 @@ Q_{jk}^{\mathrm{eq}}
 \end{align}\]</div>
 <p>が得られる．したがって，平衡遷移流束<span class="math notranslate nohighlight">\(Q_{jk}^{\mathrm{eq}}\)</span>が求まれば，各状態の平衡ポピュレーションを直接計算することができる．
 さらに，積分方程式を行列表記すると，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-3bd6338d-f8a8-4eda-a1af-c15c5ca8f520">
-<span class="eqno">(94)<a class="headerlink" href="#equation-3bd6338d-f8a8-4eda-a1af-c15c5ca8f520" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-e409f1d7-5f2c-4428-a67b-df714186ea6d">
+<span class="eqno">(94)<a class="headerlink" href="#equation-e409f1d7-5f2c-4428-a67b-df714186ea6d" title="Permalink to this equation"></a></span>\[\begin{align}
 \boldsymbol{\delta}{\bf Q}(t)
 &amp;=
 {\bf R}(t)
@@ -396,8 +396,8 @@ d\tau\,
 {\bf Q}^{\mathrm{eq}},
 \end{align}\]</div>
 <p>となる．ここで，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f29bed25-69bb-4de2-8741-1d0eda657e7a">
-<span class="eqno">(95)<a class="headerlink" href="#equation-f29bed25-69bb-4de2-8741-1d0eda657e7a" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-4f8b674a-f126-4057-ab90-2e657eb93745">
+<span class="eqno">(95)<a class="headerlink" href="#equation-4f8b674a-f126-4057-ab90-2e657eb93745" title="Permalink to this equation"></a></span>\[\begin{align}
 J_{\lambda\mu}
 =
 \int_{0}^{\infty}
@@ -405,16 +405,16 @@ dt\,
 \mathcal{K}_{\lambda\mu}(t)
 \end{align}\]</div>
 <p>である．<span class="math notranslate nohighlight">\(t\to\infty\)</span>の極限では，時間依存項が消失するため，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-66d9aa81-907c-43cb-a21c-31de62df4883">
-<span class="eqno">(96)<a class="headerlink" href="#equation-66d9aa81-907c-43cb-a21c-31de62df4883" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-d698927c-d2e2-4c8b-9d42-c92860dd45cc">
+<span class="eqno">(96)<a class="headerlink" href="#equation-d698927c-d2e2-4c8b-9d42-c92860dd45cc" title="Permalink to this equation"></a></span>\[\begin{align}
 {\bf J}
 {\bf Q}^{\mathrm{eq}}
 =
 {\bf Q}^{\mathrm{eq}}
 \end{align}\]</div>
 <p>を得る．すなわち，<span class="math notranslate nohighlight">\({\bf Q}^{\mathrm{eq}}\)</span>は行列<span class="math notranslate nohighlight">\({\bf J}\)</span>の固有値1に対応する固有ベクトルとして与えられる．したがって，<span class="math notranslate nohighlight">\({\bf J}\)</span>の固有値問題を解くことで<span class="math notranslate nohighlight">\({\bf Q}^{\mathrm{eq}}\)</span>を求め，さらに</p>
-<div class="amsmath math notranslate nohighlight" id="equation-36168956-c046-4aab-8f2c-257240ed32a7">
-<span class="eqno">(97)<a class="headerlink" href="#equation-36168956-c046-4aab-8f2c-257240ed32a7" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-6edf0f29-ea20-4910-844b-2e6d931a9548">
+<span class="eqno">(97)<a class="headerlink" href="#equation-6edf0f29-ea20-4910-844b-2e6d931a9548" title="Permalink to this equation"></a></span>\[\begin{align}
 P_{j}^{\mathrm{eq}}
 =
 \sum_{k\in\mathcal{N}_{j}}
@@ -423,8 +423,8 @@ Q_{jk}^{\mathrm{eq}}
 \end{align}\]</div>
 <p>を用いて平衡ポピュレーションを評価することができる．
 得られた平衡ポピュレーションは，IEPDYN法における初期統計重み</p>
-<div class="amsmath math notranslate nohighlight" id="equation-bb5fb263-903d-44b5-b2b0-8bac3e8cb672">
-<span class="eqno">(98)<a class="headerlink" href="#equation-bb5fb263-903d-44b5-b2b0-8bac3e8cb672" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-2cc4ed27-98aa-48e9-a1da-ac755f9f71a7">
+<span class="eqno">(98)<a class="headerlink" href="#equation-2cc4ed27-98aa-48e9-a1da-ac755f9f71a7" title="Permalink to this equation"></a></span>\[\begin{align}
 \forall j\in\mathcal{M}_{\mathrm{I}},
 \quad
 w_j
@@ -929,8 +929,8 @@ P_k^{\mathrm{eq}}
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">*.int</span></code> (<code class="docutils literal notranslate"><span class="pre">calc_Pint</span> <span class="pre">=</span> <span class="pre">.true.</span></code>の場合)<br />
 下記のフォーマットで</p>
-<div class="amsmath math notranslate nohighlight" id="equation-03de309c-b204-413d-86a9-9e8bb54cbd5e">
-<span class="eqno">(99)<a class="headerlink" href="#equation-03de309c-b204-413d-86a9-9e8bb54cbd5e" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-5b8206db-224a-4f7c-be9b-f32459dc4296">
+<span class="eqno">(99)<a class="headerlink" href="#equation-5b8206db-224a-4f7c-be9b-f32459dc4296" title="Permalink to this equation"></a></span>\[\begin{align}
 \tau_{j} = \int_{0}^{\infty} dt\, P_{j}\left(t\right),
 \end{align}\]</div>
 <p>が格納されている．</p>
@@ -970,8 +970,8 @@ IEPDYN法の適用手順について述べる．
 <li><p>状態4 (解離状態を含む): <span class="math notranslate nohighlight">\(4\leq r \)</span></p></li>
 </ul>
 <p>また，求める計算量を，residence time correlation function</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f3930fe8-51e8-4c97-9e9a-f6575f67c0ab">
-<span class="eqno">(100)<a class="headerlink" href="#equation-f3930fe8-51e8-4c97-9e9a-f6575f67c0ab" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-09aeb32e-a55f-45a2-95c4-999acf86f11d">
+<span class="eqno">(100)<a class="headerlink" href="#equation-09aeb32e-a55f-45a2-95c4-999acf86f11d" title="Permalink to this equation"></a></span>\[\begin{align}
 P_{\mathrm{B}}\left(t\right) 
 =\dfrac{\displaystyle \sum_{k\in \mathcal{M}_{\mathrm{I}}}P_{k}\left(t\right) }{\displaystyle \sum_{k\in \mathcal{M}_{\mathrm{I}}}P_{k}\left(0\right)} 
 \end{align}\]</div>

@@ -170,7 +170,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#free-volume">自由体積プロファイル(free_volume)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#free-volume-fvol">自由体積プロファイル(<code class="docutils literal notranslate"><span class="pre">free_volume</span></code>, <code class="docutils literal notranslate"><span class="pre">fvol</span></code>)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id55">オプション一覧</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id56">出力ファイルのフォーマット</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id57">解析例</a><ul>
@@ -1058,36 +1058,36 @@ PBCラップを実行する例を示す．この際，ラップ中心はC<span c
 <p>平均二乗変位(MSD) <span class="math notranslate nohighlight">\(\chi(t)\)</span>の定義を導入すると同時に，
 それを求める意義について，拡散方程式に基づいて述べる．</p>
 <p>分子の時刻<span class="math notranslate nohighlight">\(t\)</span>での位置を<span class="math notranslate nohighlight">\({\bf r}(t)\)</span>とすると，MSDは次式で定義される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-e733e8d1-98b4-409a-8a55-3e91033ba2cc">
-<span class="eqno">(1)<a class="headerlink" href="#equation-e733e8d1-98b4-409a-8a55-3e91033ba2cc" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-40e4692c-e37a-4f2c-8978-777858394af9">
+<span class="eqno">(1)<a class="headerlink" href="#equation-40e4692c-e37a-4f2c-8978-777858394af9" title="Permalink to this equation"></a></span>\[\begin{align}
 \chi\left(t\right)  =\braket{\left|{\bf r}\left(t\right)-{\bf r}\left(0\right)\right|^{2}}.
 \end{align}\]</div>
 <p>つまり<span class="math notranslate nohighlight">\(\chi(t)\)</span>は，時間が<span class="math notranslate nohighlight">\(t\)</span>だけたった後における分子の移動距離の2乗平均を表す．MSDが拡散方程式に基づくと，どのように表されるのかを次に考えてみる．
 分子の確率密度場を<span class="math notranslate nohighlight">\(\rho({\bf r},t)\)</span>，拡散係数を<span class="math notranslate nohighlight">\(D\)</span>とすると，拡散方程式は次式で表される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-32795ad8-a9fe-44ad-b20a-850ae11b915f">
-<span class="eqno">(2)<a class="headerlink" href="#equation-32795ad8-a9fe-44ad-b20a-850ae11b915f" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-5f1bfdd2-b771-49f4-9adb-6518ae9a21f4">
+<span class="eqno">(2)<a class="headerlink" href="#equation-5f1bfdd2-b771-49f4-9adb-6518ae9a21f4" title="Permalink to this equation"></a></span>\[\begin{align}
 \dfrac{\partial}{\partial t}\rho\left({\bf r},t\right) =D\nabla^{2}\rho\left({\bf r},t\right).
 \end{align}\]</div>
 <p>時刻<span class="math notranslate nohighlight">\(t=0\)</span>で分子は位置<span class="math notranslate nohighlight">\({\bf 0}\)</span>に存在していたとすると，初期条件は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-6db65cc5-734d-4bf9-b1c0-f3cd42f65213">
-<span class="eqno">(3)<a class="headerlink" href="#equation-6db65cc5-734d-4bf9-b1c0-f3cd42f65213" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-91135342-df0d-4cf2-87d8-b8ceaf5639e4">
+<span class="eqno">(3)<a class="headerlink" href="#equation-91135342-df0d-4cf2-87d8-b8ceaf5639e4" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho\left({\bf r},t=0\right) &amp; =\delta\left({\bf r}\right),
 \end{align}\]</div>
 <p>となる．この条件の下，拡散方程式を解くと，次式が得られる．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-3f40339a-a704-44c4-99a1-ac31855a7a1d">
-<span class="eqno">(4)<a class="headerlink" href="#equation-3f40339a-a704-44c4-99a1-ac31855a7a1d" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-95800f4d-53a5-4ee7-9074-f138f3bf088b">
+<span class="eqno">(4)<a class="headerlink" href="#equation-95800f4d-53a5-4ee7-9074-f138f3bf088b" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho\left({\bf r},t\right) =\dfrac{1}{\left(4\pi Dt\right)^{3/2}}\exp\left[-\dfrac{\left|{\bf r}\right|^{2}}{4Dt}\right].
 \end{align}\]</div>
 <p>この解を用いると，MSDは</p>
-<div class="amsmath math notranslate nohighlight" id="equation-3962aeac-5f76-4973-a91b-db85f6173eff">
-<span class="eqno">(5)<a class="headerlink" href="#equation-3962aeac-5f76-4973-a91b-db85f6173eff" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-95ed9163-8a87-41a7-b8d5-d97c82252e3a">
+<span class="eqno">(5)<a class="headerlink" href="#equation-95ed9163-8a87-41a7-b8d5-d97c82252e3a" title="Permalink to this equation"></a></span>\[\begin{align}
 \chi\left(t\right) &amp; =\int d{\bf r}\,\left|{\bf r}\right|^{2}\rho\left({\bf r},t\right) \\
                    &amp; = 6Dt,
 \end{align}\]</div>
 <p>と表される．つまり，MSDは傾き<span class="math notranslate nohighlight">\(6D\)</span>で時間に比例して増加していくことになる．
 ただし，拡散方程式は長時間極限において成り立つ関係式なので，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-d35a1358-e87e-4629-8700-fb6fdb1f4fe4">
-<span class="eqno">(6)<a class="headerlink" href="#equation-d35a1358-e87e-4629-8700-fb6fdb1f4fe4" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-693a4cbd-15ce-46b4-87d5-757678206339">
+<span class="eqno">(6)<a class="headerlink" href="#equation-693a4cbd-15ce-46b4-87d5-757678206339" title="Permalink to this equation"></a></span>\[\begin{align}
 D &amp; =\dfrac{1}{6}\lim_{t\to\infty}\dfrac{\braket{\left|{\bf r}\left(t\right)-{\bf r}\left(0\right)\right|^{2}}}{t},
 \end{align}\]</div>
 <p>とすべきである．上式はEinsteinの関係式と呼ばれる．
@@ -1200,8 +1200,8 @@ D &amp; =\dfrac{1}{6}\lim_{t\to\infty}\dfrac{\braket{\left|{\bf r}\left(t\right)
 <li><p><strong>-t_sparse &lt;MSDを出力するときの時間刻み&gt;</strong></p>
 <p>MSDを出力するときの時間刻みを指定する．
 例えば，<code class="docutils literal notranslate"><span class="pre">-dt</span> <span class="pre">0.1</span></code> (<span class="math notranslate nohighlight">\(=\delta t\)</span>), <code class="docutils literal notranslate"><span class="pre">-t_sparse</span> <span class="pre">1</span></code> (=<span class="math notranslate nohighlight">\(\Delta t\)</span>)のとき，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-a4b2e3a7-9634-4822-ab6b-d12fe216b00f">
-<span class="eqno">(7)<a class="headerlink" href="#equation-a4b2e3a7-9634-4822-ab6b-d12fe216b00f" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-d80b6ef6-2aab-4d0e-90ce-550bff37eaf3">
+<span class="eqno">(7)<a class="headerlink" href="#equation-d80b6ef6-2aab-4d0e-90ce-550bff37eaf3" title="Permalink to this equation"></a></span>\[\begin{align}
    \Delta T = \mathrm{nint}\left(\dfrac{\Delta t}{\delta t}\right) \delta t
 \end{align}  \]</div>
 <p>の時間刻みでMSD (Angstrom<span class="math notranslate nohighlight">\(^{2}\)</span>)が計算される．</p>
@@ -1294,78 +1294,78 @@ D &amp; =\dfrac{1}{6}\lim_{t\to\infty}\dfrac{\braket{\left|{\bf r}\left(t\right)
 <h4>同種粒子間の動径分布関数<a class="headerlink" href="#id21" title="Link to this heading"></a></h4>
 <p>粒子<span class="math notranslate nohighlight">\(a\)</span>が<span class="math notranslate nohighlight">\(N_a\)</span>個存在している系(体積<span class="math notranslate nohighlight">\(V\)</span>，粒子<span class="math notranslate nohighlight">\(a\)</span>の平均(バルク)数密度<span class="math notranslate nohighlight">\(\rho_a = N_a/V\)</span>)を考え，
 局所密度場<span class="math notranslate nohighlight">\(\hat{\rho}_{a}\left({\bf r}\right)\)</span>を次式で定義する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-ad0b2833-263b-44e3-8958-f92c52f6a2e0">
-<span class="eqno">(8)<a class="headerlink" href="#equation-ad0b2833-263b-44e3-8958-f92c52f6a2e0" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-f543038a-0207-4777-944d-dd6e361ea6ed">
+<span class="eqno">(8)<a class="headerlink" href="#equation-f543038a-0207-4777-944d-dd6e361ea6ed" title="Permalink to this equation"></a></span>\[\begin{align}
 \hat{\rho}_{a}\left({\bf r}\right) &amp; =\sum_{i=1}^{N_{a}}\delta\left({\bf r}-{\bf r}_{i}\right).
 \end{align}\]</div>
 <p>ここで，<span class="math notranslate nohighlight">\({\bf r}_{i}\)</span>は<span class="math notranslate nohighlight">\(i\)</span>番目の粒子<span class="math notranslate nohighlight">\(a\)</span>の位置である．
 もし，系に外場などが存在しない場合，局所密度場のアンサンブル平均は
 平均数密度<span class="math notranslate nohighlight">\(\rho_{a}\)</span>に等しくなる．つまり，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-1c6eaaf0-edc7-4c37-a6bd-7049e3b2aa8a">
-<span class="eqno">(9)<a class="headerlink" href="#equation-1c6eaaf0-edc7-4c37-a6bd-7049e3b2aa8a" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-f05bcd4b-f59b-4213-af35-53a5882d64d1">
+<span class="eqno">(9)<a class="headerlink" href="#equation-f05bcd4b-f59b-4213-af35-53a5882d64d1" title="Permalink to this equation"></a></span>\[\begin{align}
 \Braket{\hat{\rho}_{a}\left({\bf r}\right)} = \rho_{a},
 \end{align}\]</div>
 <p>である．次に，2体密度相関関数を次式で定義する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-4268fc50-cd60-42f8-aaed-821d8d268288">
-<span class="eqno">(10)<a class="headerlink" href="#equation-4268fc50-cd60-42f8-aaed-821d8d268288" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-b60e35ee-e918-47e0-9c5d-918bf6387109">
+<span class="eqno">(10)<a class="headerlink" href="#equation-b60e35ee-e918-47e0-9c5d-918bf6387109" title="Permalink to this equation"></a></span>\[\begin{align}
 \chi\left({\bf r},{\bf r}^{\prime}\right) &amp; =\Braket{\hat{\rho}_{a}\left({\bf r}\right)\hat{\rho}_{a}\left({\bf r}^{\prime}\right)}\\
  &amp; =\Braket{\sum_{i=1}^{N_{a}}\sum_{j=1}^{N_{a}}\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}.
 \end{align}\]</div>
 <p>上式において，<span class="math notranslate nohighlight">\(i=j\)</span>の項と<span class="math notranslate nohighlight">\(i\neq j\)</span>の分けて書くと，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-55af7f6b-a528-4ab6-b177-de8809d97673">
-<span class="eqno">(11)<a class="headerlink" href="#equation-55af7f6b-a528-4ab6-b177-de8809d97673" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-28dd52bd-7771-4122-b1a7-34fa33b02209">
+<span class="eqno">(11)<a class="headerlink" href="#equation-28dd52bd-7771-4122-b1a7-34fa33b02209" title="Permalink to this equation"></a></span>\[\begin{align}
 \chi\left({\bf r},{\bf r}^{\prime}\right) &amp; =\sum_{i=1}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{i}\right)}+\sum_{i=1}^{N_{a}}{\sum_{j\neq i}^{N_{a}}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)},
 \end{align}\]</div>
 <p>第1項目は同一粒子が<span class="math notranslate nohighlight">\({\bf r}\)</span>と<span class="math notranslate nohighlight">\({\bf r}^{\prime}\)</span>の位置に存在する確率を表しており，
 これは<span class="math notranslate nohighlight">\({\bf r}={\bf r}^{\prime}\)</span>のとき以外は明らかにゼロとなる．つまり，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-dcf90855-39f7-43c4-b7fc-50331fdc8818">
-<span class="eqno">(12)<a class="headerlink" href="#equation-dcf90855-39f7-43c4-b7fc-50331fdc8818" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-84946911-c7b7-47d1-a7a3-06d2b3a0678f">
+<span class="eqno">(12)<a class="headerlink" href="#equation-84946911-c7b7-47d1-a7a3-06d2b3a0678f" title="Permalink to this equation"></a></span>\[\begin{align}
 \sum_{i=1}^{N_{a}}\braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{i}\right)} &amp; =\rho_{a}\delta\left({\bf r}-{\bf r}^{\prime}\right),
 \end{align}\]</div>
 <p>である．
 次に，第2項は<span class="math notranslate nohighlight">\(i\)</span>番目の粒子が<span class="math notranslate nohighlight">\({\bf r}\)</span>の位置に存在し，<span class="math notranslate nohighlight">\(j\)</span>番目の粒子が<span class="math notranslate nohighlight">\({\bf r}^{\prime}\)</span>の位置に存在する確率を表している．この項は2体密度と呼ばれており，
 2粒子の相関関係を表している．2体密度を<span class="math notranslate nohighlight">\(\rho^{(2)}_{aa}\left({\bf r},{\bf r}^{\prime}\right)\)</span>と表しておくことにする．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f952fce1-23fa-4372-bb0c-19c1ca0cc8d2">
-<span class="eqno">(13)<a class="headerlink" href="#equation-f952fce1-23fa-4372-bb0c-19c1ca0cc8d2" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-61fea8ff-edb6-479b-8531-3dbce22a315f">
+<span class="eqno">(13)<a class="headerlink" href="#equation-61fea8ff-edb6-479b-8531-3dbce22a315f" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\sum_{i=1}^{N_{a}}\sum_{j\neq i}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}.
 \end{align}\]</div>
 <p>もし，<span class="math notranslate nohighlight">\({\bf r}と{\bf r}^{\prime}\)</span>の位置が互いに遠く離れている場合，
 そのような配置での2粒子間の相関は無視できる．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-5edaf1ee-ffcd-44eb-b7ce-fffa8da22d37">
-<span class="eqno">(14)<a class="headerlink" href="#equation-5edaf1ee-ffcd-44eb-b7ce-fffa8da22d37" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-74e6e71c-ff85-464a-939a-16b941de0d4b">
+<span class="eqno">(14)<a class="headerlink" href="#equation-74e6e71c-ff85-464a-939a-16b941de0d4b" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; \approx\sum_{i=1}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)}\sum_{j\neq i}^{N_{b}}\Braket{\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}\\
  &amp; =\rho_{a}^{2}\left(1-\dfrac{1}{N_{a}}\right).
 \end{align}\]</div>
 <p>無相関の状態を基準にとって，2体分布関数を次式で定義することにしておく．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-0460acef-ef34-4e23-95cc-357299582df4">
-<span class="eqno">(15)<a class="headerlink" href="#equation-0460acef-ef34-4e23-95cc-357299582df4" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-21030cf6-08f9-45c6-8bfc-51ce52b5136f">
+<span class="eqno">(15)<a class="headerlink" href="#equation-21030cf6-08f9-45c6-8bfc-51ce52b5136f" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\dfrac{1}{\rho_{a}^{2}\left(1-1/N_{a}\right)}\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right).
 \end{align}\]</div>
 <p>もし，粒子を十分に多く含んでいる系を取り扱っている場合は，<span class="math notranslate nohighlight">\(1/N_a \simeq 0\)</span>と考えて，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-2a0583bc-5169-40be-a809-b35ce8996a95">
-<span class="eqno">(16)<a class="headerlink" href="#equation-2a0583bc-5169-40be-a809-b35ce8996a95" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-b5d117e4-eef2-4069-b943-96132acc7464">
+<span class="eqno">(16)<a class="headerlink" href="#equation-b5d117e4-eef2-4069-b943-96132acc7464" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\dfrac{1}{\rho_{a}^{2}}\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right),
 \end{align}\]</div>
 <p>としても良い．</p>
 <p>系が均一の場合(外場が存在しない場合など)，2体分布関数(および2体密度)は2粒子の絶対的な位置<span class="math notranslate nohighlight">\({\bf r}\)</span>，<span class="math notranslate nohighlight">\({\bf r}^{\prime}\)</span>ではなく，2粒子の相対的な位置<span class="math notranslate nohighlight">\({\bf r}^{\prime} - {\bf r}\)</span>に依存する．つまり，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-a3839409-55d7-4a76-aa8d-c0c41551bc7e">
-<span class="eqno">(17)<a class="headerlink" href="#equation-a3839409-55d7-4a76-aa8d-c0c41551bc7e" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-d065e6d9-2203-48b9-ae0c-d12b240016cf">
+<span class="eqno">(17)<a class="headerlink" href="#equation-d065e6d9-2203-48b9-ae0c-d12b240016cf" title="Permalink to this equation"></a></span>\[\begin{align}
 g^{\left(2\right)}_{aa}\left({\bf r},{\bf r}^{\prime}\right) &amp; =g^{\left(2\right)}_{aa}\left({\bf 0},{\bf r}^{\prime}-{\bf r}\right),
 \end{align}\]</div>
 <p>のような関係が成り立つ．<span class="math notranslate nohighlight">\({\bf r}^{\prime}-{\bf r}\)</span>を改めて
 <span class="math notranslate nohighlight">\({\bf r}\)</span>とおき直しておき，空間分布関数(spatial distribution function, SDF)を次式で定義する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-ff75b9c8-d86a-4393-9e3e-b6617c939a89">
-<span class="eqno">(18)<a class="headerlink" href="#equation-ff75b9c8-d86a-4393-9e3e-b6617c939a89" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-27f213d6-fd73-4401-93a7-65ef8becce01">
+<span class="eqno">(18)<a class="headerlink" href="#equation-27f213d6-fd73-4401-93a7-65ef8becce01" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{aa}\left({\bf r}\right) &amp; =g^{\left(2\right)}_{aa}\left({\bf 0},{\bf r}\right).
 \end{align}\]</div>
 <p>これを角度方向に平均をとり，距離<span class="math notranslate nohighlight">\(r\)</span>の分布関数に変換したものを動径分布関数(radial distribution function, RDF)と呼ぶ．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-56b3b166-f436-48e4-90c7-7106f1601a2b">
-<span class="eqno">(19)<a class="headerlink" href="#equation-56b3b166-f436-48e4-90c7-7106f1601a2b" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-7c8aac15-d026-42ed-99c4-8502ace95e68">
+<span class="eqno">(19)<a class="headerlink" href="#equation-7c8aac15-d026-42ed-99c4-8502ace95e68" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{aa}\left(r\right) &amp; =\dfrac{1}{4\pi r^{2}}\int d{\bf r}\,\delta\left(\left|{\bf r}\right|-r\right)g_{aa}\left({\bf r}\right).
 \end{align}\]</div>
 <p>もし，系が等方的である場合，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-95fb28d8-addb-4621-a16a-f1aac8cb329c">
-<span class="eqno">(20)<a class="headerlink" href="#equation-95fb28d8-addb-4621-a16a-f1aac8cb329c" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-5153d3a6-a225-4671-884c-92c5220bfa8f">
+<span class="eqno">(20)<a class="headerlink" href="#equation-5153d3a6-a225-4671-884c-92c5220bfa8f" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{aa}\left(\left|{\bf r}\right|\right) &amp; =g_{aa}\left({\bf r}\right),
 \end{align}\]</div>
 <p>が成り立つ．
@@ -1378,26 +1378,26 @@ SDFを計算することに意義が生じるのは，非等方系の場合や�
 <h4>異種粒子間の動径分布関数<a class="headerlink" href="#id22" title="Link to this heading"></a></h4>
 <p>粒子<span class="math notranslate nohighlight">\(a\)</span>が<span class="math notranslate nohighlight">\(N_a\)</span>個，粒子<span class="math notranslate nohighlight">\(b\)</span>が<span class="math notranslate nohighlight">\(N_b\)</span>個存在している系(体積<span class="math notranslate nohighlight">\(V\)</span>，平均数密度はそれぞれの粒子で<span class="math notranslate nohighlight">\(\rho_a = N_a /V\)</span>, <span class="math notranslate nohighlight">\(\rho_b = N_b / V\)</span>)での，
 粒子<span class="math notranslate nohighlight">\(a\)</span>と粒子<span class="math notranslate nohighlight">\(b\)</span>の間のRDFを導入する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-bae1aab4-8e71-4e94-b6c5-74f261373b51">
-<span class="eqno">(21)<a class="headerlink" href="#equation-bae1aab4-8e71-4e94-b6c5-74f261373b51" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-63799f14-5b0a-43a6-8b31-7c6b30b5d0a3">
+<span class="eqno">(21)<a class="headerlink" href="#equation-63799f14-5b0a-43a6-8b31-7c6b30b5d0a3" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho_{ab}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\sum_{i=1}^{N_{a}}\sum_{j=1}^{N_{b}}\Braket{\delta\left({\bf r}-{\bf r}_{i}^{a}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}^{b}\right)}.
 \end{align}\]</div>
 <p>ここで，<span class="math notranslate nohighlight">\({\bf r}_{i}^{p}~(p=a, b)\)</span> は粒子<span class="math notranslate nohighlight">\(p\)</span>の<span class="math notranslate nohighlight">\(i\)</span>番目の粒子の位置である．
 同種粒子間の場合と異なるのは，<span class="math notranslate nohighlight">\(j=i\)</span>の場合を除外しなくても良い点である．
 これにより，無相関の場合は，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-c619c732-5cf7-466f-9a7e-6558beef476a">
-<span class="eqno">(22)<a class="headerlink" href="#equation-c619c732-5cf7-466f-9a7e-6558beef476a" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-7aba2293-7060-400d-b15f-8a476e999e36">
+<span class="eqno">(22)<a class="headerlink" href="#equation-7aba2293-7060-400d-b15f-8a476e999e36" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho_{ab}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; \approx\rho_{a}\rho_{b},
 \end{align}\]</div>
 <p>となる．それ以外の点は全く同じなので，同様の手続きを踏んで動径分布関数を導入できる．
 まず，空間分布関数は，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-15cfab9e-1882-4912-bcf6-c828c507cfb0">
-<span class="eqno">(23)<a class="headerlink" href="#equation-15cfab9e-1882-4912-bcf6-c828c507cfb0" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-a2fd5e10-7e49-4cd4-8fd0-1aeee0a7e6b6">
+<span class="eqno">(23)<a class="headerlink" href="#equation-a2fd5e10-7e49-4cd4-8fd0-1aeee0a7e6b6" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{ab}\left({\bf r}\right) &amp; =\dfrac{1}{\rho_{a}\rho_{b}}\rho_{ab}^{\left(2\right)}\left({\bf 0},{\bf r}\right),
 \end{align}\]</div>
 <p>であり，これを角度方向について平均化することにより，動径分布関数の表式を得る．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-d7bc6b0f-0769-4ebf-b032-7e6b0dc6bd26">
-<span class="eqno">(24)<a class="headerlink" href="#equation-d7bc6b0f-0769-4ebf-b032-7e6b0dc6bd26" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-f4d1d7ce-9b6e-4ba7-af0f-6cb72c921547">
+<span class="eqno">(24)<a class="headerlink" href="#equation-f4d1d7ce-9b6e-4ba7-af0f-6cb72c921547" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{ab}\left(r\right) &amp; =\dfrac{1}{4\pi r^{2}}\int d{\bf r}\,\delta\left(\left|{\bf r}\right|-r\right)g_{ab}\left({\bf r}\right).
 \end{align}\]</div>
 </section>
@@ -1599,21 +1599,21 @@ g_{ab}\left(r\right) &amp; =\dfrac{1}{4\pi r^{2}}\int d{\bf r}\,\delta\left(\lef
 この節の最後で述べるようにトラジェクトリのフィッティングを行うことで，
 仮想的に同様の状況を作り出すことができる．</p>
 <p>動径分布関数の場合と同様に，粒子<span class="math notranslate nohighlight">\(a\)</span>の局所密度場を次式で定義する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-6dcd1372-58e8-4acb-ad8a-f3cc2a6f8894">
-<span class="eqno">(25)<a class="headerlink" href="#equation-6dcd1372-58e8-4acb-ad8a-f3cc2a6f8894" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-f6a4f745-391f-4629-9729-8a010b02e97e">
+<span class="eqno">(25)<a class="headerlink" href="#equation-f6a4f745-391f-4629-9729-8a010b02e97e" title="Permalink to this equation"></a></span>\[\begin{align}
 \hat{\rho}_{a}\left({\bf r}\right) &amp; =\sum_{i=1}^{N_{a}}\delta\left({\bf r}-{\bf r}_{i}\right).
 \end{align}\]</div>
 <p>これのアンサンブル平均は1体密度と呼ばれる．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-b9785440-70c9-4236-b2a3-576ecc7c3257">
-<span class="eqno">(26)<a class="headerlink" href="#equation-b9785440-70c9-4236-b2a3-576ecc7c3257" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-aceeb701-802e-4323-b3da-7e90ca01507e">
+<span class="eqno">(26)<a class="headerlink" href="#equation-aceeb701-802e-4323-b3da-7e90ca01507e" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho_{a}\left({\bf r}\right) &amp; =\braket{\hat{\rho}_{a}\left({\bf r}\right)}_{\mathrm{ext}}\\
 \end{align}\]</div>
 <p>ここで，<span class="math notranslate nohighlight">\(\braket{\cdots}_{\mathrm{ext}}\)</span>は外場存在下でのアンサンブル平均を表す．
 外場が存在しないとき<span class="math notranslate nohighlight">\(\rho_{a}({\bf r}) = \rho_a\)</span>となる．また，中心の分子(外場)から遠く離れているところでも，
 <span class="math notranslate nohighlight">\(\rho_{a}\left({\bf r}\right) = \rho_a\)</span>となる．
 空間分布関数(spatial distribution function, SDF)を次式で定義する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-af6a6758-c466-493b-b552-d864ce810326">
-<span class="eqno">(27)<a class="headerlink" href="#equation-af6a6758-c466-493b-b552-d864ce810326" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-0a6fce89-a0e3-4511-8bb7-9f6c3a80e6d7">
+<span class="eqno">(27)<a class="headerlink" href="#equation-0a6fce89-a0e3-4511-8bb7-9f6c3a80e6d7" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{a}\left({\bf r}\right) &amp; =\dfrac{\rho_{a}\left({\bf r}\right)}{\rho_{a}}.
 \end{align}\]</div>
 <p><span class="math notranslate nohighlight">\(g_{a}\left({\bf r}\right) &gt; 0\)</span>はその位置での粒子<span class="math notranslate nohighlight">\(a\)</span>の存在確率がバルクよりも高く，
@@ -1725,8 +1725,8 @@ SDFの計算は困難となる．天然構造を持つタンパク質につい�
 <li><p>Example: <code class="docutils literal notranslate"><span class="pre">-origin</span> <span class="pre">0.0</span> <span class="pre">0.0</span> <span class="pre">0.0</span></code></p></li>
 </ul>
 <p>グリッドを張るときの原点を指定する．原点の座標を<span class="math notranslate nohighlight">\((x_o, y_0, z_0)\)</span>とすると，グリッド点<span class="math notranslate nohighlight">\(i_x, i_y, i_z\)</span>の座標<span class="math notranslate nohighlight">\((x_i, y_i, z_i)\)</span>は次式で与えられる．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-0e2b70a3-e6ad-43f3-9a78-69790ba8df8a">
-<span class="eqno">(28)<a class="headerlink" href="#equation-0e2b70a3-e6ad-43f3-9a78-69790ba8df8a" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-cfe8af62-a857-453c-9dc5-f6275db9b2d0">
+<span class="eqno">(28)<a class="headerlink" href="#equation-cfe8af62-a857-453c-9dc5-f6275db9b2d0" title="Permalink to this equation"></a></span>\[\begin{align}
 x_i &amp;= x_0 + \Delta x \, (i_x - 1) \\
 y_i &amp;= y_0 + \Delta y \, (i_y - 1) \\
 z_i &amp;= z_0 + \Delta z \, (i_z - 1) 
@@ -1781,14 +1781,14 @@ z_i &amp;= z_0 + \Delta z \, (i_z - 1)
 <li><p>Note: &quot;<code class="docutils literal notranslate"><span class="pre">-use_spline</span> <span class="pre">true</span></code>&quot;のときに有効となる．</p></li>
 </ul>
 <p>スプラインによるグリッド細分化の度合いを整数値で指定する．この値を<span class="math notranslate nohighlight">\(n_r\)</span>とし，スプライン実行前のSDFのグリッド刻みを<span class="math notranslate nohighlight">\(\Delta \alpha~(\alpha=x,y,z)\)</span>とすると，スプラインを施したSDFのグリッド刻みは</p>
-<div class="amsmath math notranslate nohighlight" id="equation-b8f8c562-1683-481a-a0f0-cf8c2e88d613">
-<span class="eqno">(29)<a class="headerlink" href="#equation-b8f8c562-1683-481a-a0f0-cf8c2e88d613" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-bb5b8a33-10a1-4510-9494-ea147a62dd84">
+<span class="eqno">(29)<a class="headerlink" href="#equation-bb5b8a33-10a1-4510-9494-ea147a62dd84" title="Permalink to this equation"></a></span>\[\begin{align}
   \Delta \alpha^{\prime} = \Delta \alpha / n_r,
 \end{align} \]</div>
 <p>となる．また，スプライン実行前の合計グリッド数を<span class="math notranslate nohighlight">\(N\)</span>，
 実行後のグリッド数を<span class="math notranslate nohighlight">\(N^{\prime}\)</span>とすると，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-e5f8deb7-6d80-4721-a4f3-9607b60303a0">
-<span class="eqno">(30)<a class="headerlink" href="#equation-e5f8deb7-6d80-4721-a4f3-9607b60303a0" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-44522bdc-b0d8-4883-a16f-80ba316d43aa">
+<span class="eqno">(30)<a class="headerlink" href="#equation-44522bdc-b0d8-4883-a16f-80ba316d43aa" title="Permalink to this equation"></a></span>\[\begin{align}
   N^{\prime} = n_r^{3} N,
 \end{align}\]</div>
 <p>となる．</p>
@@ -1859,8 +1859,8 @@ z_i &amp;= z_0 + \Delta z \, (i_z - 1)
 例えばあるタンパク質について，結晶構造を参照構造として，平衡化過程で参照構造からどの程度構造のズレが生じ，また構造が緩和しているかを判別する際によく用いられる．</p>
 <p>原子<span class="math notranslate nohighlight">\(N_{\mathrm{sel}}\)</span>個からなる分子について，<span class="math notranslate nohighlight">\({\bf r}_{i}\)</span>を<span class="math notranslate nohighlight">\(i\)</span>番目の原子の座標，<span class="math notranslate nohighlight">\({\bf r} ^{\mathrm{ref}}\)</span>を参照構造中の原子の座標，<span class="math notranslate nohighlight">\({\bf r} (t)\)</span>を時刻<span class="math notranslate nohighlight">\(t\)</span>での座標とする．この時，
 平均二乗偏差<span class="math notranslate nohighlight">\(\chi\left(t\right)\)</span>は以下の式で定義される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-3bd07e09-d6d3-49a1-b91a-1b5c2cf2fe4c">
-<span class="eqno">(31)<a class="headerlink" href="#equation-3bd07e09-d6d3-49a1-b91a-1b5c2cf2fe4c" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-526a7bc8-95bc-441d-98f8-824b6ab6bbc8">
+<span class="eqno">(31)<a class="headerlink" href="#equation-526a7bc8-95bc-441d-98f8-824b6ab6bbc8" title="Permalink to this equation"></a></span>\[\begin{align}
 \chi\left(t\right) &amp; =\sqrt{\dfrac{1}{N_{\mathrm{sel}}}\sum_{i=1}^{N_{\mathrm{sel}}}\left|{\bf r}_{i}\left(t\right)-{\bf r}_{i}^{\mathrm{ref}}\right|^{2}}.
 \end{align}\]</div>
 </section>
@@ -2022,8 +2022,8 @@ z_i &amp;= z_0 + \Delta z \, (i_z - 1)
 <ul>
 <li><p><strong>静電相互作用</strong><br />
 分子Aと分子Bの間に働く静電相互作用<span class="math notranslate nohighlight">\(U_{\mathrm{elec}}\)</span>について，2通りのスキームを実装している．一つはBare相互作用であり，<span class="math notranslate nohighlight">\(i\)</span>と<span class="math notranslate nohighlight">\(j\)</span>はそれぞれ分子AとBの原子インデックス番号とするとA-B間の相互作用は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-2e185c84-15d5-4d1b-b5a8-b23a8f275a8c">
-<span class="eqno">(32)<a class="headerlink" href="#equation-2e185c84-15d5-4d1b-b5a8-b23a8f275a8c" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-ffa17c03-c48b-4d07-a363-27f7a7eb1256">
+<span class="eqno">(32)<a class="headerlink" href="#equation-ffa17c03-c48b-4d07-a363-27f7a7eb1256" title="Permalink to this equation"></a></span>\[\begin{align}
 U_{\mathrm{elec}}=\sum_{i \in \mathrm{A}}\sum_{j \in \mathrm{B}}\dfrac{q_{i}q_{j}}{r_{ij}}, \label{elec}
 \end{align}\]</div>
 <p>で表される．
@@ -2031,16 +2031,16 @@ U_{\mathrm{elec}}=\sum_{i \in \mathrm{A}}\sum_{j \in \mathrm{B}}\dfrac{q_{i}q_{j
 </li>
 <li><p><strong>Lennard-Jones (LJ)相互作用</strong><br />
 van der Waals相互作用を表現するための経験的なモデルであるLennard-Jones相互作用は，以下の式で定義される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f7d9aea6-8404-4fa1-b85a-a78037a93de7">
-<span class="eqno">(33)<a class="headerlink" href="#equation-f7d9aea6-8404-4fa1-b85a-a78037a93de7" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-fc0473c1-f2ca-4f29-a370-e3ce888eeb3f">
+<span class="eqno">(33)<a class="headerlink" href="#equation-fc0473c1-f2ca-4f29-a370-e3ce888eeb3f" title="Permalink to this equation"></a></span>\[\begin{align}
 U_{\mathrm{LJ}}=\sum_{i \in \mathrm{A}}\sum_{i \in \mathrm{B}}4\epsilon_{ij} \left\{ \left(\dfrac{\sigma_{ij}}{r_{ij}}\right)^{12}-\left(\dfrac{\sigma_{ij}}{r_{ij}}\right)^{6}\right\}．\label{LJ}
 \end{align}\]</div>
 <p>この式中の<span class="math notranslate nohighlight">\(\epsilon_{ij}\)</span>と<span class="math notranslate nohighlight">\(\sigma_{ij}\)</span>は分子A中の原子<span class="math notranslate nohighlight">\(i\)</span>と分子B中の原子<span class="math notranslate nohighlight">\(j\)</span>との間のLJパラメータである．</p>
 </li>
 <li><p><strong>Attractive LJ 相互作用</strong>
 Attractive LJ相互作用は，以下で定義される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-90e36cf1-9537-428c-8f0e-b845adafd31d">
-<span class="eqno">(34)<a class="headerlink" href="#equation-90e36cf1-9537-428c-8f0e-b845adafd31d" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-0e724d75-6db5-4c40-b220-369371401837">
+<span class="eqno">(34)<a class="headerlink" href="#equation-0e724d75-6db5-4c40-b220-369371401837" title="Permalink to this equation"></a></span>\[\begin{align}
 U_{\mathrm{attr}} &amp; =\sum_{i \in \mathrm{A}}\sum_{i \in \mathrm{B}} u_{\mathrm{attr},ij} , \label{Uattr} \\
 u_{\mathrm{attr}, i j} &amp;= \begin{cases}4 \epsilon_{i j}\left\{\left(\frac{\sigma_{i j}}{r_{i j}}\right)^{12}-\left(\frac{\sigma_{i j}}{r_{i j}}\right)^6\right\} &amp; r_{i j} \geq 2^{1 / 6} \sigma \\ -\epsilon_{i j} &amp; r_{i j}&lt;2^{1 / 6} \sigma .\end{cases}
 \end{align}\]</div>
@@ -2342,8 +2342,8 @@ LJ相互作用を計算する場合を示す．</p>
 <p><code class="docutils literal notranslate"><span class="pre">lipid_order</span></code> (<code class="docutils literal notranslate"><span class="pre">scd</span></code>)ではリン脂質のアシル鎖に関する配向秩序パラメータ<span class="math notranslate nohighlight">\(S_{\mathrm{CD}}\)</span>の計算が可能である．
 脂質膜の法線方向を<span class="math notranslate nohighlight">\(z\)</span>として，特定の炭素原子と隣接する水素原子のなす角を<span class="math notranslate nohighlight">\(\theta\)</span>と定義する．
 <span class="math notranslate nohighlight">\(S_{\mathrm{CD}}\)</span>は<span class="math notranslate nohighlight">\(\theta\)</span>を用いて式で定義される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-2f6abf9d-4653-435b-af73-770217080c30">
-<span class="eqno">(35)<a class="headerlink" href="#equation-2f6abf9d-4653-435b-af73-770217080c30" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-e66ade4f-276b-4047-a049-7a22745b3841">
+<span class="eqno">(35)<a class="headerlink" href="#equation-e66ade4f-276b-4047-a049-7a22745b3841" title="Permalink to this equation"></a></span>\[\begin{align}
 S_{\mathrm{CD}} &amp; =\dfrac{1}{2}\braket{3\cos^{2}\theta-1}.
 \end{align}\]</div>
 <p><span class="math notranslate nohighlight">\(S_{\mathrm{CD}}\)</span>の値域は<span class="math notranslate nohighlight">\(0\leq S_{\mathrm{CD}} \leq 1\)</span>であり，
@@ -2449,19 +2449,19 @@ S_{\mathrm{CD}} &amp; =\dfrac{1}{2}\braket{3\cos^{2}\theta-1}.
 <p><code class="docutils literal notranslate"><span class="pre">z_profile</span></code> (<code class="docutils literal notranslate"><span class="pre">zprof</span></code>)は，
 膜界面の法線方向(<span class="math notranslate nohighlight">\(z\)</span>)に沿った分布を計算する．
 分子<span class="math notranslate nohighlight">\(a\)</span>の<span class="math notranslate nohighlight">\(z\)</span>軸に沿った局所密度場を<span class="math notranslate nohighlight">\(\hat{\rho}_{a}\left(z\right)\)</span>と定義する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-5b668e1d-a998-4b39-a68f-8e1ee512b47b">
-<span class="eqno">(36)<a class="headerlink" href="#equation-5b668e1d-a998-4b39-a68f-8e1ee512b47b" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-e32815e6-b3ea-4b32-9faa-2c666e698829">
+<span class="eqno">(36)<a class="headerlink" href="#equation-e32815e6-b3ea-4b32-9faa-2c666e698829" title="Permalink to this equation"></a></span>\[\begin{align}
 \hat{\rho}_{a}\left(z\right) &amp; =\dfrac{1}{A_{xy}}\sum_{i=1}^{N_{\mathrm{a}}}\delta\left(z-z_{i}\right).
 \end{align}\]</div>
 <p>ここで，<span class="math notranslate nohighlight">\(A_{xy}\)</span>はシミュレーションセルの<span class="math notranslate nohighlight">\(xy\)</span>面の面積，<span class="math notranslate nohighlight">\(z_{i}\)</span>は<span class="math notranslate nohighlight">\(i\)</span>番目の分子の<span class="math notranslate nohighlight">\(z\)</span>座標である．
 これの平均をとったものが，分布関数である．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-e2ad7be8-468b-4118-b95f-66548775e51e">
-<span class="eqno">(37)<a class="headerlink" href="#equation-e2ad7be8-468b-4118-b95f-66548775e51e" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-32c55174-bcd0-4410-8331-f69591f4ad15">
+<span class="eqno">(37)<a class="headerlink" href="#equation-32c55174-bcd0-4410-8331-f69591f4ad15" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho_{a}\left(z\right) = \Braket{\hat{\rho}\left(z\right)}.
 \end{align}\]</div>
 <p>実験データと比較するために，電子密度分布<span class="math notranslate nohighlight">\(\rho^{e}_{a}\left(z\right)\)</span>を計算することも多い．その場合の局所密度場は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-09adf989-c3dc-40d4-93f9-a3580174fce6">
-<span class="eqno">(38)<a class="headerlink" href="#equation-09adf989-c3dc-40d4-93f9-a3580174fce6" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-6b18fa5e-e618-472f-9fb6-47d92e25e73c">
+<span class="eqno">(38)<a class="headerlink" href="#equation-6b18fa5e-e618-472f-9fb6-47d92e25e73c" title="Permalink to this equation"></a></span>\[\begin{align}
 \hat{\rho}^{e}_{a}\left(z\right) = \sum_{i=1}^{N_{a}}\sum_{\lambda=1}^{N_{\mathrm{s}}} q_{\lambda}\delta\left(z-z_{i,\lambda}\right),
 \end{align}\]</div>
 <p>で与えられる．ただし，<span class="math notranslate nohighlight">\(q_{\lambda}\)</span>は分子<span class="math notranslate nohighlight">\(a\)</span>内の<span class="math notranslate nohighlight">\(\lambda\)</span>番目の原子が持つ電子数，<span class="math notranslate nohighlight">\(z_{i,\lambda}\)</span>
@@ -2607,43 +2607,43 @@ S_{\mathrm{CD}} &amp; =\dfrac{1}{2}\braket{3\cos^{2}\theta-1}.
 特定の方向(<span class="math notranslate nohighlight">\(z\)</span>)を基準として．
 分子の配向分布を計算する．
 分子内にある2つの部位bottom, headを定義し，それぞれの重心を<span class="math notranslate nohighlight">\({\bf R}_{\mathrm{B}}\)</span>, <span class="math notranslate nohighlight">\({\bf R}_{\mathrm{H}}\)</span>とおく．そして，分子軸<span class="math notranslate nohighlight">\({\bf u}\)</span>を</p>
-<div class="amsmath math notranslate nohighlight" id="equation-c84e4492-719f-4c79-9881-8fa0b8725c2e">
-<span class="eqno">(39)<a class="headerlink" href="#equation-c84e4492-719f-4c79-9881-8fa0b8725c2e" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-9e085a2f-859c-4c66-a319-b11bb917c930">
+<span class="eqno">(39)<a class="headerlink" href="#equation-9e085a2f-859c-4c66-a319-b11bb917c930" title="Permalink to this equation"></a></span>\[\begin{align}
 {\bf u} = {\bf R}_{\mathrm{H}} - {\bf R}_{\mathrm{B}}, \label{uvec}
 \end{align}\]</div>
 <p>と定義する．<span class="math notranslate nohighlight">\(z\)</span>軸(単位ベクトル<span class="math notranslate nohighlight">\({\bf e}_{z}\)</span>)と<span class="math notranslate nohighlight">\({\bf u}\)</span> (単位ベクトル<span class="math notranslate nohighlight">\({\bf e}_{\mathrm{u}}\)</span>)のなす角を<span class="math notranslate nohighlight">\(\theta\)</span>とすると，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-7934f5e8-bba8-4d1c-b7b1-9dd5d09ece0b">
-<span class="eqno">(40)<a class="headerlink" href="#equation-7934f5e8-bba8-4d1c-b7b1-9dd5d09ece0b" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-df5b3b6c-fbc8-415c-97c5-697e1eb22af5">
+<span class="eqno">(40)<a class="headerlink" href="#equation-df5b3b6c-fbc8-415c-97c5-697e1eb22af5" title="Permalink to this equation"></a></span>\[\begin{align}
 \cos \theta = {\bf e}_{z} \cdot {\bf e}_{\mathrm{u}},
 \end{align}\]</div>
 <p>である．<span class="math notranslate nohighlight">\(\cos\theta\)</span>に対する分布関数を</p>
-<div class="amsmath math notranslate nohighlight" id="equation-d122e7a0-09a7-4858-a1d2-7f552ae14100">
-<span class="eqno">(41)<a class="headerlink" href="#equation-d122e7a0-09a7-4858-a1d2-7f552ae14100" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-eece6a0c-43f4-499e-b650-086f6eb9dce3">
+<span class="eqno">(41)<a class="headerlink" href="#equation-eece6a0c-43f4-499e-b650-086f6eb9dce3" title="Permalink to this equation"></a></span>\[\begin{align}
 P\left(\chi\right) = C\Braket{\delta\left(\chi - \cos \theta\right)},
 \end{align}\]</div>
 <p>とする．ただし，<span class="math notranslate nohighlight">\(C\)</span>は規格化定数であり，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-89805f76-9c5c-4303-9fc1-3690f4a0f45f">
-<span class="eqno">(42)<a class="headerlink" href="#equation-89805f76-9c5c-4303-9fc1-3690f4a0f45f" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-a0e656af-15e7-436c-805b-47d2b3def1af">
+<span class="eqno">(42)<a class="headerlink" href="#equation-a0e656af-15e7-436c-805b-47d2b3def1af" title="Permalink to this equation"></a></span>\[\begin{align}
 \int_{0}^{\pi}d\theta\,\sin\theta\,P\left(\chi \right) &amp; =1,
 \end{align}\]</div>
 <p>を満たすように設定する．
 上式は，<span class="math notranslate nohighlight">\(\theta\)</span>から<span class="math notranslate nohighlight">\(\chi = \cos\theta\)</span>への変数変換を考えることで，次式のように書き直せる．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-28cd35c8-f92e-4bbf-aabf-7b30a729f73a">
-<span class="eqno">(43)<a class="headerlink" href="#equation-28cd35c8-f92e-4bbf-aabf-7b30a729f73a" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-86ff48fb-f406-4b18-8b7c-592a56df9ea4">
+<span class="eqno">(43)<a class="headerlink" href="#equation-86ff48fb-f406-4b18-8b7c-592a56df9ea4" title="Permalink to this equation"></a></span>\[\begin{align}
 \int_{0}^{1}d\chi\,P\left(\chi\right) &amp; =1.
 \end{align}\]</div>
 <p><code class="docutils literal notranslate"><span class="pre">z_orient</span> <span class="pre">(zori)</span></code>は，上式を満たす<span class="math notranslate nohighlight">\(P\left(\chi\right) = P\left(\cos \theta\right)\)</span>を計算する．</p>
 <p>さらに，実験室座標系での<span class="math notranslate nohighlight">\(z\)</span>軸に加えて，
 特定の分子の向きによって定義されるベクトルを<span class="math notranslate nohighlight">\(z\)</span>方向に設定することも可能である．
 その分子の4つの部位の重心を<span class="math notranslate nohighlight">\({\bf x}_{\mathrm{B}_0}, {\bf x}_{\mathrm{H}_0}, {\bf x}_{\mathrm{B}_1}, {\bf x}_{\mathrm{H}_1}\)</span>として，ベクトル</p>
-<div class="amsmath math notranslate nohighlight" id="equation-587b31fd-0b34-4729-833e-5e4aeaf9ed82">
-<span class="eqno">(44)<a class="headerlink" href="#equation-587b31fd-0b34-4729-833e-5e4aeaf9ed82" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-b69d0db6-6131-49a2-921d-8a45a6fc3538">
+<span class="eqno">(44)<a class="headerlink" href="#equation-b69d0db6-6131-49a2-921d-8a45a6fc3538" title="Permalink to this equation"></a></span>\[\begin{align}
 {\bf v}_{0} &amp;= {\bf x}_{\mathrm{H}_0} - {\bf x}_{\mathrm{B}_0}  \label{vec0} \\
 {\bf v}_{1} &amp;= {\bf x}_{\mathrm{H}_1} - {\bf x}_{\mathrm{B}_1} \label{vec1} 
 \end{align}\]</div>
 <p>を用意することで，<span class="math notranslate nohighlight">\(z\)</span>方向の単位ベクトル</p>
-<div class="amsmath math notranslate nohighlight" id="equation-d126558e-1a44-4178-a6b3-85a2ebc4cf1f">
-<span class="eqno">(45)<a class="headerlink" href="#equation-d126558e-1a44-4178-a6b3-85a2ebc4cf1f" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-457e6890-cde1-40fd-8409-ba625d488dc2">
+<span class="eqno">(45)<a class="headerlink" href="#equation-457e6890-cde1-40fd-8409-ba625d488dc2" title="Permalink to this equation"></a></span>\[\begin{align}
 {\bf e}_{z} = \dfrac{{\bf v}_1 \times {\bf v}_2}{\left|{\bf v}_1 \times {\bf v}_2 \right|}
 \end{align}\]</div>
 <p>を定義する．このようにして定義した<span class="math notranslate nohighlight">\({\bf e}_{z}\)</span>と注目している分子の分子軸ベクトル<span class="math notranslate nohighlight">\({\bf u}\)</span>のなす角によって配向を定義することで，配向分布<span class="math notranslate nohighlight">\(P\left(\chi\right)\)</span>の定義・計算が可能である．</p>
@@ -2776,8 +2776,8 @@ P\left(\chi\right) = C\Braket{\delta\left(\chi - \cos \theta\right)},
 <p><code class="docutils literal notranslate"><span class="pre">-judgeup</span> <span class="pre">coord</span></code>の場合: <code class="docutils literal notranslate"><span class="pre">-center_selid</span></code>で指定した分子の重心の<span class="math notranslate nohighlight">\(z\)</span>座標を<span class="math notranslate nohighlight">\(z_{\mathrm{c}}\)</span>, <code class="docutils literal notranslate"><span class="pre">-bottom_selid</span></code>と<code class="docutils literal notranslate"><span class="pre">-head_selid</span></code>で指定された部位の重心の<span class="math notranslate nohighlight">\(z\)</span>座標をそれぞれ<span class="math notranslate nohighlight">\(z_{\mathrm{B}}\)</span>, <span class="math notranslate nohighlight">\(z_{\mathrm{H}}\)</span>とすると，</p>
 </li>
 </ul>
-<div class="amsmath math notranslate nohighlight" id="equation-2f7d3c68-db00-407f-9937-033cc5d34b32">
-<span class="eqno">(46)<a class="headerlink" href="#equation-2f7d3c68-db00-407f-9937-033cc5d34b32" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-d8574727-90b2-491d-b19d-059d773e88f5">
+<span class="eqno">(46)<a class="headerlink" href="#equation-d8574727-90b2-491d-b19d-059d773e88f5" title="Permalink to this equation"></a></span>\[\begin{align}
 {\bf e}_{z} = 
 \begin{cases}
 {\bf e}_{z}^{\prime}  &amp; \dfrac{z_{\mathrm{H}}+z_{\mathrm{B}}}{2} &gt; 0\\[.2cm]
@@ -2862,15 +2862,15 @@ P\left(\chi\right) = C\Braket{\delta\left(\chi - \cos \theta\right)},
 <h2>クラスターサイズ(cluster_size)<a class="headerlink" href="#cluster-size" title="Link to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">cluster_size</span></code> (<code class="docutils literal notranslate"><span class="pre">cls</span></code>)は，系内に含まれるクラスターのサイズ分布を計算する．
 分子<span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(j\)</span>の位置をそれぞれ<span class="math notranslate nohighlight">\({\bf r}_{i}\)</span>, <span class="math notranslate nohighlight">\({\bf r}_{j}\)</span>, そしてカットオフ距離を<span class="math notranslate nohighlight">\(r_{\mathrm{cut}}\)</span>として，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-b87895bf-7096-4b96-80b9-3930dacf4e48">
-<span class="eqno">(47)<a class="headerlink" href="#equation-b87895bf-7096-4b96-80b9-3930dacf4e48" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-94600fcc-29d9-4e0c-b6a6-f2e13164ccc1">
+<span class="eqno">(47)<a class="headerlink" href="#equation-94600fcc-29d9-4e0c-b6a6-f2e13164ccc1" title="Permalink to this equation"></a></span>\[\begin{align}
  \left|{\bf r}_{i} - {\bf r}_{j}\right| \leq r_{\mathrm{cut}} \label{clsrcut}
 \end{align}\]</div>
 <p>を満たすとき，分子<span class="math notranslate nohighlight">\(i\)</span>と<span class="math notranslate nohighlight">\(j\)</span>は同じクラスターに属していると定義する．
 クラスターに属する分子の数<span class="math notranslate nohighlight">\(n\)</span>がクラスターのサイズである．
 クラスターのサイズ分布関数<span class="math notranslate nohighlight">\(P\left(n\right)\)</span>を，次式に示す規格化条件を満たすものとして定義する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-d36a8c5f-3776-4d8f-bf0e-6db70fbf64b6">
-<span class="eqno">(48)<a class="headerlink" href="#equation-d36a8c5f-3776-4d8f-bf0e-6db70fbf64b6" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-98f266bf-6897-48ae-9e1a-425a4a05e061">
+<span class="eqno">(48)<a class="headerlink" href="#equation-98f266bf-6897-48ae-9e1a-425a4a05e061" title="Permalink to this equation"></a></span>\[\begin{align}
 \sum_{n=1}^{N_{\mathrm{tot}}} P\left(n\right) = 1 
 \end{align}\]</div>
 <p>ここで，<span class="math notranslate nohighlight">\(N_{\mathrm{tot}}\)</span>は系内に含まれる注目分子の数である．
@@ -2959,8 +2959,8 @@ P\left(\chi\right) = C\Braket{\delta\left(\chi - \cos \theta\right)},
 </section>
 </section>
 </section>
-<section id="free-volume">
-<h2>自由体積プロファイル(free_volume)<a class="headerlink" href="#free-volume" title="Link to this heading"></a></h2>
+<section id="free-volume-fvol">
+<h2>自由体積プロファイル(<code class="docutils literal notranslate"><span class="pre">free_volume</span></code>, <code class="docutils literal notranslate"><span class="pre">fvol</span></code>)<a class="headerlink" href="#free-volume-fvol" title="Link to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">free_volume</span></code>は，ユーザーが指定した座標軸に沿って，自由体積(free volume)の存在割合のプロファイルを計算する．
 自由体積とは，<code class="docutils literal notranslate"><span class="pre">target_selid</span></code>で指定した原子が存在しない領域として定義される．
 原子のサイズはLennard-Jonesパラメータを用いて見積もられ，
