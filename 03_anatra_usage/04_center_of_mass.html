@@ -66,7 +66,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">重心解析・平均二乗変位(center_of_mass, com)</li>
+      <li class="breadcrumb-item active">重心解析・平均二乗変位(<code class="docutils literal notranslate"><span class="pre">center_of_mass</span></code>, <code class="docutils literal notranslate"><span class="pre">com</span></code>)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/03_anatra_usage/04_center_of_mass.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,7 +77,7 @@
            <div itemprop="articleBody">
              
   <section id="center-of-mass-com">
-<h1>重心解析・平均二乗変位(center_of_mass, com)<a class="headerlink" href="#center-of-mass-com" title="Link to this heading"></a></h1>
+<h1>重心解析・平均二乗変位(<code class="docutils literal notranslate"><span class="pre">center_of_mass</span></code>, <code class="docutils literal notranslate"><span class="pre">com</span></code>)<a class="headerlink" href="#center-of-mass-com" title="Link to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">center_of_mass</span></code> (<code class="docutils literal notranslate"><span class="pre">com</span></code>)は分子の重心の時間変化や平均二乗変位(Mean square displacement, MSD)
 を求めるプログラムである．
 また，脂質膜内部での分子の2次元的拡散(側方拡散)に対応するため，
@@ -89,36 +89,36 @@
 <p>平均二乗変位(MSD) <span class="math notranslate nohighlight">\(\chi(t)\)</span>の定義を導入すると同時に，
 それを求める意義について，拡散方程式に基づいて述べる．</p>
 <p>分子の時刻<span class="math notranslate nohighlight">\(t\)</span>での位置を<span class="math notranslate nohighlight">\({\bf r}(t)\)</span>とすると，MSDは次式で定義される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-58835ae7-1e5b-41dc-8efb-d1286490ffb8">
-<span class="eqno">()<a class="headerlink" href="#equation-58835ae7-1e5b-41dc-8efb-d1286490ffb8" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-2b17d018-3c61-4036-a9ec-47104c5a06e7">
+<span class="eqno">()<a class="headerlink" href="#equation-2b17d018-3c61-4036-a9ec-47104c5a06e7" title="Permalink to this equation"></a></span>\[\begin{align}
 \chi\left(t\right)  =\braket{\left|{\bf r}\left(t\right)-{\bf r}\left(0\right)\right|^{2}}.
 \end{align}\]</div>
 <p>つまり<span class="math notranslate nohighlight">\(\chi(t)\)</span>は，時間が<span class="math notranslate nohighlight">\(t\)</span>だけたった後における分子の移動距離の2乗平均を表す．MSDが拡散方程式に基づくと，どのように表されるのかを次に考えてみる．
 分子の確率密度場を<span class="math notranslate nohighlight">\(\rho({\bf r},t)\)</span>，拡散係数を<span class="math notranslate nohighlight">\(D\)</span>とすると，拡散方程式は次式で表される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-4511f8a0-f6e5-46ff-997f-0d31bc1080d6">
-<span class="eqno">()<a class="headerlink" href="#equation-4511f8a0-f6e5-46ff-997f-0d31bc1080d6" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-e349caca-3bfa-47bf-98c1-428e47e6974b">
+<span class="eqno">()<a class="headerlink" href="#equation-e349caca-3bfa-47bf-98c1-428e47e6974b" title="Permalink to this equation"></a></span>\[\begin{align}
 \dfrac{\partial}{\partial t}\rho\left({\bf r},t\right) =D\nabla^{2}\rho\left({\bf r},t\right).
 \end{align}\]</div>
 <p>時刻<span class="math notranslate nohighlight">\(t=0\)</span>で分子は位置<span class="math notranslate nohighlight">\({\bf 0}\)</span>に存在していたとすると，初期条件は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-752eb47e-e2b4-42d8-9109-3d1b7de7b12b">
-<span class="eqno">()<a class="headerlink" href="#equation-752eb47e-e2b4-42d8-9109-3d1b7de7b12b" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-8b551a3e-867f-4454-9a53-0fabb32d58ae">
+<span class="eqno">()<a class="headerlink" href="#equation-8b551a3e-867f-4454-9a53-0fabb32d58ae" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho\left({\bf r},t=0\right) &amp; =\delta\left({\bf r}\right),
 \end{align}\]</div>
 <p>となる．この条件の下，拡散方程式を解くと，次式が得られる．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-1b69f2fb-deaf-4465-9e6f-e3a31b8516a6">
-<span class="eqno">()<a class="headerlink" href="#equation-1b69f2fb-deaf-4465-9e6f-e3a31b8516a6" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-09482cdc-8f54-4616-bc71-68373c07be3d">
+<span class="eqno">()<a class="headerlink" href="#equation-09482cdc-8f54-4616-bc71-68373c07be3d" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho\left({\bf r},t\right) =\dfrac{1}{\left(4\pi Dt\right)^{3/2}}\exp\left[-\dfrac{\left|{\bf r}\right|^{2}}{4Dt}\right].
 \end{align}\]</div>
 <p>この解を用いると，MSDは</p>
-<div class="amsmath math notranslate nohighlight" id="equation-cd307256-5110-4965-9907-4e28ef26ab1d">
-<span class="eqno">()<a class="headerlink" href="#equation-cd307256-5110-4965-9907-4e28ef26ab1d" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-a2ba9831-8a51-451e-a6ec-c345ee5e46fe">
+<span class="eqno">()<a class="headerlink" href="#equation-a2ba9831-8a51-451e-a6ec-c345ee5e46fe" title="Permalink to this equation"></a></span>\[\begin{align}
 \chi\left(t\right) &amp; =\int d{\bf r}\,\left|{\bf r}\right|^{2}\rho\left({\bf r},t\right) \\
                    &amp; = 6Dt,
 \end{align}\]</div>
 <p>と表される．つまり，MSDは傾き<span class="math notranslate nohighlight">\(6D\)</span>で時間に比例して増加していくことになる．
 ただし，拡散方程式は長時間極限において成り立つ関係式なので，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-c15552ff-ede1-42d7-895b-ae92cff3530e">
-<span class="eqno">()<a class="headerlink" href="#equation-c15552ff-ede1-42d7-895b-ae92cff3530e" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-551f63e8-98f1-49e4-aaae-a261f7430113">
+<span class="eqno">()<a class="headerlink" href="#equation-551f63e8-98f1-49e4-aaae-a261f7430113" title="Permalink to this equation"></a></span>\[\begin{align}
 D &amp; =\dfrac{1}{6}\lim_{t\to\infty}\dfrac{\braket{\left|{\bf r}\left(t\right)-{\bf r}\left(0\right)\right|^{2}}}{t},
 \end{align}\]</div>
 <p>とすべきである．上式はEinsteinの関係式と呼ばれる．
@@ -231,8 +231,8 @@ D &amp; =\dfrac{1}{6}\lim_{t\to\infty}\dfrac{\braket{\left|{\bf r}\left(t\right)
 <li><p><strong>-t_sparse &lt;MSDを出力するときの時間刻み&gt;</strong></p>
 <p>MSDを出力するときの時間刻みを指定する．
 例えば，<code class="docutils literal notranslate"><span class="pre">-dt</span> <span class="pre">0.1</span></code> (<span class="math notranslate nohighlight">\(=\delta t\)</span>), <code class="docutils literal notranslate"><span class="pre">-t_sparse</span> <span class="pre">1</span></code> (=<span class="math notranslate nohighlight">\(\Delta t\)</span>)のとき，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-7c565f2e-f6e9-47f3-9782-484e1e16c0b1">
-<span class="eqno">()<a class="headerlink" href="#equation-7c565f2e-f6e9-47f3-9782-484e1e16c0b1" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-0e92a6c1-5bc3-441d-a9df-cd8b309e2deb">
+<span class="eqno">()<a class="headerlink" href="#equation-0e92a6c1-5bc3-441d-a9df-cd8b309e2deb" title="Permalink to this equation"></a></span>\[\begin{align}
    \Delta T = \mathrm{nint}\left(\dfrac{\Delta t}{\delta t}\right) \delta t
 \end{align}  \]</div>
 <p>の時間刻みでMSD (ANGSTROM<span class="math notranslate nohighlight">\(^{2}\)</span>)が計算される．</p>

@@ -66,7 +66,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">平均力ポテンシャル(potential_of_mean_force, pmf)</li>
+      <li class="breadcrumb-item active">平均力ポテンシャル(<code class="docutils literal notranslate"><span class="pre">potential_of_mean_force</span></code>, <code class="docutils literal notranslate"><span class="pre">pmf</span></code>)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/05_fanatra_usage/03_potential_of_mean_force.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,7 +77,7 @@
            <div itemprop="articleBody">
              
   <section id="potential-of-mean-force-pmf">
-<h1>平均力ポテンシャル(potential_of_mean_force, pmf)<a class="headerlink" href="#potential-of-mean-force-pmf" title="Link to this heading"></a></h1>
+<h1>平均力ポテンシャル(<code class="docutils literal notranslate"><span class="pre">potential_of_mean_force</span></code>, <code class="docutils literal notranslate"><span class="pre">pmf</span></code>)<a class="headerlink" href="#potential-of-mean-force-pmf" title="Link to this heading"></a></h1>
 <p>この解析モードでは，
 反応座標に対する時系列データ<span class="math notranslate nohighlight">\(\bm{\xi}\left(t\right)\)</span>から，
 反応座標<span class="math notranslate nohighlight">\(\bm{\zeta}\)</span>に沿った自由エネルギープロファイル<span class="math notranslate nohighlight">\(W\left(\bm{\zeta}\right)\)</span>を計算する．
@@ -86,36 +86,36 @@
 <h2>理論背景<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p>系の配置を<span class="math notranslate nohighlight">\({\bf X}\)</span>，そしてポテンシャルを<span class="math notranslate nohighlight">\(U\left({\bf X}\right)\)</span>とする．
 このとき，配置積分<span class="math notranslate nohighlight">\(Z\)</span>は逆温度を<span class="math notranslate nohighlight">\(\beta\)</span>として</p>
-<div class="amsmath math notranslate nohighlight" id="equation-4659912f-93b9-45dc-addb-19e3659c64ea">
-<span class="eqno">()<a class="headerlink" href="#equation-4659912f-93b9-45dc-addb-19e3659c64ea" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-e40734da-fe56-4cb6-bd34-83c8a8ba3e12">
+<span class="eqno">()<a class="headerlink" href="#equation-e40734da-fe56-4cb6-bd34-83c8a8ba3e12" title="Permalink to this equation"></a></span>\[\begin{align}
 Z &amp; =\int d{\bf X}\,\exp\left(-\beta U\left({\bf X}\right)\right)
 \end{align}\]</div>
 <p>で与えられる．
 同様に，系が反応座標空間(<span class="math notranslate nohighlight">\(\bm{\zeta}\left({\bf X}\right)\)</span>)上の
 微小区間<span class="math notranslate nohighlight">\(\bm{\zeta} - \bm{\zeta}+\Delta \bm{\zeta}\)</span>にトラップされている状態に対応する分配関数は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f16cfa11-9587-46af-a52e-99c4e7bb8b96">
-<span class="eqno">()<a class="headerlink" href="#equation-f16cfa11-9587-46af-a52e-99c4e7bb8b96" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-630ee0e8-f013-4e27-b3db-1c2fd5255334">
+<span class="eqno">()<a class="headerlink" href="#equation-630ee0e8-f013-4e27-b3db-1c2fd5255334" title="Permalink to this equation"></a></span>\[\begin{align}
 Z\left(\bm{\zeta}\right) &amp; =\Delta\bm{\zeta}\int d{\bf X}\,\delta\left(\bm{\zeta}-\bm{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
 \end{align}\]</div>
 <p>である．<span class="math notranslate nohighlight">\(\bm{\zeta}\)</span>に対する確率密度を</p>
-<div class="amsmath math notranslate nohighlight" id="equation-bf52f7b7-472c-4dfc-8965-e254f8c999ee">
-<span class="eqno">()<a class="headerlink" href="#equation-bf52f7b7-472c-4dfc-8965-e254f8c999ee" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-4411d3f7-1b14-4e57-8c18-50df8b1676ed">
+<span class="eqno">()<a class="headerlink" href="#equation-4411d3f7-1b14-4e57-8c18-50df8b1676ed" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho\left(\bm{\zeta}\right) &amp; = \Braket{\delta\left(\bm{\zeta} - \bm{\xi}\left({\bf X}\right)\right)} = \dfrac{1}{Z}\int d{\bf X}\,\delta\left(\bm{\zeta}-\bm{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
 \end{align}\]</div>
 <p>と定義すると，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-609128ae-1ae5-4ca4-908b-16ca63ff51e4">
-<span class="eqno">()<a class="headerlink" href="#equation-609128ae-1ae5-4ca4-908b-16ca63ff51e4" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-3a4bc7be-341e-466d-aa48-cffb242ac9ea">
+<span class="eqno">()<a class="headerlink" href="#equation-3a4bc7be-341e-466d-aa48-cffb242ac9ea" title="Permalink to this equation"></a></span>\[\begin{align}
 \dfrac{Z\left(\bm{\zeta}\right)}{Z} &amp; =\rho\left(\bm{\zeta}\right)\Delta\bm{\zeta}
 \end{align}\]</div>
 <p>が成り立つ．したがって，系が領域<span class="math notranslate nohighlight">\(\bm{\zeta}-\bm{\zeta} + \Delta \bm{\zeta}\)</span>に制限されている状態と制限されていない状態の自由エネルギー差<span class="math notranslate nohighlight">\(\Delta F\left(\bm{\zeta}\right)\)</span>は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-904db15a-4ec6-46bc-956e-e64e3b11a3e7">
-<span class="eqno">()<a class="headerlink" href="#equation-904db15a-4ec6-46bc-956e-e64e3b11a3e7" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-a8bb1fc8-79bc-4023-88a2-5c08fd565905">
+<span class="eqno">()<a class="headerlink" href="#equation-a8bb1fc8-79bc-4023-88a2-5c08fd565905" title="Permalink to this equation"></a></span>\[\begin{align}
 \Delta F\left(\bm{\zeta}\right) &amp; =-\dfrac{1}{\beta}\log\dfrac{Z\left(\bm{\zeta}\right)}{Z} 
  = -\dfrac{1}{\beta}\log \left(\rho\left(\bm{\zeta}\right)\Delta \bm{\zeta}\right)
 \end{align}\]</div>
 <p>と表せる．<span class="math notranslate nohighlight">\(\bm{\zeta}_{0}\)</span>を基準にとった自由エネルギーは</p>
-<div class="amsmath math notranslate nohighlight" id="equation-45ed1601-8cae-48d0-8c61-9504e8af8792">
-<span class="eqno">()<a class="headerlink" href="#equation-45ed1601-8cae-48d0-8c61-9504e8af8792" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-0e5c36d5-6f3c-4cf4-95a6-ab1ccef683b6">
+<span class="eqno">()<a class="headerlink" href="#equation-0e5c36d5-6f3c-4cf4-95a6-ab1ccef683b6" title="Permalink to this equation"></a></span>\[\begin{align}
 W\left(\bm{\zeta}\right) &amp; =\Delta F\left(\bm{\zeta}\right)-\Delta F\left(\bm{\zeta}_{0}\right)\notag\\
  &amp; =-\dfrac{1}{\beta}\log\dfrac{\rho\left(\bm{\zeta}\right)}{\rho\left(\bm{\zeta}_{0}\right)}
  \label{pmf:pmf}
@@ -124,14 +124,14 @@ W\left(\bm{\zeta}\right) &amp; =\Delta F\left(\bm{\zeta}\right)-\Delta F\left(\b
 多くの場合，<span class="math notranslate nohighlight">\(W\left(\bm{\zeta}\right)\)</span>の最小値が0となるようにとる．
 <span class="math notranslate nohighlight">\(W\left(\bm{\zeta}\right)\)</span>を計算することで，<span class="math notranslate nohighlight">\(\bm{\zeta}\)</span>に応じた熱力学的な安定性の変化を
 議論することが可能となる．式EQREF(pmf:pmfEQREF)は，<span class="math notranslate nohighlight">\(\bm{\zeta}\)</span>に依存する部分と定数<span class="math notranslate nohighlight">\(C\)</span>に分けて</p>
-<div class="amsmath math notranslate nohighlight" id="equation-b8cfba51-c817-4b45-8f47-2cc18119cd66">
-<span class="eqno">()<a class="headerlink" href="#equation-b8cfba51-c817-4b45-8f47-2cc18119cd66" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-c914213e-5613-49c8-b90a-95c39865401c">
+<span class="eqno">()<a class="headerlink" href="#equation-c914213e-5613-49c8-b90a-95c39865401c" title="Permalink to this equation"></a></span>\[\begin{align}
 W\left(\bm{\zeta}\right) &amp; =-\dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\bm{\zeta}-\bm{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)+C
 \label{pmf:pmf2}
 \end{align}\]</div>
 <p>と書き直すこともできる．ただし，<span class="math notranslate nohighlight">\(C\)</span>は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-c640e74b-b5c4-48b0-8744-8a4b07f0abad">
-<span class="eqno">()<a class="headerlink" href="#equation-c640e74b-b5c4-48b0-8744-8a4b07f0abad" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-77647dc8-530a-4ddf-ae26-134cd1b34b84">
+<span class="eqno">()<a class="headerlink" href="#equation-77647dc8-530a-4ddf-ae26-134cd1b34b84" title="Permalink to this equation"></a></span>\[\begin{align}
 C &amp; = \dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\bm{\zeta}_{0}-\bm{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)
 \end{align}\]</div>
 <p>で与えられる．</p>
@@ -345,8 +345,8 @@ C &amp; = \dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\bm{\zeta}_{0}-\bm{\xi}
 </ul>
 <p>各CV方向のグリッドの原点を指定する．</p>
 <p><span class="math notranslate nohighlight">\(k\)</span>番目のCVについて，原点を<span class="math notranslate nohighlight">\(x_k^{(0)}\)</span>，グリッド間隔を<span class="math notranslate nohighlight">\(\Delta_k\)</span>とすると，<span class="math notranslate nohighlight">\(i\)</span>番目のグリッド位置は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-ee849a8e-0f2b-476f-9ade-b1806ec49381">
-<span class="eqno">()<a class="headerlink" href="#equation-ee849a8e-0f2b-476f-9ade-b1806ec49381" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-4f980269-218f-4953-8ee1-c0b7c9c67b80">
+<span class="eqno">()<a class="headerlink" href="#equation-4f980269-218f-4953-8ee1-c0b7c9c67b80" title="Permalink to this equation"></a></span>\[\begin{align}
 x_k^{(i)} = x_k^{(0)} + (i-1)\Delta_k
 \end{align}\]</div>
 <p>で与えられる．</p>

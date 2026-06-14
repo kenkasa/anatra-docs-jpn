@@ -66,7 +66,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">特定の方向<span class="math notranslate nohighlight">\(z\)</span>に対する分子の配向(z_orient, zori)</li>
+      <li class="breadcrumb-item active">特定の方向<span class="math notranslate nohighlight">\(z\)</span>に対する分子の配向(<code class="docutils literal notranslate"><span class="pre">z_orient</span></code>, <code class="docutils literal notranslate"><span class="pre">zori</span></code>)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/03_anatra_usage/11_z_orient.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,48 +77,48 @@
            <div itemprop="articleBody">
              
   <section id="z-z-orient-zori">
-<h1>特定の方向<span class="math notranslate nohighlight">\(z\)</span>に対する分子の配向(z_orient, zori)<a class="headerlink" href="#z-z-orient-zori" title="Link to this heading"></a></h1>
+<h1>特定の方向<span class="math notranslate nohighlight">\(z\)</span>に対する分子の配向(<code class="docutils literal notranslate"><span class="pre">z_orient</span></code>, <code class="docutils literal notranslate"><span class="pre">zori</span></code>)<a class="headerlink" href="#z-z-orient-zori" title="Link to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">z_orient</span></code> (<code class="docutils literal notranslate"><span class="pre">zori</span></code>)は，
 特定の方向(<span class="math notranslate nohighlight">\(z\)</span>)を基準として．
 分子の配向分布を計算する．
 分子内にある2つの部位bottom, headを定義し，それぞれの重心を<span class="math notranslate nohighlight">\({\bf R}_{\mathrm{B}}\)</span>, <span class="math notranslate nohighlight">\({\bf R}_{\mathrm{H}}\)</span>とおく．そして，分子軸<span class="math notranslate nohighlight">\({\bf u}\)</span>を</p>
-<div class="amsmath math notranslate nohighlight" id="equation-1898e03b-7618-4411-8b55-f8f0964a2146">
-<span class="eqno">()<a class="headerlink" href="#equation-1898e03b-7618-4411-8b55-f8f0964a2146" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-24b577c2-3c4a-46a7-820d-f29116dfcef2">
+<span class="eqno">()<a class="headerlink" href="#equation-24b577c2-3c4a-46a7-820d-f29116dfcef2" title="Permalink to this equation"></a></span>\[\begin{align}
 {\bf u} = {\bf R}_{\mathrm{H}} - {\bf R}_{\mathrm{B}}, \label{uvec}
 \end{align}\]</div>
 <p>と定義する．<span class="math notranslate nohighlight">\(z\)</span>軸(単位ベクトル<span class="math notranslate nohighlight">\({\bf e}_{z}\)</span>)と<span class="math notranslate nohighlight">\({\bf u}\)</span> (単位ベクトル<span class="math notranslate nohighlight">\({\bf e}_{\mathrm{u}}\)</span>)のなす角を<span class="math notranslate nohighlight">\(\theta\)</span>とすると，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-76ab0dec-6e58-4fd9-953e-aa1d14aeec39">
-<span class="eqno">()<a class="headerlink" href="#equation-76ab0dec-6e58-4fd9-953e-aa1d14aeec39" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-cbfa978a-c47a-435c-aa44-8d6a0328b65e">
+<span class="eqno">()<a class="headerlink" href="#equation-cbfa978a-c47a-435c-aa44-8d6a0328b65e" title="Permalink to this equation"></a></span>\[\begin{align}
 \cos \theta = {\bf e}_{z} \cdot {\bf e}_{\mathrm{u}},
 \end{align}\]</div>
 <p>である．<span class="math notranslate nohighlight">\(\cos\theta\)</span>に対する分布関数を</p>
-<div class="amsmath math notranslate nohighlight" id="equation-9d3d4b91-d371-4acd-84e9-984654429fa4">
-<span class="eqno">()<a class="headerlink" href="#equation-9d3d4b91-d371-4acd-84e9-984654429fa4" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-1c4b3def-ffa7-44e9-890f-73f0690a0399">
+<span class="eqno">()<a class="headerlink" href="#equation-1c4b3def-ffa7-44e9-890f-73f0690a0399" title="Permalink to this equation"></a></span>\[\begin{align}
 P\left(\chi\right) = C\Braket{\delta\left(\chi - \cos \theta\right)},
 \end{align}\]</div>
 <p>とする．ただし，<span class="math notranslate nohighlight">\(C\)</span>は規格化定数であり，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-050ec72f-a82c-4eed-a2e4-170152cf7119">
-<span class="eqno">()<a class="headerlink" href="#equation-050ec72f-a82c-4eed-a2e4-170152cf7119" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-f3a4511f-b042-4134-a6eb-7d9a0576ad52">
+<span class="eqno">()<a class="headerlink" href="#equation-f3a4511f-b042-4134-a6eb-7d9a0576ad52" title="Permalink to this equation"></a></span>\[\begin{align}
 \int_{0}^{\pi}d\theta\,\sin\theta\,P\left(\chi \right) &amp; =1,
 \end{align}\]</div>
 <p>を満たすように設定する．
 上式は，<span class="math notranslate nohighlight">\(\theta\)</span>から<span class="math notranslate nohighlight">\(\chi = \cos\theta\)</span>への変数変換を考えることで，次式のように書き直せる．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-a81aec97-3463-4bf8-b441-a4c625120af1">
-<span class="eqno">()<a class="headerlink" href="#equation-a81aec97-3463-4bf8-b441-a4c625120af1" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-ad7b4bfa-3f7d-42fd-bae7-b0fcb39b7895">
+<span class="eqno">()<a class="headerlink" href="#equation-ad7b4bfa-3f7d-42fd-bae7-b0fcb39b7895" title="Permalink to this equation"></a></span>\[\begin{align}
 \int_{0}^{1}d\chi\,P\left(\chi\right) &amp; =1.
 \end{align}\]</div>
 <p><code class="docutils literal notranslate"><span class="pre">z_orient</span> <span class="pre">(zori)</span></code>は，上式を満たす<span class="math notranslate nohighlight">\(P\left(\chi\right) = P\left(\cos \theta\right)\)</span>を計算する．</p>
 <p>さらに，実験室座標系での<span class="math notranslate nohighlight">\(z\)</span>軸に加えて，
 特定の分子の向きによって定義されるベクトルを<span class="math notranslate nohighlight">\(z\)</span>方向に設定することも可能である．
 その分子の4つの部位の重心を<span class="math notranslate nohighlight">\({\bf x}_{\mathrm{B}_0}, {\bf x}_{\mathrm{H}_0}, {\bf x}_{\mathrm{B}_1}, {\bf x}_{\mathrm{H}_1}\)</span>として，ベクトル</p>
-<div class="amsmath math notranslate nohighlight" id="equation-7803f6c7-cc5f-4754-ac67-b7d772fe3ecd">
-<span class="eqno">()<a class="headerlink" href="#equation-7803f6c7-cc5f-4754-ac67-b7d772fe3ecd" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-035eadae-75dd-4e3e-9905-79e06bcf5451">
+<span class="eqno">()<a class="headerlink" href="#equation-035eadae-75dd-4e3e-9905-79e06bcf5451" title="Permalink to this equation"></a></span>\[\begin{align}
 {\bf v}_{0} &amp;= {\bf x}_{\mathrm{H}_0} - {\bf x}_{\mathrm{B}_0}  \label{vec0} \\
 {\bf v}_{1} &amp;= {\bf x}_{\mathrm{H}_1} - {\bf x}_{\mathrm{B}_1} \label{vec1} 
 \end{align}\]</div>
 <p>を用意することで，<span class="math notranslate nohighlight">\(z\)</span>方向の単位ベクトル</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f1670919-e326-4aa0-bac7-87af56e8e047">
-<span class="eqno">()<a class="headerlink" href="#equation-f1670919-e326-4aa0-bac7-87af56e8e047" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-9fc7a870-889d-4fdc-87cf-747f8a38a757">
+<span class="eqno">()<a class="headerlink" href="#equation-9fc7a870-889d-4fdc-87cf-747f8a38a757" title="Permalink to this equation"></a></span>\[\begin{align}
 {\bf e}_{z} = \dfrac{{\bf v}_1 \times {\bf v}_2}{\left|{\bf v}_1 \times {\bf v}_2 \right|}
 \end{align}\]</div>
 <p>を定義する．このようにして定義した<span class="math notranslate nohighlight">\({\bf e}_{z}\)</span>と注目している分子の分子軸ベクトル<span class="math notranslate nohighlight">\({\bf u}\)</span>のなす角によって配向を定義することで，配向分布<span class="math notranslate nohighlight">\(P\left(\chi\right)\)</span>の定義・計算が可能である．</p>
@@ -251,8 +251,8 @@ P\left(\chi\right) = C\Braket{\delta\left(\chi - \cos \theta\right)},
 <p><code class="docutils literal notranslate"><span class="pre">-judgeup</span> <span class="pre">coord</span></code>の場合: <code class="docutils literal notranslate"><span class="pre">-center_selid</span></code>で指定した分子の重心の<span class="math notranslate nohighlight">\(z\)</span>座標を<span class="math notranslate nohighlight">\(z_{\mathrm{c}}\)</span>, <code class="docutils literal notranslate"><span class="pre">-bottom_selid</span></code>と<code class="docutils literal notranslate"><span class="pre">-head_selid</span></code>で指定された部位の重心の<span class="math notranslate nohighlight">\(z\)</span>座標をそれぞれ<span class="math notranslate nohighlight">\(z_{\mathrm{B}}\)</span>, <span class="math notranslate nohighlight">\(z_{\mathrm{H}}\)</span>とすると，</p>
 </li>
 </ul>
-<div class="amsmath math notranslate nohighlight" id="equation-633a3ead-3df4-4a93-a7dd-a08279946a83">
-<span class="eqno">()<a class="headerlink" href="#equation-633a3ead-3df4-4a93-a7dd-a08279946a83" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-41b0d153-e125-42bf-b703-81a5810eb2cc">
+<span class="eqno">()<a class="headerlink" href="#equation-41b0d153-e125-42bf-b703-81a5810eb2cc" title="Permalink to this equation"></a></span>\[\begin{align}
 {\bf e}_{z} = 
 \begin{cases}
 {\bf e}_{z}^{\prime}  &amp; \dfrac{z_{\mathrm{H}}+z_{\mathrm{B}}}{2} &gt; 0\\[.2cm]

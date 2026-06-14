@@ -66,7 +66,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">相互作用エネルギー(interaction_energy, ene)</li>
+      <li class="breadcrumb-item active">相互作用エネルギー(<code class="docutils literal notranslate"><span class="pre">interaction_energy</span></code>, <code class="docutils literal notranslate"><span class="pre">ene</span></code>)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/03_anatra_usage/08_interaction_energy.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,14 +77,14 @@
            <div itemprop="articleBody">
              
   <section id="interaction-energy-ene">
-<h1>相互作用エネルギー(interaction_energy, ene)<a class="headerlink" href="#interaction-energy-ene" title="Link to this heading"></a></h1>
+<h1>相互作用エネルギー(<code class="docutils literal notranslate"><span class="pre">interaction_energy</span></code>, <code class="docutils literal notranslate"><span class="pre">ene</span></code>)<a class="headerlink" href="#interaction-energy-ene" title="Link to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">interaction_energy</span></code> (<code class="docutils literal notranslate"><span class="pre">ene</span></code>)では選択した分子やその集団，もしくは特定部位等の間に働く相互作用エネルギーを計算できる．<br />
 現在<strong>anatra</strong>では以下の三種類の相互作用が計算可能である．</p>
 <ul>
 <li><p><strong>静電相互作用</strong><br />
 分子Aと分子Bの間に働く静電相互作用<span class="math notranslate nohighlight">\(U_{\mathrm{elec}}\)</span>について，2通りのスキームを実装している．一つはBare相互作用であり，<span class="math notranslate nohighlight">\(i\)</span>と<span class="math notranslate nohighlight">\(j\)</span>はそれぞれ分子AとBの原子インデックス番号とするとA-B間の相互作用は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-090baaea-c051-4c24-96dc-866d002ef776">
-<span class="eqno">()<a class="headerlink" href="#equation-090baaea-c051-4c24-96dc-866d002ef776" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-51e7a57e-7d38-44e8-81b0-7283dc9024d4">
+<span class="eqno">()<a class="headerlink" href="#equation-51e7a57e-7d38-44e8-81b0-7283dc9024d4" title="Permalink to this equation"></a></span>\[\begin{align}
 U_{\mathrm{elec}}=\sum_{i \in \mathrm{A}}\sum_{j \in \mathrm{B}}\dfrac{q_{i}q_{j}}{r_{ij}}, \label{elec}
 \end{align}\]</div>
 <p>で表される．
@@ -92,16 +92,16 @@ U_{\mathrm{elec}}=\sum_{i \in \mathrm{A}}\sum_{j \in \mathrm{B}}\dfrac{q_{i}q_{j
 </li>
 <li><p><strong>Lennard-Jones (LJ)相互作用</strong><br />
 van der Waals相互作用を表現するための経験的なモデルであるLennard-Jones相互作用は，以下の式で定義される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-67181783-2b78-4e02-a6c2-af0b813474de">
-<span class="eqno">()<a class="headerlink" href="#equation-67181783-2b78-4e02-a6c2-af0b813474de" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-5f812e0b-8d12-4a1a-af36-ab74cbd27091">
+<span class="eqno">()<a class="headerlink" href="#equation-5f812e0b-8d12-4a1a-af36-ab74cbd27091" title="Permalink to this equation"></a></span>\[\begin{align}
 U_{\mathrm{LJ}}=\sum_{i \in \mathrm{A}}\sum_{i \in \mathrm{B}}4\epsilon_{ij} \left\{ \left(\dfrac{\sigma_{ij}}{r_{ij}}\right)^{12}-\left(\dfrac{\sigma_{ij}}{r_{ij}}\right)^{6}\right\}．\label{LJ}
 \end{align}\]</div>
 <p>この式中の<span class="math notranslate nohighlight">\(\epsilon_{ij}\)</span>と<span class="math notranslate nohighlight">\(\sigma_{ij}\)</span>は分子A中の原子<span class="math notranslate nohighlight">\(i\)</span>と分子B中の原子<span class="math notranslate nohighlight">\(j\)</span>との間のLJパラメータである．</p>
 </li>
 <li><p><strong>Attractive LJ 相互作用</strong>
 Attractive LJ相互作用は，以下で定義される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-b4037227-2b07-4475-8ebf-44b245c6cc16">
-<span class="eqno">()<a class="headerlink" href="#equation-b4037227-2b07-4475-8ebf-44b245c6cc16" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-d2372764-36d2-46a7-bb4f-47468adf7d44">
+<span class="eqno">()<a class="headerlink" href="#equation-d2372764-36d2-46a7-bb4f-47468adf7d44" title="Permalink to this equation"></a></span>\[\begin{align}
 U_{\mathrm{attr}} &amp; =\sum_{i \in \mathrm{A}}\sum_{i \in \mathrm{B}} u_{\mathrm{attr},ij} , \label{Uattr} \\
 u_{\mathrm{attr}, i j} &amp;= \begin{cases}4 \epsilon_{i j}\left\{\left(\frac{\sigma_{i j}}{r_{i j}}\right)^{12}-\left(\frac{\sigma_{i j}}{r_{i j}}\right)^6\right\} &amp; r_{i j} \geq 2^{1 / 6} \sigma \\ -\epsilon_{i j} &amp; r_{i j}&lt;2^{1 / 6} \sigma .\end{cases}
 \end{align}\]</div>

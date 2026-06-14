@@ -66,7 +66,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">界面法線方向(<span class="math notranslate nohighlight">\(z\)</span>)に沿った分布関数(z_profile, zprof)</li>
+      <li class="breadcrumb-item active">界面法線方向(<span class="math notranslate nohighlight">\(z\)</span>)に沿った分布関数(<code class="docutils literal notranslate"><span class="pre">z_profile</span></code>, <code class="docutils literal notranslate"><span class="pre">zprof</span></code>)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/03_anatra_usage/10_z_profile.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,23 +77,23 @@
            <div itemprop="articleBody">
              
   <section id="z-z-profile-zprof">
-<h1>界面法線方向(<span class="math notranslate nohighlight">\(z\)</span>)に沿った分布関数(z_profile, zprof)<a class="headerlink" href="#z-z-profile-zprof" title="Link to this heading"></a></h1>
+<h1>界面法線方向(<span class="math notranslate nohighlight">\(z\)</span>)に沿った分布関数(<code class="docutils literal notranslate"><span class="pre">z_profile</span></code>, <code class="docutils literal notranslate"><span class="pre">zprof</span></code>)<a class="headerlink" href="#z-z-profile-zprof" title="Link to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">z_profile</span></code> (<code class="docutils literal notranslate"><span class="pre">zprof</span></code>)は，
 膜界面の法線方向(<span class="math notranslate nohighlight">\(z\)</span>)に沿った分布を計算する．
 分子<span class="math notranslate nohighlight">\(a\)</span>の<span class="math notranslate nohighlight">\(z\)</span>軸に沿った局所密度場を<span class="math notranslate nohighlight">\(\hat{\rho}_{a}\left(z\right)\)</span>と定義する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-7fa0c7df-422c-4b1b-8eae-ccec78ebf084">
-<span class="eqno">()<a class="headerlink" href="#equation-7fa0c7df-422c-4b1b-8eae-ccec78ebf084" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-1ef53cd4-ec70-487f-a4f5-ea391c8bf962">
+<span class="eqno">()<a class="headerlink" href="#equation-1ef53cd4-ec70-487f-a4f5-ea391c8bf962" title="Permalink to this equation"></a></span>\[\begin{align}
 \hat{\rho}_{a}\left(z\right) &amp; =\dfrac{1}{A_{xy}}\sum_{i=1}^{N_{\mathrm{a}}}\delta\left(z-z_{i}\right).
 \end{align}\]</div>
 <p>ここで，<span class="math notranslate nohighlight">\(A_{xy}\)</span>はシミュレーションセルの<span class="math notranslate nohighlight">\(xy\)</span>面の面積，<span class="math notranslate nohighlight">\(z_{i}\)</span>は<span class="math notranslate nohighlight">\(i\)</span>番目の分子の<span class="math notranslate nohighlight">\(z\)</span>座標である．
 これの平均をとったものが，分布関数である．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-5ae1d086-52a9-4c81-a37e-ca3787e5862b">
-<span class="eqno">()<a class="headerlink" href="#equation-5ae1d086-52a9-4c81-a37e-ca3787e5862b" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-722aef0f-e6ac-4dee-a3f5-6d96a408f328">
+<span class="eqno">()<a class="headerlink" href="#equation-722aef0f-e6ac-4dee-a3f5-6d96a408f328" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho_{a}\left(z\right) = \Braket{\hat{\rho}\left(z\right)}.
 \end{align}\]</div>
 <p>実験データと比較するために，電子密度分布<span class="math notranslate nohighlight">\(\rho^{e}_{a}\left(z\right)\)</span>を計算することも多い．その場合の局所密度場は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-08b5ce7c-4077-4359-ac30-07184ddaa299">
-<span class="eqno">()<a class="headerlink" href="#equation-08b5ce7c-4077-4359-ac30-07184ddaa299" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-99067933-8f64-4ca3-9002-6bfa1791f634">
+<span class="eqno">()<a class="headerlink" href="#equation-99067933-8f64-4ca3-9002-6bfa1791f634" title="Permalink to this equation"></a></span>\[\begin{align}
 \hat{\rho}^{e}_{a}\left(z\right) = \sum_{i=1}^{N_{a}}\sum_{\lambda=1}^{N_{\mathrm{s}}} q_{\lambda}\delta\left(z-z_{i,\lambda}\right),
 \end{align}\]</div>
 <p>で与えられる．ただし，<span class="math notranslate nohighlight">\(q_{\lambda}\)</span>は分子<span class="math notranslate nohighlight">\(a\)</span>内の<span class="math notranslate nohighlight">\(\lambda\)</span>番目の原子が持つ電子数，<span class="math notranslate nohighlight">\(z_{i,\lambda}\)</span>

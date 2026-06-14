@@ -66,7 +66,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">平均二乗偏差(rmsd)</li>
+      <li class="breadcrumb-item active">平均二乗偏差(<code class="docutils literal notranslate"><span class="pre">rmsd</span></code>)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/03_anatra_usage/07_rmsd.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,15 +77,15 @@
            <div itemprop="articleBody">
              
   <section id="rmsd">
-<h1>平均二乗偏差(rmsd)<a class="headerlink" href="#rmsd" title="Link to this heading"></a></h1>
+<h1>平均二乗偏差(<code class="docutils literal notranslate"><span class="pre">rmsd</span></code>)<a class="headerlink" href="#rmsd" title="Link to this heading"></a></h1>
 <section id="id1">
 <h2>理論背景<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p>ここでは，平均二乗偏差（Root-mean-square deviation, RMSD）の定義について解説する．RMSDは注目する分子やその特定部位について，MD計算中のある時刻での構造が，参照とする構造(参照構造)からどの程度ずれているかを定量的に評価するものである．
 例えばあるタンパク質について，結晶構造を参照構造として，平衡化過程で参照構造からどの程度構造のズレが生じ，また構造が緩和しているかを判別する際によく用いられる．</p>
 <p>原子<span class="math notranslate nohighlight">\(N_{\mathrm{sel}}\)</span>個からなる分子について，<span class="math notranslate nohighlight">\({\bf r}_{i}\)</span>を<span class="math notranslate nohighlight">\(i\)</span>番目の原子の座標，<span class="math notranslate nohighlight">\({\bf r} ^{\mathrm{ref}}\)</span>を参照構造中の原子の座標，<span class="math notranslate nohighlight">\({\bf r} (t)\)</span>を時刻<span class="math notranslate nohighlight">\(t\)</span>での座標とする．この時，
 平均二乗偏差<span class="math notranslate nohighlight">\(\chi\left(t\right)\)</span>は以下の式で定義される．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f34119db-6e42-4d88-ba9b-a1f4f4f07bab">
-<span class="eqno">()<a class="headerlink" href="#equation-f34119db-6e42-4d88-ba9b-a1f4f4f07bab" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-8a65cd3c-8b62-4b84-aa6e-471da774a593">
+<span class="eqno">()<a class="headerlink" href="#equation-8a65cd3c-8b62-4b84-aa6e-471da774a593" title="Permalink to this equation"></a></span>\[\begin{align}
 \chi\left(t\right) &amp; =\sqrt{\dfrac{1}{N_{\mathrm{sel}}}\sum_{i=1}^{N_{\mathrm{sel}}}\left|{\bf r}_{i}\left(t\right)-{\bf r}_{i}^{\mathrm{ref}}\right|^{2}}.
 \end{align}\]</div>
 </section>

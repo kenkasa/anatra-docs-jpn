@@ -66,7 +66,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">制限つき動径平均力ポテンシャル(restricted_radial, rrpmf)</li>
+      <li class="breadcrumb-item active">制限つき動径平均力ポテンシャル(<code class="docutils literal notranslate"><span class="pre">restricted_radial</span></code>, <code class="docutils literal notranslate"><span class="pre">rrpmf</span></code>)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/05_fanatra_usage/04_restricted_radial.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,7 +77,7 @@
            <div itemprop="articleBody">
              
   <section id="restricted-radial-rrpmf">
-<h1>制限つき動径平均力ポテンシャル(restricted_radial, rrpmf)<a class="headerlink" href="#restricted-radial-rrpmf" title="Link to this heading"></a></h1>
+<h1>制限つき動径平均力ポテンシャル(<code class="docutils literal notranslate"><span class="pre">restricted_radial</span></code>, <code class="docutils literal notranslate"><span class="pre">rrpmf</span></code>)<a class="headerlink" href="#restricted-radial-rrpmf" title="Link to this heading"></a></h1>
 <p>この解析モードでは，何らかの反応座標(集団座標)によって
 条件づけられた状態の動径方向に対する自由エネルギープロファイルを計算できる．
 また，このプロファイルから，ホスト分子とゲスト分子の結合に伴う自由エネルギー変化
@@ -87,22 +87,22 @@
 <p>系が配置<span class="math notranslate nohighlight">\({\bf X}\)</span>をとるときの
 ホスト–ゲスト分子間の距離，結合状態を規定する反応座標の値をそれぞれ<span class="math notranslate nohighlight">\(d\left({\bf X}\right)\)</span>, <span class="math notranslate nohighlight">\(\bm{\xi}\left({\bf X}\right)\)</span>とする．
 距離に対する平均力ポテンシャルを</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f624e7b8-9fb2-437c-b704-5d55d27e7dc8">
-<span class="eqno">()<a class="headerlink" href="#equation-f624e7b8-9fb2-437c-b704-5d55d27e7dc8" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-ad6751c5-6945-4124-a047-3eb8d2568086">
+<span class="eqno">()<a class="headerlink" href="#equation-ad6751c5-6945-4124-a047-3eb8d2568086" title="Permalink to this equation"></a></span>\[\begin{align}
 w\left(r\right) &amp; =-\dfrac{1}{\beta}\log\left[\int d{\bf X}\,\dfrac{\delta\left(r-d\left({\bf X}\right)\right)}{4\pi r^{2}}\exp\left(-\beta U\left({\bf X}\right)\right)\right]+C
 \end{align}\]</div>
 <p>と定義する．
 さらに，反応座標空間上の結合状態に対応する領域を<span class="math notranslate nohighlight">\(\bm{\Upsilon}\)</span>とし，次式に示す特性関数<span class="math notranslate nohighlight">\(\Theta\left(\bm{\xi}\right)\)</span>を導入する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-a4ecdc14-96c7-4309-921b-99b8460bc4a5">
-<span class="eqno">()<a class="headerlink" href="#equation-a4ecdc14-96c7-4309-921b-99b8460bc4a5" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-7579ac85-492f-4b2d-9b28-7b76c489da3f">
+<span class="eqno">()<a class="headerlink" href="#equation-7579ac85-492f-4b2d-9b28-7b76c489da3f" title="Permalink to this equation"></a></span>\[\begin{align}
 \Theta_{\mathrm{B}}\left(\bm{\xi}\right) &amp; =\begin{cases}
 1 &amp; \bm{\xi}\in\bm{\Upsilon}\\
 0 &amp; \bm{\xi}\notin\bm{\Upsilon}
 \end{cases}
 \end{align}\]</div>
 <p>この<span class="math notranslate nohighlight">\(\Theta\left(\bm{\xi}\right)\)</span>を用いれば，結合状態に属する配置に対する平均力ポテンシャルは</p>
-<div class="amsmath math notranslate nohighlight" id="equation-8ee9ce57-0b6d-4024-912b-a386af81e9e6">
-<span class="eqno">()<a class="headerlink" href="#equation-8ee9ce57-0b6d-4024-912b-a386af81e9e6" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-86d7a852-d9b0-47ec-9f22-020fb64fa0ca">
+<span class="eqno">()<a class="headerlink" href="#equation-86d7a852-d9b0-47ec-9f22-020fb64fa0ca" title="Permalink to this equation"></a></span>\[\begin{align}
 w_{\mathrm{B}}\left(r\right) &amp; =-\dfrac{1}{\beta}\log\left[\int d{\bf X}\,\dfrac{\delta\left(r-d\left({\bf X}\right)\right)}{4\pi r^{2}}\Theta_{\mathrm{B}}\left(\bm{\xi}\left({\bf X}\right)\right)\exp\left(-\beta U\left({\bf X}\right)\right)\right]+C
 \end{align}\]</div>
 <p>と表せる．<span class="math notranslate nohighlight">\(w\left(r\right)\)</span>と<span class="math notranslate nohighlight">\(w_{\mathrm{B}}\left(r\right)\)</span>に含まれる定数<span class="math notranslate nohighlight">\(C\)</span>は同一の値とし，
@@ -112,25 +112,25 @@ w_{\mathrm{B}}\left(r\right) &amp; =-\dfrac{1}{\beta}\log\left[\int d{\bf X}\,\d
 <span class="math notranslate nohighlight">\(r_{0}, r_{1}\)</span>の設定は，<span class="math notranslate nohighlight">\(w\left(r\right) = \Delta w\)</span>を満たしてさえいれば，任意に決めて良い．このことについては後で述べる．
 2分子が<span class="math notranslate nohighlight">\(r_{0}\leq r \leq r_{1}\)</span>の距離範囲に存在する状態Uと結合状態Bの
 存在確率比は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-e56dd25f-780e-4b04-93da-30b003974181">
-<span class="eqno">()<a class="headerlink" href="#equation-e56dd25f-780e-4b04-93da-30b003974181" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-b56bcde5-9120-44e8-8e4b-6f33d95c194a">
+<span class="eqno">()<a class="headerlink" href="#equation-b56bcde5-9120-44e8-8e4b-6f33d95c194a" title="Permalink to this equation"></a></span>\[\begin{align}
 \dfrac{{\displaystyle \int_{\bm{\Upsilon}}dr\,\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)}}{{\displaystyle \int_{r_{0}}^{r_{1}}dr\,\exp\left(-\beta w\left(r\right)\right)}}
 \end{align}\]</div>
 <p>であることから，UからBの変化に伴う自由エネルギー変化<span class="math notranslate nohighlight">\(\Delta G_{\mathrm{PMF}}\)</span>は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-acff8234-f040-4fda-bb41-628193fccf7c">
-<span class="eqno">()<a class="headerlink" href="#equation-acff8234-f040-4fda-bb41-628193fccf7c" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-f7a540e3-7acc-4bbc-8b58-8b0e0a6158f7">
+<span class="eqno">()<a class="headerlink" href="#equation-f7a540e3-7acc-4bbc-8b58-8b0e0a6158f7" title="Permalink to this equation"></a></span>\[\begin{align}
 \Delta G_{\mathrm{PMF}} &amp; =-\dfrac{1}{\beta}\log\dfrac{{\displaystyle \int_{\bm{\Upsilon}}dr\,4\pi r^{2}\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)}}{{\displaystyle \int_{r_{0}}^{r_{1}}dr\,4\pi r^{2}\exp\left(-\beta w\left(r\right)\right)}}
 \end{align}\]</div>
 <p>と表せる．
 分母に含まれる<span class="math notranslate nohighlight">\(w\left(r\right)\)</span>は<span class="math notranslate nohighlight">\(r_{0}\leq r\leq r_{1}\)</span>の範囲で<span class="math notranslate nohighlight">\(\Delta w\)</span>なので，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-aee87564-6f06-4f99-bccf-8711a4e3cc62">
-<span class="eqno">()<a class="headerlink" href="#equation-aee87564-6f06-4f99-bccf-8711a4e3cc62" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-5ddde3a6-0ada-4251-a0c4-ef0c0610a070">
+<span class="eqno">()<a class="headerlink" href="#equation-5ddde3a6-0ada-4251-a0c4-ef0c0610a070" title="Permalink to this equation"></a></span>\[\begin{align}
 \Delta G_{\mathrm{PMF}} &amp; =-\Delta w-\dfrac{1}{\beta}\log\dfrac{V_{\mathrm{B}}}{V_{\mathrm{U}}}
 \label{pmf:dGpmf}
 \end{align}\]</div>
 <p>と書き直せる．ただし，<span class="math notranslate nohighlight">\(V_{\mathrm{B}}\)</span>, <span class="math notranslate nohighlight">\(V_{\mathrm{U}}\)</span>は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-3cb4502a-80cf-48f9-91f3-a6f76b52069a">
-<span class="eqno">()<a class="headerlink" href="#equation-3cb4502a-80cf-48f9-91f3-a6f76b52069a" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-869d9b4b-8122-4319-9e13-f03d4e7a1611">
+<span class="eqno">()<a class="headerlink" href="#equation-869d9b4b-8122-4319-9e13-f03d4e7a1611" title="Permalink to this equation"></a></span>\[\begin{align}
 V_{\mathrm{B}} &amp; =\int_{\bm{\Upsilon}}dr\,4\pi r^{2}\exp\left(-\beta w_{\mathrm{B}}\left(r\right)\right)\\
 V_{\mathrm{U}} &amp; =\int_{r_{0}}^{r_{1}}dr\,4\pi r^{2}
 \end{align}\]</div>
@@ -139,20 +139,20 @@ V_{\mathrm{U}} &amp; =\int_{r_{0}}^{r_{1}}dr\,4\pi r^{2}
 のゲスト分子がホスト分子に結合するのに伴う自由エネルギー変化(<span class="math notranslate nohighlight">\(\Delta G^{\circ}\)</span>)であり，<span class="math notranslate nohighlight">\(\Delta G_{\mathrm{PMF}}\)</span>とは異なる．
 ゲスト分子1つで濃度<span class="math notranslate nohighlight">\(c^{\circ}\)</span>となるときの体積を<span class="math notranslate nohighlight">\(V^{\circ}\)</span>とするとこれは<span class="math notranslate nohighlight">\(V^{\circ} = 1661\)</span> ANGSTROM<span class="math notranslate nohighlight">\(^{3}\)</span>である．
 ゲスト分子が濃度<span class="math notranslate nohighlight">\(c^{\circ} = 1/V^{\circ} \)</span>の状態から濃度が<span class="math notranslate nohighlight">\(1/V_{\mathrm{U}}\)</span>の状態への移行に対する自由エネルギー変化<span class="math notranslate nohighlight">\(\Delta G^{\circ}_{\mathrm{corr}}\)</span>は</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f5a1fa30-dd54-4a54-bda3-b46b186ea611">
-<span class="eqno">()<a class="headerlink" href="#equation-f5a1fa30-dd54-4a54-bda3-b46b186ea611" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-27105c32-1e86-472c-b3f8-b46a9b7f77f5">
+<span class="eqno">()<a class="headerlink" href="#equation-27105c32-1e86-472c-b3f8-b46a9b7f77f5" title="Permalink to this equation"></a></span>\[\begin{align}
 \Delta G^{\circ}_{\mathrm{corr}} = - \dfrac{1}{\beta} \log \dfrac{V_{\mathrm{U}}}{V^{\circ}}
 \label{pmf:dGcorr}
 \end{align}\]</div>
 <p>である．つまり，<span class="math notranslate nohighlight">\(1/V^{\circ} \to 1/V_{\mathrm{B}}\)</span>の変化を<span class="math notranslate nohighlight">\(1/V^{\circ} \to 1/V_{\mathrm{U}}\)</span>と<span class="math notranslate nohighlight">\(1/V_{\mathrm{U}} 
 \to 1/V_{\mathrm{B}}\)</span>の2段階に分けることで，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-0cf17bbf-1f54-4993-ad67-21e42b60f888">
-<span class="eqno">()<a class="headerlink" href="#equation-0cf17bbf-1f54-4993-ad67-21e42b60f888" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-b2a2b639-89de-4823-ac86-0563fc0bde40">
+<span class="eqno">()<a class="headerlink" href="#equation-b2a2b639-89de-4823-ac86-0563fc0bde40" title="Permalink to this equation"></a></span>\[\begin{align}
 \Delta G^{\circ} = \Delta G_{\mathrm{PMF}} + \Delta G_{\mathrm{corr}}^{\circ}
 \end{align}\]</div>
 <p>と表すことができる．式EQREF(pmf:dGpmfEQREF), EQREF(pmf:dGcorrEQREF)を上式に代入することで，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-3e740f6e-5b94-4a38-976e-4f8d4b2205bd">
-<span class="eqno">()<a class="headerlink" href="#equation-3e740f6e-5b94-4a38-976e-4f8d4b2205bd" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-9ceabd98-b034-4db5-9f47-b403c5b2a3d0">
+<span class="eqno">()<a class="headerlink" href="#equation-9ceabd98-b034-4db5-9f47-b403c5b2a3d0" title="Permalink to this equation"></a></span>\[\begin{align}
 \Delta G^{\circ} = - \Delta w - \dfrac{1}{\beta} \log \dfrac{V_{\mathrm{B}}}{V^{\circ}}
 \end{align}\]</div>
 <p>を得る．この式には<span class="math notranslate nohighlight">\(V_{\mathrm{U}}\)</span>が含まれていないことから，<span class="math notranslate nohighlight">\(\Delta G^{\circ}\)</span>の値は<span class="math notranslate nohighlight">\(r_{0},r_{1}\)</span>の選択に依存しない．</p>

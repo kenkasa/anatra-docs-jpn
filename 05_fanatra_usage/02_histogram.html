@@ -66,7 +66,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">ヒストグラム(histogram, hist)</li>
+      <li class="breadcrumb-item active">ヒストグラム(<code class="docutils literal notranslate"><span class="pre">histogram</span></code>, <code class="docutils literal notranslate"><span class="pre">hist</span></code>)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/05_fanatra_usage/02_histogram.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,15 +77,15 @@
            <div itemprop="articleBody">
              
   <section id="histogram-hist">
-<h1>ヒストグラム(histogram, hist)<a class="headerlink" href="#histogram-hist" title="Link to this heading"></a></h1>
+<h1>ヒストグラム(<code class="docutils literal notranslate"><span class="pre">histogram</span></code>, <code class="docutils literal notranslate"><span class="pre">hist</span></code>)<a class="headerlink" href="#histogram-hist" title="Link to this heading"></a></h1>
 <p>この解析モードでは，何らかの時系列データ<span class="math notranslate nohighlight">\(\xi\left(t\right)\)</span>から分布関数<span class="math notranslate nohighlight">\(P\left(x\right)\)</span>を計算する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-47a2af64-b0be-4d8d-a928-2ef17aea7139">
-<span class="eqno">()<a class="headerlink" href="#equation-47a2af64-b0be-4d8d-a928-2ef17aea7139" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-dd567c12-6a7f-4045-986b-acefd5f0f34f">
+<span class="eqno">()<a class="headerlink" href="#equation-dd567c12-6a7f-4045-986b-acefd5f0f34f" title="Permalink to this equation"></a></span>\[\begin{align}
 P\left(x\right) =  \dfrac{1}{N}\Braket{\delta\left(x - \xi\right)} 
 \end{align}\]</div>
 <p>ここで，<span class="math notranslate nohighlight">\(N\)</span>はデータ点の数であり，上式は規格化条件</p>
-<div class="amsmath math notranslate nohighlight" id="equation-6a710cbf-ea65-418e-8008-59ace02cd609">
-<span class="eqno">()<a class="headerlink" href="#equation-6a710cbf-ea65-418e-8008-59ace02cd609" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-e145a469-9511-41d6-a543-84243dc2559b">
+<span class="eqno">()<a class="headerlink" href="#equation-e145a469-9511-41d6-a543-84243dc2559b" title="Permalink to this equation"></a></span>\[\begin{align}
 \int_{-\infty}^{\infty} dx P\left(x\right) = 1
 \end{align}\]</div>
 <p>を満たす．</p>
@@ -178,8 +178,8 @@ P\left(x\right) =  \dfrac{1}{N}\Braket{\delta\left(x - \xi\right)}
 <li><p>Example: <code class="docutils literal notranslate"><span class="pre">xsta</span> <span class="pre">=</span> <span class="pre">0.0</span></code></p></li>
 </ul>
 <p>グリッドを張るスタート位置<span class="math notranslate nohighlight">\(x_{0}\)</span>を指定する．<span class="math notranslate nohighlight">\(i\)</span>番目のグリッドの位置を<span class="math notranslate nohighlight">\(x_{i}\)</span>とすると，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-7bb96672-1d2f-4eb5-852a-7c422788f022">
-<span class="eqno">()<a class="headerlink" href="#equation-7bb96672-1d2f-4eb5-852a-7c422788f022" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-900edc07-9cb8-4f76-bf2d-cc68caac72c6">
+<span class="eqno">()<a class="headerlink" href="#equation-900edc07-9cb8-4f76-bf2d-cc68caac72c6" title="Permalink to this equation"></a></span>\[\begin{align}
 x_{i} = x_{0} + \left(i - 1 \right) \Delta x
 \end{align}\]</div>
 <p>である．</p>

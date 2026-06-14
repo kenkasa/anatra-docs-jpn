@@ -66,7 +66,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">動径分布関数(radial_distr, rdf)</li>
+      <li class="breadcrumb-item active">動径分布関数(<code class="docutils literal notranslate"><span class="pre">radial_distr</span></code>, <code class="docutils literal notranslate"><span class="pre">rdf</span></code>)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/03_anatra_usage/05_radial_distr.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,7 +77,7 @@
            <div itemprop="articleBody">
              
   <section id="radial-distr-rdf">
-<h1>動径分布関数(radial_distr, rdf)<a class="headerlink" href="#radial-distr-rdf" title="Link to this heading"></a></h1>
+<h1>動径分布関数(<code class="docutils literal notranslate"><span class="pre">radial_distr</span></code>, <code class="docutils literal notranslate"><span class="pre">rdf</span></code>)<a class="headerlink" href="#radial-distr-rdf" title="Link to this heading"></a></h1>
 <section id="id1">
 <h2>理論背景<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p>ここでは，動径分布関数の定義について解説する．</p>
@@ -85,78 +85,78 @@
 <h3>同種粒子間の動径分布関数<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <p>粒子<span class="math notranslate nohighlight">\(a\)</span>が<span class="math notranslate nohighlight">\(N_a\)</span>個存在している系(体積<span class="math notranslate nohighlight">\(V\)</span>，粒子<span class="math notranslate nohighlight">\(a\)</span>の平均(バルク)数密度<span class="math notranslate nohighlight">\(\rho_a = N_a/V\)</span>)を考え，
 局所密度場<span class="math notranslate nohighlight">\(\hat{\rho}_{a}\left({\bf r}\right)\)</span>を次式で定義する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-215fe852-ecde-4229-8f87-3495c45cae49">
-<span class="eqno">()<a class="headerlink" href="#equation-215fe852-ecde-4229-8f87-3495c45cae49" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-7874a877-333e-4cb2-9239-56f35f2cbedc">
+<span class="eqno">()<a class="headerlink" href="#equation-7874a877-333e-4cb2-9239-56f35f2cbedc" title="Permalink to this equation"></a></span>\[\begin{align}
 \hat{\rho}_{a}\left({\bf r}\right) &amp; =\sum_{i=1}^{N_{a}}\delta\left({\bf r}-{\bf r}_{i}\right).
 \end{align}\]</div>
 <p>ここで，<span class="math notranslate nohighlight">\({\bf r}_{i}\)</span>は<span class="math notranslate nohighlight">\(i\)</span>番目の粒子<span class="math notranslate nohighlight">\(a\)</span>の位置である．
 もし，系に外場などが存在しない場合，局所密度場のアンサンブル平均は
 平均数密度<span class="math notranslate nohighlight">\(\rho_{a}\)</span>に等しくなる．つまり，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-2e16f3ea-192a-4351-9af8-e6713ad87b71">
-<span class="eqno">()<a class="headerlink" href="#equation-2e16f3ea-192a-4351-9af8-e6713ad87b71" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-edbb6014-4ead-4dbc-b140-3d508c59338f">
+<span class="eqno">()<a class="headerlink" href="#equation-edbb6014-4ead-4dbc-b140-3d508c59338f" title="Permalink to this equation"></a></span>\[\begin{align}
 \Braket{\hat{\rho}_{a}\left({\bf r}\right)} = \rho_{a},
 \end{align}\]</div>
 <p>である．次に，2体密度相関関数を次式で定義する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-91a72898-7f8e-4a0e-91ff-8098f1c70013">
-<span class="eqno">()<a class="headerlink" href="#equation-91a72898-7f8e-4a0e-91ff-8098f1c70013" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-9d8b8b08-4cbd-4435-bad6-7b0823ebacd4">
+<span class="eqno">()<a class="headerlink" href="#equation-9d8b8b08-4cbd-4435-bad6-7b0823ebacd4" title="Permalink to this equation"></a></span>\[\begin{align}
 \chi\left({\bf r},{\bf r}^{\prime}\right) &amp; =\Braket{\hat{\rho}_{a}\left({\bf r}\right)\hat{\rho}_{a}\left({\bf r}^{\prime}\right)}\\
  &amp; =\Braket{\sum_{i=1}^{N_{a}}\sum_{j=1}^{N_{a}}\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}.
 \end{align}\]</div>
 <p>上式において，<span class="math notranslate nohighlight">\(i=j\)</span>の項と<span class="math notranslate nohighlight">\(i\neq j\)</span>の分けて書くと，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-0f24df2c-2bba-4b6c-88ba-0de3794a1f0d">
-<span class="eqno">()<a class="headerlink" href="#equation-0f24df2c-2bba-4b6c-88ba-0de3794a1f0d" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-46af9e7d-6133-4b91-9e24-0a014674ae52">
+<span class="eqno">()<a class="headerlink" href="#equation-46af9e7d-6133-4b91-9e24-0a014674ae52" title="Permalink to this equation"></a></span>\[\begin{align}
 \chi\left({\bf r},{\bf r}^{\prime}\right) &amp; =\sum_{i=1}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{i}\right)}+\sum_{i=1}^{N_{a}}{\sum_{j\neq i}^{N_{a}}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)},
 \end{align}\]</div>
 <p>第1項目は同一粒子が<span class="math notranslate nohighlight">\({\bf r}\)</span>と<span class="math notranslate nohighlight">\({\bf r}^{\prime}\)</span>の位置に存在する確率を表しており，
 これは<span class="math notranslate nohighlight">\({\bf r}={\bf r}^{\prime}\)</span>のとき以外は明らかにゼロとなる．つまり，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-a125082c-d854-47f5-9ed7-015ef9b24d15">
-<span class="eqno">()<a class="headerlink" href="#equation-a125082c-d854-47f5-9ed7-015ef9b24d15" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-cf9c6c8d-63bb-4d8b-a0d3-ad228637b853">
+<span class="eqno">()<a class="headerlink" href="#equation-cf9c6c8d-63bb-4d8b-a0d3-ad228637b853" title="Permalink to this equation"></a></span>\[\begin{align}
 \sum_{i=1}^{N_{a}}\braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{i}\right)} &amp; =\rho_{a}\delta\left({\bf r}-{\bf r}^{\prime}\right),
 \end{align}\]</div>
 <p>である．
 次に，第2項は<span class="math notranslate nohighlight">\(i\)</span>番目の粒子が<span class="math notranslate nohighlight">\({\bf r}\)</span>の位置に存在し，<span class="math notranslate nohighlight">\(j\)</span>番目の粒子が<span class="math notranslate nohighlight">\({\bf r}^{\prime}\)</span>の位置に存在する確率を表している．この項は2体密度と呼ばれており，
 2粒子の相関関係を表している．2体密度を<span class="math notranslate nohighlight">\(\rho^{(2)}_{aa}\left({\bf r},{\bf r}^{\prime}\right)\)</span>と表しておくことにする．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-06be87da-17b0-495b-8b2a-77b2b158f764">
-<span class="eqno">()<a class="headerlink" href="#equation-06be87da-17b0-495b-8b2a-77b2b158f764" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-42b1e981-5035-413e-b2ba-068f17b2ae68">
+<span class="eqno">()<a class="headerlink" href="#equation-42b1e981-5035-413e-b2ba-068f17b2ae68" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\sum_{i=1}^{N_{a}}\sum_{j\neq i}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}.
 \end{align}\]</div>
 <p>もし，<span class="math notranslate nohighlight">\({\bf r}と{\bf r}^{\prime}\)</span>の位置が互いに遠く離れている場合，
 そのような配置での2粒子間の相関は無視できる．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-a518bd47-3941-46c9-b8e7-8c0c6a1bf2fd">
-<span class="eqno">()<a class="headerlink" href="#equation-a518bd47-3941-46c9-b8e7-8c0c6a1bf2fd" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-bfd0af2f-1f1e-4e5b-803d-33dbff18a2b2">
+<span class="eqno">()<a class="headerlink" href="#equation-bfd0af2f-1f1e-4e5b-803d-33dbff18a2b2" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; \approx\sum_{i=1}^{N_{a}}\Braket{\delta\left({\bf r}-{\bf r}_{i}\right)}\sum_{j\neq i}^{N_{b}}\Braket{\delta\left({\bf r}^{\prime}-{\bf r}_{j}\right)}\\
  &amp; =\rho_{a}^{2}\left(1-\dfrac{1}{N_{a}}\right).
 \end{align}\]</div>
 <p>無相関の状態を基準にとって，2体分布関数を次式で定義することにしておく．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-6a83b182-8089-4d10-82be-3be1a78a9599">
-<span class="eqno">()<a class="headerlink" href="#equation-6a83b182-8089-4d10-82be-3be1a78a9599" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-0c744d00-4c64-43aa-a5b8-ef5828b0db08">
+<span class="eqno">()<a class="headerlink" href="#equation-0c744d00-4c64-43aa-a5b8-ef5828b0db08" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\dfrac{1}{\rho_{a}^{2}\left(1-1/N_{a}\right)}\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right).
 \end{align}\]</div>
 <p>もし，粒子を十分に多く含んでいる系を取り扱っている場合は，<span class="math notranslate nohighlight">\(1/N_a \simeq 0\)</span>と考えて，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f8b8f323-fbee-4f1a-b4fb-b8271707a48d">
-<span class="eqno">()<a class="headerlink" href="#equation-f8b8f323-fbee-4f1a-b4fb-b8271707a48d" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-8e8f7e97-3788-42b6-a0be-40435a26de2b">
+<span class="eqno">()<a class="headerlink" href="#equation-8e8f7e97-3788-42b6-a0be-40435a26de2b" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\dfrac{1}{\rho_{a}^{2}}\rho_{aa}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right),
 \end{align}\]</div>
 <p>としても良い．</p>
 <p>系が均一の場合(外場が存在しない場合など)，2体分布関数(および2体密度)は2粒子の絶対的な位置<span class="math notranslate nohighlight">\({\bf r}\)</span>，<span class="math notranslate nohighlight">\({\bf r}^{\prime}\)</span>ではなく，2粒子の相対的な位置<span class="math notranslate nohighlight">\({\bf r}^{\prime} - {\bf r}\)</span>に依存する．つまり，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-9a4f1b84-6b91-485c-a01c-39eb8796fde4">
-<span class="eqno">()<a class="headerlink" href="#equation-9a4f1b84-6b91-485c-a01c-39eb8796fde4" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-cebc5692-5e2d-48e6-8d34-d980447d1229">
+<span class="eqno">()<a class="headerlink" href="#equation-cebc5692-5e2d-48e6-8d34-d980447d1229" title="Permalink to this equation"></a></span>\[\begin{align}
 g^{\left(2\right)}_{aa}\left({\bf r},{\bf r}^{\prime}\right) &amp; =g^{\left(2\right)}_{aa}\left({\bf 0},{\bf r}^{\prime}-{\bf r}\right),
 \end{align}\]</div>
 <p>のような関係が成り立つ．<span class="math notranslate nohighlight">\({\bf r}^{\prime}-{\bf r}\)</span>を改めて
 <span class="math notranslate nohighlight">\({\bf r}\)</span>とおき直しておき，空間分布関数(spatial distribution function, SDF)を次式で定義する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-c05611a6-ed20-4c39-ba9c-8e440390b691">
-<span class="eqno">()<a class="headerlink" href="#equation-c05611a6-ed20-4c39-ba9c-8e440390b691" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-c79c6864-2615-423e-9845-7b62bef05bac">
+<span class="eqno">()<a class="headerlink" href="#equation-c79c6864-2615-423e-9845-7b62bef05bac" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{aa}\left({\bf r}\right) &amp; =g^{\left(2\right)}_{aa}\left({\bf 0},{\bf r}\right).
 \end{align}\]</div>
 <p>これを角度方向に平均をとり，距離<span class="math notranslate nohighlight">\(r\)</span>の分布関数に変換したものを動径分布関数(radial distribution function, RDF)と呼ぶ．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-7076d355-d382-48e0-a94c-eba033f6f1df">
-<span class="eqno">()<a class="headerlink" href="#equation-7076d355-d382-48e0-a94c-eba033f6f1df" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-d41cb0a4-6a1a-498f-a4a5-c0dbd6eb1377">
+<span class="eqno">()<a class="headerlink" href="#equation-d41cb0a4-6a1a-498f-a4a5-c0dbd6eb1377" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{aa}\left(r\right) &amp; =\dfrac{1}{4\pi r^{2}}\int d{\bf r}\,\delta\left(\left|{\bf r}\right|-r\right)g_{aa}\left({\bf r}\right).
 \end{align}\]</div>
 <p>もし，系が等方的である場合，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-2722a6b6-362e-4c85-96c2-248589040316">
-<span class="eqno">()<a class="headerlink" href="#equation-2722a6b6-362e-4c85-96c2-248589040316" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-3f933f76-b8ad-475b-a043-44976529b5cd">
+<span class="eqno">()<a class="headerlink" href="#equation-3f933f76-b8ad-475b-a043-44976529b5cd" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{aa}\left(\left|{\bf r}\right|\right) &amp; =g_{aa}\left({\bf r}\right),
 \end{align}\]</div>
 <p>が成り立つ．
@@ -169,26 +169,26 @@ SDFを計算することに意義が生じるのは，非等方系の場合や�
 <h3>異種粒子間の動径分布関数<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <p>粒子<span class="math notranslate nohighlight">\(a\)</span>が<span class="math notranslate nohighlight">\(N_a\)</span>個，粒子<span class="math notranslate nohighlight">\(b\)</span>が<span class="math notranslate nohighlight">\(N_b\)</span>個存在している系(体積<span class="math notranslate nohighlight">\(V\)</span>，平均数密度はそれぞれの粒子で<span class="math notranslate nohighlight">\(\rho_a = N_a /V\)</span>, <span class="math notranslate nohighlight">\(\rho_b = N_b / V\)</span>)での，
 粒子<span class="math notranslate nohighlight">\(a\)</span>と粒子<span class="math notranslate nohighlight">\(b\)</span>の間のRDFを導入する．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-ce8010f5-d936-4b88-81c6-e82e003f495f">
-<span class="eqno">()<a class="headerlink" href="#equation-ce8010f5-d936-4b88-81c6-e82e003f495f" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-91dbf4b6-18c0-445e-8d2b-ce9ff63b277a">
+<span class="eqno">()<a class="headerlink" href="#equation-91dbf4b6-18c0-445e-8d2b-ce9ff63b277a" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho_{ab}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; =\sum_{i=1}^{N_{a}}\sum_{j=1}^{N_{b}}\Braket{\delta\left({\bf r}-{\bf r}_{i}^{a}\right)\delta\left({\bf r}^{\prime}-{\bf r}_{j}^{b}\right)}.
 \end{align}\]</div>
 <p>ここで，<span class="math notranslate nohighlight">\({\bf r}_{i}^{p}~(p=a, b)\)</span> は粒子<span class="math notranslate nohighlight">\(p\)</span>の<span class="math notranslate nohighlight">\(i\)</span>番目の粒子の位置である．
 同種粒子間の場合と異なるのは，<span class="math notranslate nohighlight">\(j=i\)</span>の場合を除外しなくても良い点である．
 これにより，無相関の場合は，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-a2158ec9-fa6b-40de-9034-bf3cfc844886">
-<span class="eqno">()<a class="headerlink" href="#equation-a2158ec9-fa6b-40de-9034-bf3cfc844886" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-fc2a8ab7-21f9-45a7-87ce-63369d2058d1">
+<span class="eqno">()<a class="headerlink" href="#equation-fc2a8ab7-21f9-45a7-87ce-63369d2058d1" title="Permalink to this equation"></a></span>\[\begin{align}
 \rho_{ab}^{\left(2\right)}\left({\bf r},{\bf r}^{\prime}\right) &amp; \approx\rho_{a}\rho_{b},
 \end{align}\]</div>
 <p>となる．それ以外の点は全く同じなので，同様の手続きを踏んで動径分布関数を導入できる．
 まず，空間分布関数は，</p>
-<div class="amsmath math notranslate nohighlight" id="equation-1d0c111b-c50c-4b2e-a716-0dff9310464c">
-<span class="eqno">()<a class="headerlink" href="#equation-1d0c111b-c50c-4b2e-a716-0dff9310464c" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-0f213fee-8ff6-48d5-bdf6-1094c37c4b91">
+<span class="eqno">()<a class="headerlink" href="#equation-0f213fee-8ff6-48d5-bdf6-1094c37c4b91" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{ab}\left({\bf r}\right) &amp; =\dfrac{1}{\rho_{a}\rho_{b}}\rho_{ab}^{\left(2\right)}\left({\bf 0},{\bf r}\right),
 \end{align}\]</div>
 <p>であり，これを角度方向について平均化することにより，動径分布関数の表式を得る．</p>
-<div class="amsmath math notranslate nohighlight" id="equation-4080881a-63a5-4d6b-a55f-7966c8a75d67">
-<span class="eqno">()<a class="headerlink" href="#equation-4080881a-63a5-4d6b-a55f-7966c8a75d67" title="Permalink to this equation"></a></span>\[\begin{align}
+<div class="amsmath math notranslate nohighlight" id="equation-2cc464be-0539-49d4-aa86-a02fdf175d60">
+<span class="eqno">()<a class="headerlink" href="#equation-2cc464be-0539-49d4-aa86-a02fdf175d60" title="Permalink to this equation"></a></span>\[\begin{align}
 g_{ab}\left(r\right) &amp; =\dfrac{1}{4\pi r^{2}}\int d{\bf r}\,\delta\left(\left|{\bf r}\right|-r\right)g_{ab}\left({\bf r}\right).
 \end{align}\]</div>
 </section>
