@@ -1,4 +1,4 @@
-## 脂質膜秩序(lipid_order, scd)
+## 脂質膜秩序(``lipid_order``, ``scd``)
 
 ```{figure} ./figures/scd.eps
 :name: figure_scd.eps

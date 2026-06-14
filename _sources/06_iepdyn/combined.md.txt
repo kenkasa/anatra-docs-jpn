@@ -319,6 +319,35 @@ P_k^{\mathrm{eq}}
 
 ## パラメータ一覧 
 
+**Namelist**      | **パラメータ**         | **備考**
+:-----------------|:----------------------|:--------------------------------------------------------
+`&input_param`    | `fcv`                 | 時系列CVデータファイル
+`&input_param`    | `flist_cv`            | CVデータファイル一覧
+`&output_param`   | `fhead`               | 出力ファイル名のヘッダ
+`&option_param`   | `input_type`          | 入力ファイル形式
+`&option_param`   | `output_histogram`    | リスタートファイルの出力
+`&option_param`   | `use_perturbed_traj`  | バイアスポテンシャル存在下のMDに基づくかどうか
+`&option_param`   | `f_unperturbed_id`    | 各データでどの状態のダイナミクスが乱されていないか
+`&option_param`   | `use_dissociate_state`| 解離状態を定義するかどうか
+`&option_param`   | `use_reflection_state`| 反射状態を定義するかどうか
+`&option_param`   | `use_product_state`   | 生成状態を定義するかどうか
+`&option_param`   | `calc_steady`         | 定常状態分布を計算するかどうか
+`&option_param`   | `calc_Pint`           | 時間積分を解析的に計算するかどうか
+`&option_param`   | `extrapolate`         | 積分方程式に基づく時間発展の評価
+`&option_param`   | `nstate`              | 状態数
+`&option_param`   | `ndim`                | CVの次元数
+`&option_param`   | `nmol`                | 対象分子数
+`&option_param`   | `dt`                  | 時間グリッド幅
+`&option_param`   | `t_sparse`            | TCF計算用の粗い時間グリッド幅
+`&option_param`   | `t_range`             | K, M, R, P0関数の計算時間範囲
+`&option_param`   | `t_extend`            | P, Q関数の出力時間範囲
+`&option_param`   | `dt_tcfout`           | P, Q関数の出力時間間隔
+`&option_param`   | `initial_state_ids`   | 初期状態ID
+`&option_param`   | `reflection_state_ids`| 反射状態ID
+`&option_param`   | `product_state_ids`   | 生成状態ID
+`&state`          | `state definition`    | 各状態の範囲および初期ポピュレーション
+
+<!---
 ```{raw} latex
 \renewcommand{\arraystretch}{1.2}
 {\arrayrulewidth=0.5pt
@@ -360,6 +389,7 @@ P_k^{\mathrm{eq}}
 \end{tabular}
 }
 ```
+--->
 
 ## ``&option_param``
 

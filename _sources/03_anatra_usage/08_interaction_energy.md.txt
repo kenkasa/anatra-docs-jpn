@@ -1,4 +1,4 @@
-## 相互作用エネルギー(interaction_energy, ene)
+## 相互作用エネルギー(``interaction_energy``, ``ene``)
 
 ``interaction_energy`` (``ene``)では選択した分子やその集団，もしくは特定部位等の間に働く相互作用エネルギーを計算できる．  
 現在**anatra**では以下の三種類の相互作用が計算可能である．  

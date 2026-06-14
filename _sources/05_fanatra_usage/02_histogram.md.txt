@@ -1,4 +1,4 @@
-## ヒストグラム(histogram, hist)
+## ヒストグラム(``histogram``, ``hist``)
 
 この解析モードでは，何らかの時系列データ$\xi\left(t\right)$から分布関数$P\left(x\right)$を計算する．
 
@@ -16,6 +16,18 @@ P\left(x\right) =  \dfrac{1}{N}\Braket{\delta\left(x - \xi\right)}
 
 ### パラメータ一覧
 
+**Namelist**     | **パラメータ**    | **備考**
+:----------------|:-----------------|:---------------------------------------
+`&input_param`   | `flist_cv`       | --
+`&input_param`   | `fcv`            | --
+`&output_param`  | `fhead`          | --
+`&output_param`  | `file_extension` | --
+`&option_param`  | `dx`             | 分布関数のグリッド幅
+`&option_param`  | `xsta`           | グリッドを張るスタート位置
+`&option_param`  | `nx`             | グリッド数
+`&option_param`  | `ncol`           | 1ファイルあたりのデータ列数
+
+<!---
 ```{raw} latex
 \renewcommand{\arraystretch}{1.2}
 {\arrayrulewidth=0.5pt  
@@ -39,6 +51,7 @@ P\left(x\right) =  \dfrac{1}{N}\Braket{\delta\left(x - \xi\right)}
 \end{tabular}
 }
 ```
+--->
 
 ### &option_param
 

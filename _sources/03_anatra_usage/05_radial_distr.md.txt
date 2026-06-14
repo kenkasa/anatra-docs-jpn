@@ -1,4 +1,4 @@
-## 動径分布関数(radial_distr, rdf)
+## 動径分布関数(``radial_distr``, ``rdf``)
 
 ### 理論背景
 

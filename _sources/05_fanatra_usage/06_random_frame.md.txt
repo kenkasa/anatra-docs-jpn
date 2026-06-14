@@ -1,10 +1,22 @@
-## フレームのランダム抽出(random_frame, randf)
+## フレームのランダム抽出(``random_frame``, ``randf``)
 
 この解析モードでは，ランダムにスナップショット(フレーム)を抽出する．
 
 ### パラメータ一覧
 
-```{raw} latex
+**Namelist**     | **パラメータ**      | **備考**
+:----------------|:-------------------|:------------------------------------------------
+`&input_param`   | `ftraj`            | 入力トラジェクトリファイル名
+`&input_param`   | `flist_traj`       | トラジェクトリファイル一覧を格納したファイル名
+`&output_param`  | `fhead`            | 出力ファイル名のヘッダ
+`&option_param`  | `nsample`          | ランダム抽出するフレーム数
+`&option_param`  | `iseed`            | 乱数シード
+`&option_param`  | `output_trajtype`  | 出力トラジェクトリ形式
+`&option_param`  | `duplicate`        | 重複抽出を許可するかどうか
+`&option_param`  | `out_rst7`         | AMBER rst7形式の出力有無
+`&option_param`  | `shuffle`          | フレームをシャッフルするかどうか
+
+<!--- ```{raw} latex
 \renewcommand{\arraystretch}{1.2}
 {\arrayrulewidth=0.5pt
 \begin{tabular}{p{3cm}p{5cm}p{7cm}}
@@ -28,6 +40,7 @@
 \end{tabular}
 }
 ```
+--->
 
 ### ``&option_param``
 

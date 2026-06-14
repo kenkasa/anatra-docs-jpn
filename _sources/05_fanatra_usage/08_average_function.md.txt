@@ -1,4 +1,4 @@
-## 関数の平均(average_function, avef)
+## 関数の平均(``average_function``, ``avef``)
 
 この解析モードでは，複数の入力ファイルに格納されている1次元関数を平均する．
 例えば，$i$番目のファイルに格納されている関数を$f_{i}\left(x\right)$，ファイル数を$N$とすると，平均後の関数$f_{\mathrm{ave}}\left(x\right)$は
@@ -9,6 +9,19 @@ f_{\mathrm{ave}}\left(x\right) = \dfrac{1}{N}\sum_{i=1}^{N}f_{i}\left(x\right),
 
 ### パラメータ一覧
 
+**Namelist**      | **パラメータ**     | **備考**
+:-----------------|:------------------|:------------------------------------------------
+`&input_param`    | `flist_cv`        | 関数データファイル一覧を格納したファイル名
+`&output_param`   | `fhead`           | 出力ファイル名のヘッダ
+`&option_param`   | `use_bootstrap`   | ブートストラップ解析の有無
+`&option_param`   | `xsta`            | グリッドの開始位置
+`&option_param`   | `dx`              | グリッド間隔
+`&bootopt_param`  | `duplicate`       | 重複抽出を許可するかどうか
+`&bootopt_param`  | `iseed`           | 乱数シード
+`&bootopt_param`  | `nsample`         | 各試行で抽出するサンプル数
+`&bootopt_param`  | `ntrial`          | ブートストラップ試行回数
+
+<!---
 ```{raw} latex
 \renewcommand{\arraystretch}{1.2}
 {\arrayrulewidth=0.5pt
@@ -34,6 +47,7 @@ f_{\mathrm{ave}}\left(x\right) = \dfrac{1}{N}\sum_{i=1}^{N}f_{i}\left(x\right),
 \end{tabular}
 }
 ```
+--->
 
 ### ``&option_param``
 

@@ -278,7 +278,7 @@ anatra trjconv            \
   これは計算機上での並列処理を実現する**anatra_wo_vmd**コマンドへの接続を前提としたオプションである．
 例えば，``-prep_only true``と指定すると，``*.molinfo``などのファイルが出力される．
 --->
-## トラジェクトリ変換(trjconv)
+## トラジェクトリ変換(``trjconv``, ``trj``)
 
 ``trjconv``はMD計算で得られたトラジェクトリに対して，種々の変換を行う解析モードである．
 主な用途として次のようなものが挙げられる．
@@ -536,7 +536,7 @@ anatra trjconv                              \
 ```
 
 
-## 距離(distance, dis)
+## 距離(``distance``, ``dis``)
 
 ``distance``は選択した部位間の距離を計算する解析モードである．
 通常の距離計算の場合，選択した部位の分子重心間の距離が計算される．
@@ -664,7 +664,7 @@ anatra distance                                    \
   -mode0          whole                            \
   -mode1          residue
 ```
-## 重心解析・平均二乗変位(center_of_mass, com)
+## 重心解析・平均二乗変位(``center_of_mass``, ``com``)
 
 ``center_of_mass`` (``com``)は分子の重心の時間変化や平均二乗変位(Mean square displacement, MSD)
 を求めるプログラムである．
@@ -860,7 +860,7 @@ anatra center_of_mass        \
   -t_range   100             \
   -t_sparse  0.01
 ```
-## 動径分布関数(radial_distr, rdf)
+## 動径分布関数(``radial_distr``, ``rdf``)
 
 ### 理論背景
 
@@ -1133,7 +1133,7 @@ anatra rdf                                        \
   -separate_self false
 ```
 
-## 空間分布関数(spatial_distr, sdf)
+## 空間分布関数(``spatial_distr``, ``sdf``)
 
 ### 理論背景
 
@@ -1346,7 +1346,7 @@ anatra spatial_distr                         \
   -use_spline        true                    \
   -spline_resolution 4
 ```
-## 平均二乗偏差(rmsd)
+## 平均二乗偏差(``rmsd``)
 
 ### 理論背景
 
@@ -1453,7 +1453,7 @@ anatra rmsd                                   \
   -rmsdselid    2                             \
   -rmsdrefselid 3
 ```
-## 相互作用エネルギー(interaction_energy, ene)
+## 相互作用エネルギー(``interaction_energy``, ``ene``)
 
 ``interaction_energy`` (``ene``)では選択した分子やその集団，もしくは特定部位等の間に働く相互作用エネルギーを計算できる．  
 現在**anatra**では以下の三種類の相互作用が計算可能である．  
@@ -1703,7 +1703,7 @@ anatra rmsd                                   \
     -prep_only   false
   ```
 
-## 脂質膜秩序(lipid_order, scd)
+## 脂質膜秩序(``lipid_order``, ``scd``)
 
 ```{figure} ./figures/scd.png
 :name: figure_scd.png
@@ -1777,7 +1777,7 @@ anatra lipid_order                            \
   -sel4       name C27 H7X H7Y and segid MEMB \
   -prep_only  false
 ```
-## 界面法線方向($z$)に沿った分布関数(z_profile, zprof)
+## 界面法線方向($z$)に沿った分布関数(``z_profile``, ``zprof``)
 
 ``z_profile`` (``zprof``)は，
 膜界面の法線方向($z$)に沿った分布を計算する．
@@ -1886,7 +1886,7 @@ anatra z_profile                 \
   -prep_only  false
 ```
 
-## 特定の方向$z$に対する分子の配向(z_orient, zori)
+## 特定の方向$z$に対する分子の配向(``z_orient``, ``zori``)
 
 ``z_orient`` (``zori``)は，
 特定の方向($z$)を基準として．
@@ -2147,7 +2147,7 @@ anatra cluster_size                \
   -mode0       residue             \
   -prep_only   false
 ```
-## 自由体積プロファイル(free_volume)
+## 自由体積プロファイル(``free_volume``, ``fvol``)
 
 ``free_volume``は，ユーザーが指定した座標軸に沿って，自由体積(free volume)の存在割合のプロファイルを計算する．
 自由体積とは，``target_selid``で指定した原子が存在しない領域として定義される．

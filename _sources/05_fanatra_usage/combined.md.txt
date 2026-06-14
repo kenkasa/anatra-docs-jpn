@@ -245,7 +245,7 @@ $cat input_list.txt
 
 という構造である必要がある．
 --->
-## ヒストグラム(histogram, hist)
+## ヒストグラム(``histogram``, ``hist``)
 
 この解析モードでは，何らかの時系列データ$\xi\left(t\right)$から分布関数$P\left(x\right)$を計算する．
 
@@ -263,6 +263,18 @@ P\left(x\right) =  \dfrac{1}{N}\Braket{\delta\left(x - \xi\right)}
 
 ### パラメータ一覧
 
+**Namelist**     | **パラメータ**    | **備考**
+:----------------|:-----------------|:---------------------------------------
+`&input_param`   | `flist_cv`       | --
+`&input_param`   | `fcv`            | --
+`&output_param`  | `fhead`          | --
+`&output_param`  | `file_extension` | --
+`&option_param`  | `dx`             | 分布関数のグリッド幅
+`&option_param`  | `xsta`           | グリッドを張るスタート位置
+`&option_param`  | `nx`             | グリッド数
+`&option_param`  | `ncol`           | 1ファイルあたりのデータ列数
+
+<!---
 ```{raw} latex
 \renewcommand{\arraystretch}{1.2}
 {\arrayrulewidth=0.5pt  
@@ -286,6 +298,7 @@ P\left(x\right) =  \dfrac{1}{N}\Braket{\delta\left(x - \xi\right)}
 \end{tabular}
 }
 ```
+--->
 
 ### &option_param
 
@@ -345,7 +358,7 @@ EOF
 fanatra hist run.inp 
 
 ``` 
-## 平均力ポテンシャル(potential_of_mean_force, pmf)
+## 平均力ポテンシャル(``potential_of_mean_force``, ``pmf``)
 
 この解析モードでは，
 反応座標に対する時系列データ$\boldsymbol{\xi}\left(t\right)$から，
@@ -417,6 +430,33 @@ C & = \dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\boldsymbol{\zeta}_{0}-\bol
 
 ### パラメータ一覧
 
+**Namelist**         | **パラメータ**         | **備考**
+:--------------------|:----------------------|:---------------------------------------------------------
+`&input_param`       | `flist_cv`            | CVファイル一覧を格納したファイル名
+`&input_param`       | `flist_weight`        | 重みファイル一覧を格納したファイル名（オプション）
+`&input_param`       | `fcv`                 | CVファイル名
+`&input_param`       | `fweight`             | 重みファイル名（オプション）
+`&output_param`      | `fhead`               | 出力ファイル名のヘッダ
+`&option_param`      | `ndim`                | CVの次元数
+`&option_param`      | `xyzcol`              | CVデータ中の列番号
+`&option_param`      | `ng3`                 | 各CV方向のグリッド数
+`&option_param`      | `del`                 | 各CV方向のグリッド間隔
+`&option_param`      | `origin`              | 各CV方向のグリッド原点
+`&option_param`      | `temperature`         | 温度 [K]
+`&option_param`      | `use_radial`          | 動径成分のCVを含むかどうか
+`&option_param`      | `radcol`              | CVデータ中にある動径成分の列番号
+`&option_param`      | `box_system`          | 系のボックスサイズ（`ndim=3` の場合のみ使用）
+`&option_param`      | `use_spline`          | スプライン補間の有無
+`&option_param`      | `spline_resolution`   | スプライン補間の分解能
+`&option_param`      | `gen_script_mpl2d`    | 2次元PMF描画用Pythonスクリプト生成の有無
+`&option_param`      | `skip_calc`           | PMF計算をスキップするかどうか
+`&matplotlib_param`  | `fpdf`                | 出力PDFファイル名
+`&matplotlib_param`  | `labels`              | 軸ラベルおよびカラーバーラベル
+`&matplotlib_param`  | `ranges`              | 描画範囲
+`&matplotlib_param`  | `tics`                | 軸目盛り間隔
+`&matplotlib_param`  | `scales`              | 軸の単位変換係数
+
+<!---
 ```{raw} latex
 \renewcommand{\arraystretch}{1.2}
 {\arrayrulewidth=0.5pt
@@ -456,6 +496,7 @@ C & = \dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\boldsymbol{\zeta}_{0}-\bol
 \end{tabular}
 }
 ```
+--->
 
 ### &option_param
 
@@ -741,7 +782,7 @@ EOF
 fanatra potential_of_mean_force run.inp 
 
 ```
-## 制限つき動径平均力ポテンシャル(restricted_radial, rrpmf)
+## 制限つき動径平均力ポテンシャル(``restricted_radial``, ``rrpmf``)
 
 この解析モードでは，何らかの反応座標(集団座標)によって
 条件づけられた状態の動径方向に対する自由エネルギープロファイルを計算できる．
@@ -1061,12 +1102,24 @@ dGzero  (kcal/mol) =       3.9389595
 Keq     (M^-1)     =   1.3506025E-03
 ```
  
-## フレーム抽出(extract_frame, extf)
+## フレーム抽出(``extract_frame``, ``extf``)
 
 この解析モードでは，CVの値域指定により，特定の条件を満たすスナップショット(フレーム)を抽出する．
 
 ### パラメータ一覧
 
+**Namelist**     | **パラメータ**    | **備考**
+:----------------|:-----------------|:----------------------------------------------------
+`&input_param`   | `flist_traj`     | トラジェクトリファイル一覧を格納したファイル名
+`&input_param`   | `flist_cv`       | CVファイル一覧を格納したファイル名
+`&input_param`   | `ftraj`          | トラジェクトリファイル名
+`&input_param`   | `fcv`            | CVファイル名
+`&output_param`  | `fhead`          | 出力ファイル名のヘッダ
+`&option_param`  | `dt`             | トラジェクトリの時間刻み
+`&option_param`  | `ndim`           | CVの次元数
+`&option_param`  | `extract_range`  | フレーム抽出を行うCV範囲
+
+<!---
 ```{raw} latex
 \renewcommand{\arraystretch}{1.2}
 {\arrayrulewidth=0.5pt
@@ -1090,6 +1143,7 @@ Keq     (M^-1)     =   1.3506025E-03
 \end{tabular}
 }
 ```
+--->
 
 ### ``&option_param``
 
@@ -1153,13 +1207,25 @@ EOF
 fanatra extract_frame run.inp 
 ```
 これを実行すると，``out.dcd``が出力される．
-## フレームのランダム抽出(random_frame, randf)
+## フレームのランダム抽出(``random_frame``, ``randf``)
 
 この解析モードでは，ランダムにスナップショット(フレーム)を抽出する．
 
 ### パラメータ一覧
 
-```{raw} latex
+**Namelist**     | **パラメータ**      | **備考**
+:----------------|:-------------------|:------------------------------------------------
+`&input_param`   | `ftraj`            | 入力トラジェクトリファイル名
+`&input_param`   | `flist_traj`       | トラジェクトリファイル一覧を格納したファイル名
+`&output_param`  | `fhead`            | 出力ファイル名のヘッダ
+`&option_param`  | `nsample`          | ランダム抽出するフレーム数
+`&option_param`  | `iseed`            | 乱数シード
+`&option_param`  | `output_trajtype`  | 出力トラジェクトリ形式
+`&option_param`  | `duplicate`        | 重複抽出を許可するかどうか
+`&option_param`  | `out_rst7`         | AMBER rst7形式の出力有無
+`&option_param`  | `shuffle`          | フレームをシャッフルするかどうか
+
+<!--- ```{raw} latex
 \renewcommand{\arraystretch}{1.2}
 {\arrayrulewidth=0.5pt
 \begin{tabular}{p{3cm}p{5cm}p{7cm}}
@@ -1183,6 +1249,7 @@ fanatra extract_frame run.inp
 \end{tabular}
 }
 ```
+--->
 
 ### ``&option_param``
 
@@ -1268,12 +1335,25 @@ EOF
 fanatra random_frame run.inp 
 ```
 これを実行すると，``out.dcd``と``outXXXXX.inpcrd`` (``XXXXX=00001, ..., 00100``)が出力される．
-## 移動平均(moving_average, movave)
+## 移動平均(``moving_average``, ``movave``)
 
 この解析モードでは，与えられた1次元データ(分布関数など)の移動平均による平滑化を行う．
 
 ### パラメータ一覧
 
+**Namelist**     | **パラメータ**    | **備考**
+:----------------|:-----------------|:------------------------------------------------
+`&input_param`   | `fcv`            | 関数データファイル名
+`&input_param`   | `flist_cv`       | 関数データファイル一覧を格納したファイル名
+`&output_param`  | `fhead`          | 出力ファイル名のヘッダ
+`&option_param`  | `dx`             | グリッド間隔
+`&option_param`  | `xsta`           | グリッドの開始位置
+`&option_param`  | `xsep`           | 領域の境界位置
+`&option_param`  | `nregion`        | 領域数
+`&option_param`  | `npoint`         | 各領域で移動平均に用いる点数
+`&option_param`  | `include_zero`   | 原点を保持するかどうか
+
+<!---
 ```{raw} latex
 \renewcommand{\arraystretch}{1.2}
 {\arrayrulewidth=0.5pt
@@ -1298,6 +1378,7 @@ fanatra random_frame run.inp
 \end{tabular}
 }
 ```
+--->
 
 ### ``&option_param``
 
@@ -1398,7 +1479,7 @@ EOF
 fanatra moving_average run.inp 
 ```
 これを実行すると，平滑化された関数データを格納した``out0001.dat``が出力される．
-## 関数の平均(average_function, avef)
+## 関数の平均(``average_function``, ``avef``)
 
 この解析モードでは，複数の入力ファイルに格納されている1次元関数を平均する．
 例えば，$i$番目のファイルに格納されている関数を$f_{i}\left(x\right)$，ファイル数を$N$とすると，平均後の関数$f_{\mathrm{ave}}\left(x\right)$は
@@ -1409,6 +1490,19 @@ f_{\mathrm{ave}}\left(x\right) = \dfrac{1}{N}\sum_{i=1}^{N}f_{i}\left(x\right),
 
 ### パラメータ一覧
 
+**Namelist**      | **パラメータ**     | **備考**
+:-----------------|:------------------|:------------------------------------------------
+`&input_param`    | `flist_cv`        | 関数データファイル一覧を格納したファイル名
+`&output_param`   | `fhead`           | 出力ファイル名のヘッダ
+`&option_param`   | `use_bootstrap`   | ブートストラップ解析の有無
+`&option_param`   | `xsta`            | グリッドの開始位置
+`&option_param`   | `dx`              | グリッド間隔
+`&bootopt_param`  | `duplicate`       | 重複抽出を許可するかどうか
+`&bootopt_param`  | `iseed`           | 乱数シード
+`&bootopt_param`  | `nsample`         | 各試行で抽出するサンプル数
+`&bootopt_param`  | `ntrial`          | ブートストラップ試行回数
+
+<!---
 ```{raw} latex
 \renewcommand{\arraystretch}{1.2}
 {\arrayrulewidth=0.5pt
@@ -1434,6 +1528,7 @@ f_{\mathrm{ave}}\left(x\right) = \dfrac{1}{N}\sum_{i=1}^{N}f_{i}\left(x\right),
 \end{tabular}
 }
 ```
+--->
 
 ### ``&option_param``
 

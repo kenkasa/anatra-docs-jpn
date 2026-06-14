@@ -1,4 +1,4 @@
-## 平均力ポテンシャル(potential_of_mean_force, pmf)
+## 平均力ポテンシャル(``potential_of_mean_force``, ``pmf``)
 
 この解析モードでは，
 反応座標に対する時系列データ$\bm{\xi}\left(t\right)$から，
@@ -70,6 +70,33 @@ C & = \dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\bm{\zeta}_{0}-\bm{\xi}\lef
 
 ### パラメータ一覧
 
+**Namelist**         | **パラメータ**         | **備考**
+:--------------------|:----------------------|:---------------------------------------------------------
+`&input_param`       | `flist_cv`            | CVファイル一覧を格納したファイル名
+`&input_param`       | `flist_weight`        | 重みファイル一覧を格納したファイル名（オプション）
+`&input_param`       | `fcv`                 | CVファイル名
+`&input_param`       | `fweight`             | 重みファイル名（オプション）
+`&output_param`      | `fhead`               | 出力ファイル名のヘッダ
+`&option_param`      | `ndim`                | CVの次元数
+`&option_param`      | `xyzcol`              | CVデータ中の列番号
+`&option_param`      | `ng3`                 | 各CV方向のグリッド数
+`&option_param`      | `del`                 | 各CV方向のグリッド間隔
+`&option_param`      | `origin`              | 各CV方向のグリッド原点
+`&option_param`      | `temperature`         | 温度 [K]
+`&option_param`      | `use_radial`          | 動径成分のCVを含むかどうか
+`&option_param`      | `radcol`              | CVデータ中にある動径成分の列番号
+`&option_param`      | `box_system`          | 系のボックスサイズ（`ndim=3` の場合のみ使用）
+`&option_param`      | `use_spline`          | スプライン補間の有無
+`&option_param`      | `spline_resolution`   | スプライン補間の分解能
+`&option_param`      | `gen_script_mpl2d`    | 2次元PMF描画用Pythonスクリプト生成の有無
+`&option_param`      | `skip_calc`           | PMF計算をスキップするかどうか
+`&matplotlib_param`  | `fpdf`                | 出力PDFファイル名
+`&matplotlib_param`  | `labels`              | 軸ラベルおよびカラーバーラベル
+`&matplotlib_param`  | `ranges`              | 描画範囲
+`&matplotlib_param`  | `tics`                | 軸目盛り間隔
+`&matplotlib_param`  | `scales`              | 軸の単位変換係数
+
+<!---
 ```{raw} latex
 \renewcommand{\arraystretch}{1.2}
 {\arrayrulewidth=0.5pt
@@ -109,6 +136,7 @@ C & = \dfrac{1}{\beta}\log\int d{\bf X}\,\delta\left(\bm{\zeta}_{0}-\bm{\xi}\lef
 \end{tabular}
 }
 ```
+--->
 
 ### &option_param
 

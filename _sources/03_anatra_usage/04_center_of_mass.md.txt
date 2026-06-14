@@ -1,4 +1,4 @@
-## 重心解析・平均二乗変位(center_of_mass, com)
+## 重心解析・平均二乗変位(``center_of_mass``, ``com``)
 
 ``center_of_mass`` (``com``)は分子の重心の時間変化や平均二乗変位(Mean square displacement, MSD)
 を求めるプログラムである．
